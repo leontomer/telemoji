@@ -2,9 +2,8 @@ import React, { useRef, useEffect, useState } from "react";
 import * as faceapi from "@vladmandic/face-api/dist/face-api.esm.js";
 import * as tf from "@tensorflow/tfjs";
 
-function VideoModel() {
+export function DetectionVideo({ videoRef }) {
   const [userEmotion, setUserEmotion] = useState("boom");
-  const videoRef = useRef(null);
   const canvasRef = useRef(null);
   let myModel;
   useEffect(() => {
@@ -82,59 +81,56 @@ function VideoModel() {
   };
 
   const handleVideoOnPlay = () => {
-    let data = tf.browser.fromPixels(videoRef.current);
-    console.log(data);
     const videoToTensor = async () => {
       let canvases;
       if (videoRef.current && canvasRef.current) {
-        canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(
-          videoRef.current
-        );
+        canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoRef.current);
         const displaySize = {
-          width: 640,
-          height: 480,
-        };
+          width: 480,
+          height: 480
+        }
         faceapi.matchDimensions(canvasRef.current, displaySize);
-        const detections = await faceapi.detectAllFaces(
-          videoRef.current,
-          new faceapi.TinyFaceDetectorOptions()
-        );
-        console.log("detections are", detections);
-        canvases = await faceapi.extractFaces(videoRef.current, detections);
+        const detections = await faceapi.
+          detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions())
+        //------------faceapi settings---------------
+        const resizedDetections = faceapi.resizeResults(detections, displaySize);
+        faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
+        //------------------------------------------
+        console.log('detections are', detections)
+        canvases = await faceapi.extractFaces(videoRef.current, detections)
       }
       let data = null;
       if (canvases.length > 0) {
         try {
-          data = tf.browser
-            .fromPixels(canvases[0], 4)
+          data = tf.browser.fromPixels(canvases[0], 4)
             .resizeNearestNeighbor([48, 48])
             .mean(2)
             .toFloat()
             .expandDims(0)
-            .expandDims(-1);
+            .expandDims(-1)
         } catch (error) {
-          console.log("no face found");
+          console.log('no face found');
         }
+
       }
 
       //tf.browser.toPixels((data.toFloat().div(tf.scalar(255.0))), canvasRef.current)
-      console.log(data);
       if (myModel && data) {
         try {
-          console.log("predicting");
-
+          console.log('predicting');
           predict(data);
+
         } catch (error) {
           console.log(error);
         }
       }
 
       if (!videoRef.current.paused) {
-        setTimeout(videoToTensor, 20);
+        setTimeout(videoToTensor, 2000);
       }
-    };
+    }
     videoToTensor();
-  };
+  }
   return (
     <>
       <div>
@@ -165,4 +161,3 @@ function VideoModel() {
   );
 }
 
-export default VideoModel;

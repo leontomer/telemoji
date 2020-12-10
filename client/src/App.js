@@ -1,5 +1,5 @@
 import React from "react";
-import VideoModel from "./Video/VideoModel";
+import { VideoChat } from './Components/VideoChat/VideoChat';
 import "./App.css";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -12,6 +12,7 @@ import {
 } from "react-router-dom";
 
 function App() {
+
   return (
     <div>
       <AppBar position="static">
@@ -24,7 +25,7 @@ function App() {
       </AppBar>
       <Router>
         <Switch>
-          <Route path="/video-chat" component={VideoModel} />
+          <Route path="/video-chat" component={VideoChat} />
         </Switch>
       </Router>
     </div>
