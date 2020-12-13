@@ -16,6 +16,9 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "react-webcam": "^5.2.1",
+    "simple-peer": "^9.9.3",
+    "socket.io-client": "^3.0.4",
+    "styled-components": "^5.2.1",
     "typescript": "^4.1.2",
     "use-react-screenshot": "^1.0.2"
   },
@@ -39,5 +42,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/simple-peer": "^9.6.1"
   }
 }
