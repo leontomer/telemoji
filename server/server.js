@@ -14,15 +14,19 @@ io.on("connection", (socket) => {
     users[socket.id] = socket.id;
   }
   socket.emit("yourID", socket.id);
-  io.sockets.emit("allUsers", users);
   socket.on("disconnect", () => {
     delete users[socket.id];
   });
+  socket.on('new username', (userdata) => {
+    users[userdata.userID] = { username: userdata.username, userID: userdata.userID }
+    io.sockets.emit("allUsers", users);
+  })
 
   socket.on("callUser", (data) => {
     io.to(data.userToCall).emit("hey", {
       signal: data.signalData,
-      from: data.from,
+      callerID: data.callerID,
+      callerName: data.callerName
     });
   });
 
