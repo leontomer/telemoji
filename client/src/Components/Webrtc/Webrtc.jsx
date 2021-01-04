@@ -34,36 +34,32 @@ function App() {
   const userVideo = React.useRef();
   const partnerVideo = React.useRef();
   const socket = React.useRef();
-  const canvasRef = React.useRef();
+  //const canvasRef = React.useRef();
 
   React.useEffect(() => {
     socket.current = io.connect("/");
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        
-        setStream(stream);
-        if (userVideo.current) {
-          
-          userVideo.current.srcObject = stream;
-        }
-      });
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+      setStream(stream);
+      if (userVideo.current) {
+        userVideo.current.srcObject = stream;
+      }
+    })
 
     socket.current.on("yourID", (id) => {
       setYourID(id);
-    });
+    })
     socket.current.on("allUsers", (users) => {
       setUsers(users);
-    });
+    })
 
     socket.current.on("hey", (data) => {
       setReceivingCall(true);
       setCaller(data.from);
       setCallerSignal(data.signal);
-    });
+    })
   }, []);
 
- 
+
 
   function callPeer(id) {
     const peer = new Peer({
@@ -147,23 +143,23 @@ function App() {
       </div>
     );
   }
-  console.log("users::::", users);
+
   return (
     <Container>
-    <Row>
-      {UserVideo}
-      {PartnerVideo}
-    </Row>
-    <Row>
-      {Object.keys(users).map((key) => {
-        if (key === yourID) {
-          return null;
-        }
-        return <button onClick={() => callPeer(key)}>Call {key}</button>;
-      })}
-    </Row>
-    <Row>{incomingCall}</Row>
-  </Container>
+      <Row>
+        {UserVideo}
+        {PartnerVideo}
+      </Row>
+      <Row>
+        {Object.keys(users).map((key) => {
+          if (key === yourID) {
+            return null;
+          }
+          return <button onClick={() => callPeer(key)}>Call {key}</button>;
+        })}
+      </Row>
+      <Row>{incomingCall}</Row>
+    </Container>
   );
 }
 

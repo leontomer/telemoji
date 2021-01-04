@@ -3,8 +3,10 @@ import * as faceapi from "@vladmandic/face-api/dist/face-api.esm.js";
 import * as tf from "@tensorflow/tfjs";
 
 export function DetectionVideo({ videoRef }) {
-  const [userEmotion, setUserEmotion] = useState("boom");
+  const [userEmotion, setUserEmotion] = useState("Detection initializing, please wait...");
   const canvasRef = useRef(null);
+  const videoWidth = 640;
+  const videoHeight = 480;
   let myModel;
   useEffect(() => {
     const loadModels = async () => {
@@ -51,7 +53,7 @@ export function DetectionVideo({ videoRef }) {
   };
 
   const predict = (data) => {
-    console.log("data is", data);
+    // console.log("data is", data);
     if (myModel && data) {
       try {
         let classNames = [
@@ -72,7 +74,7 @@ export function DetectionVideo({ videoRef }) {
             maxPrediction.className = classNames[i];
           }
         }
-        console.log("ans is", maxPrediction);
+        //console.log("ans is", maxPrediction);
         if (maxPrediction) setUserEmotion(maxPrediction.className);
       } catch (error) {
         console.log(error);
@@ -86,18 +88,18 @@ export function DetectionVideo({ videoRef }) {
       if (videoRef.current && canvasRef.current) {
         canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoRef.current);
         const displaySize = {
-          width: 480,
-          height: 480
+          width: videoWidth,
+          height: videoHeight
         }
         faceapi.matchDimensions(canvasRef.current, displaySize);
         const detections = await faceapi.
           detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions())
         //------------faceapi settings---------------
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
+        canvasRef.current.getContext('2d').clearRect(0, 0, videoWidth, videoHeight);
         faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
         //------------------------------------------
-        console.log('detections are', detections)
-        canvases = await faceapi.extractFaces(videoRef.current, detections)
+        canvases = await faceapi.extractFaces(videoRef.current, resizedDetections)
       }
       let data = null;
       if (canvases.length > 0) {
@@ -117,7 +119,7 @@ export function DetectionVideo({ videoRef }) {
       //tf.browser.toPixels((data.toFloat().div(tf.scalar(255.0))), canvasRef.current)
       if (myModel && data) {
         try {
-          console.log('predicting');
+          //console.log('predicting');
           predict(data);
 
         } catch (error) {
@@ -133,29 +135,19 @@ export function DetectionVideo({ videoRef }) {
   }
   return (
     <>
-      <div>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
         <video
           ref={videoRef}
           autoPlay
           muted
           onPlay={handleVideoOnPlay}
-          height={340}
-          width={340}
+          height={videoHeight}
+          width={videoWidth}
         />
-        <canvas ref={canvasRef} height={1640} width={1640} />
-      </div>
-      <div
-        style={{
-          marginTop: -50,
-          height: 50,
-          width: 340,
-          backgroundColor: "black",
-          color: "white",
-          textAlign: "center",
-          justifyContent: "center",
-        }}
-      >
-        <p>{userEmotion}</p>
+        <canvas style={{ position: 'absolute' }} ref={canvasRef} height={videoHeight} width={videoWidth} />
+        <div style={{ backgroundColor: 'black', marginTop: '-60px', width: videoWidth, color: 'white', textAlign: 'center' }}>
+          <h3>{userEmotion}</h3>
+        </div>
       </div>
     </>
   );
