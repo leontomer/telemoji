@@ -2,9 +2,16 @@ import * as React from "react";
 import { DetectionVideo } from "../DetectionVideo/DetectionVideo";
 import io from "socket.io-client";
 import styled from "styled-components";
-
+import Button from "@material-ui/core/Button";
 import Peer from "simple-peer";
+import { SetYourNameModal } from '../Modals/SetYourNameModal'
+import { RecieveCallModal } from '../Modals/RecieveCallModal'
 
+import { makeStyles } from '@material-ui/core/styles';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 
 const Container = styled.div`
@@ -19,25 +26,41 @@ const Row = styled.div`
   width: 100%;
 `;
 
-
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+  },
+  nested: {
+    paddingLeft: theme.spacing(4),
+  },
+}));
 
 
 function App() {
+  const classes = useStyles();
+  const [yourName, setYourName] = React.useState('');
+  const [openNameModal, setOpenNameModal] = React.useState(false);
   const [yourID, setYourID] = React.useState("");
   const [users, setUsers] = React.useState({});
   const [stream, setStream] = React.useState();
   const [receivingCall, setReceivingCall] = React.useState(false);
-  const [caller, setCaller] = React.useState("");
+  const [caller, setCaller] = React.useState({
+    callerName: '',
+    callerID: ''
+  });
   const [callerSignal, setCallerSignal] = React.useState();
   const [callAccepted, setCallAccepted] = React.useState(false);
 
   const userVideo = React.useRef();
   const partnerVideo = React.useRef();
   const socket = React.useRef();
-  //const canvasRef = React.useRef();
+
 
   React.useEffect(() => {
     socket.current = io.connect("/");
+    setOpenNameModal(true);
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
       setStream(stream);
       if (userVideo.current) {
@@ -49,19 +72,23 @@ function App() {
       setYourID(id);
     })
     socket.current.on("allUsers", (users) => {
+      console.log('setting users', users);
       setUsers(users);
     })
 
     socket.current.on("hey", (data) => {
       setReceivingCall(true);
-      setCaller(data.from);
+      setCaller({ callerName: data.callerName, callerID: data.callerID });
       setCallerSignal(data.signal);
     })
   }, []);
 
 
-
-  function callPeer(id) {
+  const addNameToServer = () => {
+    socket.current.emit('new username', { username: yourName, userID: yourID })
+    setOpenNameModal(false);
+  }
+  function callPeer(id, callername) {
     const peer = new Peer({
       initiator: true,
       trickle: false,
@@ -86,7 +113,8 @@ function App() {
       socket.current.emit("callUser", {
         userToCall: id,
         signalData: data,
-        from: yourID,
+        callerName: callername,
+        callerID: yourID,
       });
     });
 
@@ -118,6 +146,7 @@ function App() {
     });
 
     peer.signal(callerSignal);
+    // need to fix callPeer(caller.callerID, caller.callerName)
   }
 
   let UserVideo;
@@ -134,31 +163,39 @@ function App() {
     );
   }
 
-  let incomingCall;
-  if (receivingCall) {
-    incomingCall = (
-      <div>
-        <h1>{caller} is calling you</h1>
-        <button onClick={acceptCall}>Accept</button>
-      </div>
-    );
-  }
-
+  const callList = Object.entries(users).map(([_, { userID, username }]) => {
+    if (userID != yourID && caller.callerID != userID) {
+      return (
+        <ListItem button onClick={() =>
+          callPeer(userID, yourName)
+        }>
+          <ListItemText primary={`Call ${username}`} />
+        </ListItem>
+      )
+    }
+  })
   return (
     <Container>
+      <SetYourNameModal name={yourName} setName={setYourName} open={openNameModal} setOpen={addNameToServer} />
       <Row>
         {UserVideo}
         {PartnerVideo}
       </Row>
       <Row>
-        {Object.keys(users).map((key) => {
-          if (key === yourID) {
-            return null;
+        <List
+          component="nav"
+          aria-labelledby="nested-list-subheader"
+          subheader={
+            <ListSubheader component="div" id="nested-list-subheader">
+              Users to chat
+        </ListSubheader>
           }
-          return <button onClick={() => callPeer(key)}>Call {key}</button>;
-        })}
+          className={classes.root}
+        >
+          {callList}
+        </List>
       </Row>
-      <Row>{incomingCall}</Row>
+      <RecieveCallModal open={receivingCall} setOpen={setReceivingCall} caller={caller.callerName} acceptCall={acceptCall} />
     </Container>
   );
 }
