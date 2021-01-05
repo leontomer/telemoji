@@ -164,7 +164,7 @@ function App() {
   }
 
   const callList = Object.entries(users).map(([_, { userID, username }]) => {
-    if (userID != yourID && caller.callerID != userID) {
+    if (userID != yourID) {
       return (
         <ListItem button onClick={() =>
           callPeer(userID, yourName)

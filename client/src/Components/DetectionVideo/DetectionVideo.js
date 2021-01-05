@@ -145,7 +145,7 @@ export function DetectionVideo({ videoRef }) {
           width={videoWidth}
         />
         <canvas style={{ position: 'absolute' }} ref={canvasRef} height={videoHeight} width={videoWidth} />
-        <div style={{ backgroundColor: 'black', marginTop: '-60px', width: videoWidth, color: 'white', textAlign: 'center' }}>
+        <div style={{ backgroundColor: 'black', marginTop: '-60px', width: videoWidth, color: 'white', textAlign: 'center', zIndex: 100 }}>
           <h3>{userEmotion}</h3>
         </div>
       </div>
