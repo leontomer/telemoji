@@ -147,7 +147,7 @@ export function Webrtc() {
 
     let UserVideo;
     if (stream) {
-        UserVideo = <DetectionVideo videoRef={userVideo} muted={true} />;
+        UserVideo = <DetectionVideo videoRef={userVideo} muted={true} displayEmotions={true} />;
     }
 
     let PartnerVideo;

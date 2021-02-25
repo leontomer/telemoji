@@ -12,7 +12,7 @@ export function DetectionVideo({ videoRef, displayEmotions = false, muted = fals
     if (displayEmotions) {
       const loadModels = async () => {
         try {
-          const MODEL_URL = "/models";
+          const MODEL_URL = process.env.PUBLIC_URL + "/models";
           Promise.all([
             faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
             faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
@@ -142,11 +142,10 @@ export function DetectionVideo({ videoRef, displayEmotions = false, muted = fals
           width={videoWidth}
         />
         <canvas style={{ position: 'absolute' }} ref={canvasRef} height={videoHeight} width={videoWidth} />
-        <div style={{ backgroundColor: 'black', marginTop: '-60px', width: videoWidth, color: 'white', textAlign: 'center' }}>
+        <div style={{ backgroundColor: 'black', marginTop: '-60px', width: videoWidth, color: 'white', textAlign: 'center', zIndex: 100 }}>
           <h3>{userEmotion}</h3>
         </div>
       </div>
     </>
   );
 }
-
