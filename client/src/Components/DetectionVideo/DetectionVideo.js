@@ -2,55 +2,51 @@ import React, { useRef, useEffect, useState } from "react";
 import * as faceapi from "@vladmandic/face-api/dist/face-api.esm.js";
 import * as tf from "@tensorflow/tfjs";
 
-export function DetectionVideo({ videoRef }) {
+export function DetectionVideo({ videoRef, displayEmotions = false, muted = false }) {
   const [userEmotion, setUserEmotion] = useState("Detection initializing, please wait...");
   const canvasRef = useRef(null);
   const videoWidth = 640;
   const videoHeight = 480;
   let myModel;
   useEffect(() => {
-    const loadModels = async () => {
-      try {
-        const MODEL_URL = "/models";
-        Promise.all([
-          faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
-          faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-          faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
-          faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
-        ]).then(startVideo());
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    loadModels();
+    if (displayEmotions) {
+      const loadModels = async () => {
+        try {
+          const MODEL_URL = "/models";
+          Promise.all([
+            faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+            faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+            faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
+            faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
+          ]);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      loadModels();
+    }
+    else {
+      setUserEmotion(' Your video')
+    }
+
   }, []);
 
   useEffect(() => {
-    (async function () {
-      try {
-        let model = await tf.loadLayersModel(
-          `${process.env.PUBLIC_URL}/facerecog/model.json`
-        );
-        console.log("model loaded");
-        myModel = model;
-      } catch (error) {
-        console.log("error is", error);
-      }
-    })();
+    if (displayEmotions) {
+      (async function () {
+        try {
+          let model = await tf.loadLayersModel(
+            `${process.env.PUBLIC_URL}/facerecog/model.json`
+          );
+          console.log("model loaded");
+          myModel = model;
+        } catch (error) {
+          console.log("error is", error);
+        }
+      })();
+    }
   }, []);
 
-  const startVideo = async () => {
-    try {
-      let stream = null;
-      stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true,
-      });
-      videoRef.current.srcObject = stream;
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const predict = (data) => {
     // console.log("data is", data);
@@ -133,14 +129,15 @@ export function DetectionVideo({ videoRef }) {
     }
     videoToTensor();
   }
+
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
         <video
           ref={videoRef}
           autoPlay
-          muted
-          onPlay={handleVideoOnPlay}
+          muted={muted}
+          onPlay={displayEmotions ? handleVideoOnPlay : null}
           height={videoHeight}
           width={videoWidth}
         />
