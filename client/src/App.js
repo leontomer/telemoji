@@ -14,7 +14,7 @@ function App() {
         <Toolbar>
           <Typography variant="h6">Telemoji </Typography>
           <Button color="inherit" href="/video-chat">
-            Demo
+            Demo1
           </Button>
         </Toolbar>
       </AppBar>
