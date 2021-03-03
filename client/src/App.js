@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // import { VideoChat } from "./Components/VideoChat/VideoChat";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -6,9 +6,13 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { Webrtc } from "./Components/Webrtc/Webrtc";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import LoginPage from "./Pages/LoginPage/LoginPage";
 
 function App() {
-  return (
+  const [loggedIn, setLoggedIn] = useState(false);
+  return !loggedIn ? (
+    <LoginPage />
+  ) : (
     <div>
       <AppBar position="static">
         <Toolbar>
