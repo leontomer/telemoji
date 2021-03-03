@@ -4,11 +4,18 @@
   "private": true,
   "proxy": "http://localhost:5000",
   "dependencies": {
-    "@material-ui/core": "^4.11.1",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/types": "^5.1.0",
     "@tensorflow/tfjs": "^2.6.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@types/jest": "^26.0.20",
+    "@types/material-ui": "^0.21.8",
+    "@types/node": "^14.14.31",
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.1",
     "@vladmandic/face-api": "^0.8.1",
     "capture-video-frame": "^1.0.0",
     "html2canvas": "^1.0.0-rc.7",
@@ -20,7 +27,7 @@
     "simple-peer": "^9.9.3",
     "socket.io-client": "^3.0.4",
     "styled-components": "^5.2.1",
-    "typescript": "^4.1.2",
+    "typescript": "^4.2.2",
     "use-react-screenshot": "^1.0.2"
   },
   "scripts": {
@@ -45,6 +52,21 @@
     ]
   },
   "devDependencies": {
-    "@types/simple-peer": "^9.6.1"
+    "@types/simple-peer": "^9.6.1",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "enzyme-to-json": "^3.6.1"
+  },
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*spec.(js|ts|tsx|jsx)",
+      "!src/index.js"
+    ],
+    "coverageReporters": [
+      "text"
+    ]
   }
 }

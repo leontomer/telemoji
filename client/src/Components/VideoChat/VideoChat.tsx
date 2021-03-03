@@ -9,6 +9,7 @@ export const VideoChat = () => {
         try {
             if (videoRef.current) {
                 let stream = null;
+                //@ts-ignore
                 stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
                 //@ts-ignore
                 videoRef.current.srcObject = stream;
