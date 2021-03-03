@@ -2,7 +2,7 @@ import { Content } from '../../Common/content';
 import LoginPageDriver from './LoginPage.driver';
 
 
-describe('Title', () => {
+describe('Login Page', () => {
     let driver = new LoginPageDriver()
   it('renders content', () => { 
     expect(driver.titleText).toEqual(Content.app_name);
