@@ -1,33 +1,20 @@
-import React, { useState } from "react";
-// import { VideoChat } from "./Components/VideoChat/VideoChat";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
+import React from "react";
 import { Webrtc } from "./Components/Webrtc/Webrtc";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import LoginPage from "./Pages/LoginPage/LoginPage";
+import LoginPage from "./Components/LoginPage/LoginPage";
+import LandingPage from "./Components/LandingPage/LandingPage";
+import Navbar from "./Components/Navbar/Navbar";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  return !loggedIn ? (
-    <LoginPage />
-  ) : (
-    <div>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6">Telemoji </Typography>
-          <Button color="inherit" href="/video-chat">
-            Demo
-          </Button>
-        </Toolbar>
-      </AppBar>
-      <Router>
-        <Switch>
-          <Route path="/video-chat" component={Webrtc} />
-        </Switch>
-      </Router>
-    </div>
+  return (
+    <Router>
+      <Navbar />
+      <Switch>
+        <Route exact path="/" component={LandingPage} />
+        <Route exact path="/login" component={LoginPage} />
+        <Route exact path="/video-chat" component={Webrtc} />
+      </Switch>
+    </Router>
   );
 }
 
