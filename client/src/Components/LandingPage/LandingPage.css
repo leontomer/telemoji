@@ -1,0 +1,86 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html,
+body {
+  background: #56ccf2; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #2f80ed,
+    #56ccf2
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #2f80ed,
+    #56ccf2
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.navbar {
+  align-self: flex-start;
+  width: 100vw;
+  position: fixed;
+}
+.custom-shape-divider-bottom {
+  margin-top: 800px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-bottom svg {
+  position: relative;
+  display: block;
+  width: calc(146% + 1.3px);
+  height: 246px;
+}
+
+.custom-shape-divider-bottom .shape-fill {
+  fill: #53317e;
+}
+
+.content {
+  font-family: "Roboto", sans-serif;
+  color: white;
+  margin-right: 530px;
+}
+
+.landingpage-header {
+  font-size: 60px;
+  font-weight: 500;
+  max-width: 500px;
+  margin-bottom: 10px;
+  text-shadow: 1px 1px #ebedef;
+}
+.landingpage-subheader {
+  font-size: 25px;
+  max-width: 300px;
+}
+
+@media only screen and (max-width: 1280px) {
+}
+
+@media only screen and (max-width: 1024px) {
+}
+
+@media only screen and (max-width: 768px) {
+}
+
+@media only screen and (max-width: 480px) {
+}
+
+@media only screen and (max-width: 320px) {
+}
