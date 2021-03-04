@@ -121,15 +121,17 @@ export default function SearchAppBar() {
                 Login
               </Button>
             </Link>
-            <Button
-              style={{
-                background: "  #ec7063  ",
-                color: "white",
-                fontWeight: "bold",
-              }}
-            >
-              Register
-            </Button>
+            <Link to="/video-chat">
+              <Button
+                style={{
+                  background: "  #ec7063  ",
+                  color: "white",
+                  fontWeight: "bold",
+                }}
+              >
+                Register
+              </Button>
+            </Link>
           </div>
 
           {/* <div className={classes.search}>
