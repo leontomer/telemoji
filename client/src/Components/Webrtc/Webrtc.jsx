@@ -92,9 +92,9 @@ export function Webrtc() {
       config: {
         iceServers: [
           {
-            urls: "turn:34.76.85.113:5000",
-            username: "test@gmail.com",
-            credential: "test123",
+            urls: "turn:34.76.85.113:3478",
+            username: "guest",
+            credential: "somepassword",
           },
         ],
       },
