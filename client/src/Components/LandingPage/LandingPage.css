@@ -26,11 +26,7 @@ body {
   justify-content: center;
   align-items: center;
 }
-.navbar {
-  align-self: flex-start;
-  width: 100vw;
-  position: fixed;
-}
+
 .custom-shape-divider-bottom {
   margin-top: 800px;
   position: absolute;

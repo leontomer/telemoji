@@ -2,8 +2,14 @@ import React, { useRef, useEffect, useState } from "react";
 import * as faceapi from "@vladmandic/face-api/dist/face-api.esm.js";
 import * as tf from "@tensorflow/tfjs";
 
-export function DetectionVideo({ videoRef, displayEmotions = false, muted = false }) {
-  const [userEmotion, setUserEmotion] = useState("Detection initializing, please wait...");
+export function DetectionVideo({
+  videoRef,
+  displayEmotions = false,
+  muted = false,
+}) {
+  const [userEmotion, setUserEmotion] = useState(
+    "Detection initializing, please wait..."
+  );
   const canvasRef = useRef(null);
   const videoWidth = 640;
   const videoHeight = 480;
@@ -24,12 +30,10 @@ export function DetectionVideo({ videoRef, displayEmotions = false, muted = fals
         }
       };
       loadModels();
+    } else {
+      setUserEmotion(" Your video");
     }
-    else {
-      setUserEmotion(' Your video')
-    }
-
-  }, []);
+  }, [displayEmotions]);
 
   useEffect(() => {
     if (displayEmotions) {
@@ -46,7 +50,6 @@ export function DetectionVideo({ videoRef, displayEmotions = false, muted = fals
       })();
     }
   }, []);
-
 
   const predict = (data) => {
     // console.log("data is", data);
@@ -82,34 +85,46 @@ export function DetectionVideo({ videoRef, displayEmotions = false, muted = fals
     const videoToTensor = async () => {
       let canvases;
       if (videoRef.current && canvasRef.current) {
-        canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoRef.current);
+        canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(
+          videoRef.current
+        );
         const displaySize = {
           width: videoWidth,
-          height: videoHeight
-        }
+          height: videoHeight,
+        };
         faceapi.matchDimensions(canvasRef.current, displaySize);
-        const detections = await faceapi.
-          detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions())
+        const detections = await faceapi.detectAllFaces(
+          videoRef.current,
+          new faceapi.TinyFaceDetectorOptions()
+        );
         //------------faceapi settings---------------
-        const resizedDetections = faceapi.resizeResults(detections, displaySize);
-        canvasRef.current.getContext('2d').clearRect(0, 0, videoWidth, videoHeight);
+        const resizedDetections = faceapi.resizeResults(
+          detections,
+          displaySize
+        );
+        canvasRef.current
+          .getContext("2d")
+          .clearRect(0, 0, videoWidth, videoHeight);
         faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
         //------------------------------------------
-        canvases = await faceapi.extractFaces(videoRef.current, resizedDetections)
+        canvases = await faceapi.extractFaces(
+          videoRef.current,
+          resizedDetections
+        );
       }
       let data = null;
       if (canvases.length > 0) {
         try {
-          data = tf.browser.fromPixels(canvases[0], 4)
+          data = tf.browser
+            .fromPixels(canvases[0], 4)
             .resizeNearestNeighbor([48, 48])
             .mean(2)
             .toFloat()
             .expandDims(0)
-            .expandDims(-1)
+            .expandDims(-1);
         } catch (error) {
-          console.log('no face found');
+          console.log("no face found");
         }
-
       }
 
       //tf.browser.toPixels((data.toFloat().div(tf.scalar(255.0))), canvasRef.current)
@@ -117,7 +132,6 @@ export function DetectionVideo({ videoRef, displayEmotions = false, muted = fals
         try {
           //console.log('predicting');
           predict(data);
-
         } catch (error) {
           console.log(error);
         }
@@ -126,13 +140,20 @@ export function DetectionVideo({ videoRef, displayEmotions = false, muted = fals
       if (!videoRef.current.paused) {
         setTimeout(videoToTensor, 2000);
       }
-    }
+    };
     videoToTensor();
-  }
+  };
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+      >
         <video
           ref={videoRef}
           autoPlay
@@ -141,12 +162,25 @@ export function DetectionVideo({ videoRef, displayEmotions = false, muted = fals
           height={videoHeight}
           width={videoWidth}
         />
-        <canvas style={{ position: 'absolute' }} ref={canvasRef} height={videoHeight} width={videoWidth} />
-        <div style={{ backgroundColor: 'black', marginTop: '-60px', width: videoWidth, color: 'white', textAlign: 'center', zIndex: 100 }}>
+        <canvas
+          style={{ position: "absolute" }}
+          ref={canvasRef}
+          height={videoHeight}
+          width={videoWidth}
+        />
+        <div
+          style={{
+            backgroundColor: "black",
+            marginTop: "-60px",
+            width: videoWidth,
+            color: "white",
+            textAlign: "center",
+            zIndex: 100,
+          }}
+        >
           <h3>{userEmotion}</h3>
         </div>
       </div>
     </>
   );
 }
-

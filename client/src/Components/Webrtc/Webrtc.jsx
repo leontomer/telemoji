@@ -3,7 +3,6 @@ import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
 import { DetectionVideo } from "../DetectionVideo/DetectionVideo";
-import { SetYourNameModal } from "../Modals/SetYourNameModal";
 import { RecieveCallModal } from "../Modals/RecieveCallModal";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,6 +10,8 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   height: 100vh;
@@ -45,9 +46,7 @@ export function Webrtc() {
   const [callerSignal, setCallerSignal] = useState();
   const [callAccepted, setCallAccepted] = useState(false);
   const [onCall, setOnCall] = useState(null);
-
   const [yourName, setYourName] = React.useState("");
-  const [openNameModal, setOpenNameModal] = React.useState(false);
 
   const userVideo = useRef();
   const partnerVideo = useRef();
@@ -55,12 +54,9 @@ export function Webrtc() {
 
   const addNameToServer = () => {
     socket.current.emit("new username", yourName);
-    setOpenNameModal(false);
   };
-  //webrtc
-  useEffect(() => {
-    socket.current = io.connect("/");
-    setOpenNameModal(true);
+
+  const getStreamFromVideoCamera = () => {
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
@@ -69,7 +65,15 @@ export function Webrtc() {
           userVideo.current.srcObject = stream;
         }
       });
-
+  };
+  //webrtc
+  const firstName = useSelector((state) => state.authReducer.user.firstName);
+  const lastName = useSelector((state) => state.authReducer.lastName);
+  useEffect(() => {
+    socket.current = io.connect("/");
+    setYourName(`${firstName} ${lastName}`);
+    addNameToServer();
+    getStreamFromVideoCamera();
     socket.current.on("yourID", (id) => {
       setYourID(id);
     });
@@ -151,16 +155,6 @@ export function Webrtc() {
     );
   }
 
-  let incomingCall;
-  if (receivingCall) {
-    incomingCall = (
-      <div>
-        <h1>{caller} is calling you</h1>
-        <button onClick={acceptCall}>Accept</button>
-      </div>
-    );
-  }
-
   const callList = Object.keys(users).map((key) => {
     if (key === yourID || key === caller || (callAccepted && key === onCall)) {
       return null;
@@ -182,12 +176,6 @@ export function Webrtc() {
 
   return (
     <Container>
-      <SetYourNameModal
-        name={yourName}
-        setName={setYourName}
-        open={openNameModal}
-        setOpen={addNameToServer}
-      />
       <Row>
         {UserVideo}
         {PartnerVideo}
