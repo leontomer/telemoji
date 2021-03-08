@@ -11,6 +11,8 @@ import Button from "@material-ui/core/Button";
 import CastConnectedIcon from "@material-ui/icons/CastConnected";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { openDrawer } from "../../actions/addonActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,7 +72,73 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SearchAppBar() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector(
+    (state) => state.authReducer.isAuthenticated
+  );
 
+  const authenticatedContent = (
+    <>
+      <div className={classes.search}>
+        <div className={classes.searchIcon}>
+          <SearchIcon />
+        </div>
+        <InputBase
+          placeholder="Search…"
+          classes={{
+            root: classes.inputRoot,
+            input: classes.inputInput,
+          }}
+          inputProps={{ "aria-label": "search" }}
+        />
+      </div>
+      <div style={{ marginLeft: 15 }}>
+        <IconButton
+          edge="start"
+          className={classes.menuButton}
+          color="inherit"
+          aria-label="open drawer"
+          onClick={() => dispatch(openDrawer())}
+        >
+          <MenuIcon />
+        </IconButton>
+      </div>
+    </>
+  );
+
+  const notAuthenticatedContent = (
+    <div
+      style={{
+        width: "170px",
+        display: "flex",
+        justifyContent: "space-between",
+      }}
+    >
+      {" "}
+      <Link to="/login">
+        <Button
+          style={{
+            background: " #5499c7 ",
+            color: "white",
+            fontWeight: "bold",
+          }}
+        >
+          Login
+        </Button>
+      </Link>
+      <Link to="/register">
+        <Button
+          style={{
+            background: "  #ec7063  ",
+            color: "white",
+            fontWeight: "bold",
+          }}
+        >
+          Register
+        </Button>
+      </Link>
+    </div>
+  );
   return (
     <div className={classes.root}>
       <AppBar
@@ -78,14 +146,6 @@ export default function SearchAppBar() {
         style={{ backgroundColor: "#53317e", color: "#fbfcfc" }}
       >
         <Toolbar>
-          {/* <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton> */}
           <Typography className={classes.title} variant="h6" noWrap>
             <div
               style={{
@@ -102,51 +162,11 @@ export default function SearchAppBar() {
               </Link>
             </div>
           </Typography>
-          <div
-            style={{
-              width: "170px",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            {" "}
-            <Link to="/login">
-              <Button
-                style={{
-                  background: " #5499c7 ",
-                  color: "white",
-                  fontWeight: "bold",
-                }}
-              >
-                Login
-              </Button>
-            </Link>
-            <Link to="/video-chat">
-              <Button
-                style={{
-                  background: "  #ec7063  ",
-                  color: "white",
-                  fontWeight: "bold",
-                }}
-              >
-                Register
-              </Button>
-            </Link>
-          </div>
-
-          {/* <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div> */}
+          {isAuthenticated === null
+            ? null
+            : isAuthenticated
+            ? authenticatedContent
+            : notAuthenticatedContent}
         </Toolbar>
       </AppBar>
     </div>

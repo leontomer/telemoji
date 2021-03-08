@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -14,6 +14,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { DataHook } from "../../Common/DataHooks";
 import { Content } from "../../Common/content";
+import { useDispatch } from "react-redux";
+import { login } from "../../actions/authActions";
 
 function Copyright() {
   return (
@@ -48,8 +50,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function LoginPage() {
+export default function LoginPage({ history }) {
   const classes = useStyles();
+
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+  const { email, password } = loginData;
+
+  const onChange = (e) => {
+    setLoginData({
+      ...loginData,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const dispatch = useDispatch();
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      await dispatch(login(loginData));
+      history.push("/dashboard");
+    } catch (error) {
+      return;
+    }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -68,17 +93,19 @@ export default function LoginPage() {
         >
           {Content.login_page_sign_in}
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="username"
+            id="email"
             label={Content.login_page_username}
-            name="username"
+            name="email"
             data-hook={DataHook.LoginPageUsernameTextField}
             autoFocus
+            onChange={onChange}
+            value={email}
           />
           <TextField
             variant="outlined"
@@ -91,6 +118,8 @@ export default function LoginPage() {
             id="password"
             data-hook={DataHook.LoginPagePasswordTextField}
             autoComplete="current-password"
+            onChange={onChange}
+            value={password}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}

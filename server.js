@@ -1,44 +1,19 @@
-
 const express = require("express");
-const http = require("http");
+const connectDB = require("./config/db");
+const users = require("./routes/API/usersAPI");
+const auth = require("./routes/API/authAPI");
 const app = express();
 const path = require("path");
-
+const http = require("http");
 const server = http.createServer(app);
-const socket = require("socket.io");
-const io = socket(server);
+var bodyParser = require("body-parser");
 
-const users = {};
-
-io.on("connection", (socket) => {
-  if (!users[socket.id]) {
-    users[socket.id] = { name: '' };
-  }
-  socket.on('new username', (userdata) => {
-    users[socket.id] = { name: userdata }
-    io.sockets.emit("allUsers", users);
-  })
-
-  socket.emit("yourID", socket.id);
-  io.sockets.emit("allUsers", users);
-  socket.on("disconnect", () => {
-    delete users[socket.id];
-    io.sockets.emit("allUsers", users);
-  });
-
-  socket.on("callUser", (data) => {
-    io.to(data.userToCall).emit("hey", {
-      signal: data.signalData,
-      from: data.from,
-    });
-  });
-
-  socket.on("acceptCall", (data) => {
-    io.to(data.to).emit("callAccepted", data.signal);
-  });
-});
-
+require("./socket")(server);
+connectDB();
 const port = process.env.PORT || 5000;
+app.use(express.json({ extended: false }));
+app.use("/api/users", users);
+app.use("/api/auth", auth);
 
 server.listen(port, () => console.log("server is running on port 5000"));
 

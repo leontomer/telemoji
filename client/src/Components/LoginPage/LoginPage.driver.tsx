@@ -1,4 +1,3 @@
-import React from "react";
 import LoginPage from "./LoginPage";
 import { DataHook } from "../../Common/DataHooks";
 import ComponentDriver from "../../Common/component-driver";
