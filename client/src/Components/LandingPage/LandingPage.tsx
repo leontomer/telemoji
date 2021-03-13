@@ -49,14 +49,14 @@ function Frame1(props: any) {
 
   const chatPeopleSVG = (
     <div className="landingpage-svg">
-      <img src={undrawWorkChatReQes41} />
+      <img src={undrawWorkChatReQes41} alt="" />
     </div>
   );
   return (
     <>
       <div
         className="container"
-        style={{ position: "relative", height: "100vh" }}
+        style={{ position: "relative", height: "90vh" }}
       >
         <div
           style={{

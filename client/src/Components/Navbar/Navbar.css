@@ -3,5 +3,10 @@
 .navbar-title {
   font-family: "Roboto", sans-serif;
   font-weight: 500;
-  font-size: "100px";
+  /* font-size: 100px; */
+}
+.navbar {
+  align-self: flex-start;
+  width: 100vw;
+  position: fixed;
 }
