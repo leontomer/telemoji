@@ -7,6 +7,7 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   ACCOUNT_DELETED,
+  LOGIN_SUCCESS_GOOGLE_FACEBOOK
 } from "../actions/types";
 
 const initialState: {
@@ -32,6 +33,16 @@ export default function (state = initialState, action) {
         isAuthenticated: true,
         loading: false,
       };
+
+
+      case LOGIN_SUCCESS_GOOGLE_FACEBOOK:
+        return {
+          ...state,
+          isAuthenticated: true,
+          user:payload,
+          loading: false,
+        };
+
 
     case REGISTER_FAIL:
     case AUTH_ERROR:
