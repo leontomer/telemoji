@@ -8,6 +8,7 @@ import {
   LOGIN_SUCCESS,
   LOGOUT,
   CLEAR_PROFILE,
+  LOGIN_SUCCESS_GOOGLE_FACEBOOK
 } from "./types";
 import { setError } from "./errorsActions";
 import { snackbarType } from "../Common/dataTypes";
@@ -84,6 +85,24 @@ export const login = ({
     throw err;
   }
 };
+
+
+export const loginGoogle=({
+  firstName,
+  lastName,
+  email
+}: {
+  firstName: string;
+  lastName: string;
+  email: string
+}) =>(dispatch)=>{
+  dispatch({
+    type:  LOGIN_SUCCESS_GOOGLE_FACEBOOK,
+    payload: {firstName:firstName,lastName:lastName,email:email}
+ 
+  });
+}
+
 
 export const logout = () => (dispatch) => {
   dispatch({ type: CLEAR_PROFILE });

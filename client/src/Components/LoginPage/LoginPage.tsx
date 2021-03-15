@@ -15,7 +15,9 @@ import Container from "@material-ui/core/Container";
 import { DataHook } from "../../Common/DataHooks";
 import { Content } from "../../Common/content";
 import { useDispatch } from "react-redux";
-import { login } from "../../actions/authActions";
+import { login, loginGoogle } from "../../actions/authActions";
+import { GoogleLogin } from "react-google-login";
+import FacebookLogin from "react-facebook-login";
 
 function Copyright() {
   return (
@@ -76,6 +78,29 @@ export default function LoginPage({ history }) {
     }
   };
 
+  const handleGoogleLogin = (response) => {
+    dispatch(
+      loginGoogle({
+        firstName: response.Is.cT,
+        lastName: response.Is.eR,
+        email: response.Is.ot,
+      })
+    );
+    history.push("/dashboard");
+  };
+
+  const handleFacebookLogin = (response) => {
+    dispatch(
+      loginGoogle({
+        firstName: response.name.substr(0, response.name.indexOf(" ")),
+        lastName: response.name.substr(response.name.indexOf(" ") + 1),
+        email: response.email,
+      })
+    );
+
+    history.push("/dashboard");
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -134,6 +159,7 @@ export default function LoginPage({ history }) {
           >
             {Content.login_page_sign_in_button}
           </Button>
+
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
@@ -144,6 +170,28 @@ export default function LoginPage({ history }) {
               <Link href="#" variant="body2">
                 {Content.login_page_sign_up}
               </Link>
+            </Grid>
+
+            <Grid item>
+              <div>
+                <br></br>
+                <GoogleLogin
+                  clientId="678350980728-ovb0o4qai1kcfqohoe0qrnhbso20vua3.apps.googleusercontent.com"
+                  buttonText="Login"
+                  onSuccess={handleGoogleLogin}
+                  onFailure={() => console.log("failed")}
+                  cookiePolicy={"single_host_origin"}
+                />
+              </div>{" "}
+              <div>
+                <br></br>
+                <FacebookLogin
+                  appId="1090947474723893"
+                  fields="name,email"
+                  callback={handleFacebookLogin}
+                  onFailure={() => console.log("failed")}
+                />
+              </div>
             </Grid>
           </Grid>
         </form>
