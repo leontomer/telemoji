@@ -9,7 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import Avatar from "@material-ui/core/Avatar";
 import { green, grey } from "@material-ui/core/colors";
-import { getFriends, getImageAddress } from "./FriendsList.api";
+import { FriendProps, getFriends, getImageAddress } from "../Dashboard.api";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import { ListItemIcon } from "@material-ui/core";
@@ -37,9 +37,18 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function FriendsList() {
+interface FriendsListProps {
+  setFriendInFocus: any;
+}
+
+export default function FriendsList(props: FriendsListProps) {
+  const { setFriendInFocus } = props;
   const classes = useStyles();
   const friends = getFriends();
+
+  const handleFriendClick = (friend: FriendProps) => {
+    setFriendInFocus(friend);
+  };
 
   return (
     <List dense className={classes.root}>
@@ -56,9 +65,13 @@ export default function FriendsList() {
       {friends.map((friend, index) => {
         const labelId = `checkbox-list-secondary-label-${friend}`;
         return (
-          <ListItem key={index} button>
+          <ListItem
+            key={index}
+            button
+            onClick={() => handleFriendClick(friend)}
+          >
             <ListItemAvatar>
-              <Avatar alt={`${friend.name}`} src={getImageAddress(friend)} />
+              <Avatar alt={`${friend.name}`} src={friend.imageAddress} />
             </ListItemAvatar>
             <ListItemText id={labelId} primary={friend.name} />
             <ListItemSecondaryAction>
@@ -67,8 +80,8 @@ export default function FriendsList() {
                   <InfoOutlinedIcon />
                 </IconButton>
               </Tooltip>
-              <Link to="/video-chat">
-                <IconButton disabled={!friend.available}>
+              <IconButton disabled={!friend.available}>
+                <Link to="/video-chat">
                   <PhoneIcon
                     style={
                       friend.available
@@ -76,8 +89,8 @@ export default function FriendsList() {
                         : { color: grey[500] }
                     }
                   />
-                </IconButton>
-              </Link>
+                </Link>
+              </IconButton>
             </ListItemSecondaryAction>
           </ListItem>
         );
