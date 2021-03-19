@@ -1,59 +1,35 @@
 import React, { useRef, useEffect, useState } from "react";
-import * as faceapi from "@vladmandic/face-api/dist/face-api.esm.js";
 import * as tf from "@tensorflow/tfjs";
+import { useSelector } from "react-redux";
 
 export function DetectionVideo({
   videoRef,
-  displayEmotions = false,
   muted = false,
 }) {
+
+  const [faceapi, setFaceapi] = useState();
+  const [emotionRecModel, setEmotionRecModel] = useState();
   const [userEmotion, setUserEmotion] = useState(
     "Detection initializing, please wait..."
   );
   const canvasRef = useRef(null);
   const videoWidth = 640;
   const videoHeight = 480;
-  let myModel;
-  useEffect(() => {
-    if (displayEmotions) {
-      const loadModels = async () => {
-        try {
-          const MODEL_URL = "/models";
-          Promise.all([
-            faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
-            faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-            faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
-            faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
-          ]);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      loadModels();
-    } else {
-      setUserEmotion(" Your video");
-    }
-  }, [displayEmotions]);
+
+  const faceapiReducer = useSelector((state) => state.modelReducer.faceapi);
+  const emotionRecognitionReducer = useSelector((state) => state.modelReducer.emotionRecognition);
 
   useEffect(() => {
-    if (displayEmotions) {
-      (async function () {
-        try {
-          let model = await tf.loadLayersModel(
-            `${process.env.PUBLIC_URL}/facerecog/model.json`
-          );
-          console.log("model loaded");
-          myModel = model;
-        } catch (error) {
-          console.log("error is", error);
-        }
-      })();
+    if (faceapiReducer && !faceapi) {
+      setFaceapi(faceapiReducer);
     }
-  }, []);
+    if (emotionRecognitionReducer && !emotionRecModel) {
+      setEmotionRecModel(emotionRecognitionReducer);
+    }
+  }, [faceapiReducer, emotionRecognitionReducer])
 
   const predict = (data) => {
-    // console.log("data is", data);
-    if (myModel && data) {
+    if (emotionRecModel && data) {
       try {
         let classNames = [
           "angry",
@@ -64,7 +40,7 @@ export function DetectionVideo({
           "sad",
           "suprise",
         ];
-        let ans = myModel.predict(data);
+        let ans = emotionRecModel.predict(data);
         ans = ans.dataSync();
         let maxPrediction = { value: 0, className: "" };
         for (let i = 0; i < ans.length; i++) {
@@ -73,7 +49,6 @@ export function DetectionVideo({
             maxPrediction.className = classNames[i];
           }
         }
-        //console.log("ans is", maxPrediction);
         if (maxPrediction) setUserEmotion(maxPrediction.className);
       } catch (error) {
         console.log(error);
@@ -116,19 +91,20 @@ export function DetectionVideo({
       if (canvases.length > 0) {
         try {
           data = tf.browser
-            .fromPixels(canvases[0], 4)
-            .resizeNearestNeighbor([48, 48])
-            .mean(2)
-            .toFloat()
+            .fromPixels(canvases[0], 3)
+            .resizeNearestNeighbor([96, 96])
+            // .mean(2)
+            // .toFloat()
             .expandDims(0)
-            .expandDims(-1);
+          // .expandDims(3);
         } catch (error) {
+          console.log('error is', error.message)
           console.log("no face found");
         }
       }
 
       //tf.browser.toPixels((data.toFloat().div(tf.scalar(255.0))), canvasRef.current)
-      if (myModel && data) {
+      if (emotionRecModel && data) {
         try {
           //console.log('predicting');
           predict(data);
@@ -143,7 +119,7 @@ export function DetectionVideo({
     };
     videoToTensor();
   };
-
+  const displayEmotions = faceapi && emotionRecModel
   return (
     <>
       <div
