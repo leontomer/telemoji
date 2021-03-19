@@ -46,7 +46,7 @@ export function Webrtc() {
   const [callerSignal, setCallerSignal] = useState();
   const [callAccepted, setCallAccepted] = useState(false);
   const [onCall, setOnCall] = useState(null);
-  const [yourName, setYourName] = React.useState("");
+  const [yourName, setYourName] = useState("");
 
   const userVideo = useRef();
   const partnerVideo = useRef();
@@ -68,11 +68,10 @@ export function Webrtc() {
   };
   //webrtc
   const firstName = useSelector((state) => state.authReducer.user.firstName);
-  const lastName = useSelector((state) => state.authReducer.lastName);
+  const lastName = useSelector((state) => state.authReducer.user.lastName);
   useEffect(() => {
     socket.current = io.connect("/");
     setYourName(`${firstName} ${lastName}`);
-    addNameToServer();
     getStreamFromVideoCamera();
     socket.current.on("yourID", (id) => {
       setYourID(id);
@@ -87,6 +86,12 @@ export function Webrtc() {
       setCallerSignal(data.signal);
     });
   }, []);
+
+  useEffect(() => {
+    if (yourName) {
+      addNameToServer();
+    }
+  }, [yourName])
 
   function callPeer(id) {
     setOnCall(id);
@@ -151,7 +156,7 @@ export function Webrtc() {
   let PartnerVideo;
   if (callAccepted) {
     PartnerVideo = (
-      <DetectionVideo videoRef={partnerVideo} displayEmotions={true} />
+      <DetectionVideo videoRef={partnerVideo} />
     );
   }
 
