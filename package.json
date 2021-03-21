@@ -20,6 +20,7 @@
     "express": "^4.17.1",
     "express-validator": "^6.10.0",
     "jsonwebtoken": "^8.5.1",
+    "material-ui-search-bar": "^1.0.0",
     "mongoose": "^5.11.7",
     "socket.io": "^3.0.4"
   },

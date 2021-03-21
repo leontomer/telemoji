@@ -66,4 +66,18 @@ router.post(
   }
 );
 
+router.get("/finduser", async (req, res) => {
+  otherEmail = req.query.email;
+  try {
+    const otherUser = await User.findOne({ email: otherEmail }).select(
+      "-password"
+    );
+
+    res.json({ other: otherUser });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ errors: [{ msg: err.message }] });
+  }
+});
+
 module.exports = router;
