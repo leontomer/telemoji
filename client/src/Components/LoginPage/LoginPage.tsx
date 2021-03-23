@@ -159,21 +159,6 @@ export default function LoginPage({ history }) {
           >
             {Content.login_page_sign_in_button}
           </Button>
-          <div style={{width: '100px'}}>
-          <FacebookLogin
-            appId="1090947474723893"
-            fields="name,email"
-            callback={handleFacebookLogin}
-            onFailure={() => console.log("failed")}
-          />
-          </div>
-          <GoogleLogin
-            clientId="678350980728-ovb0o4qai1kcfqohoe0qrnhbso20vua3.apps.googleusercontent.com"
-            buttonText="Login With Google"
-            onSuccess={handleGoogleLogin}
-            onFailure={() => console.log("failed")}
-            cookiePolicy={"single_host_origin"}
-          />
 
           <Grid container>
             <Grid item xs>
@@ -188,6 +173,23 @@ export default function LoginPage({ history }) {
             </Grid>
           </Grid>
         </form>
+      </div>
+      <div style={{ width: "450px", height: "250px" }}>
+        <FacebookLogin
+          appId="1090947474723893"
+          fields="name,email,picture"
+          callback={handleFacebookLogin}
+          onFailure={() => console.log("failed")}
+          icon="fa-facebook"
+        />
+
+        <GoogleLogin
+          clientId="678350980728-ovb0o4qai1kcfqohoe0qrnhbso20vua3.apps.googleusercontent.com"
+          buttonText="Login With Google"
+          onSuccess={handleGoogleLogin}
+          onFailure={() => console.log("failed")}
+          cookiePolicy={"single_host_origin"}
+        />
       </div>
       <Box mt={8}>
         <Copyright />

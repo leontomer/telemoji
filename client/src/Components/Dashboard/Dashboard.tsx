@@ -4,6 +4,7 @@ import FriendsList from "./FriendsList/FriendsList";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import { FriendProps } from "./Dashboard.api";
+import FindUser from "./FindUser/FindUser";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,6 +31,9 @@ const Dashboard = () => {
           </Grid>
           <Grid item xs={4}>
             <FriendInfoCard friendInFocus={friendInFocus} />
+          </Grid>
+          <Grid item xs={6}>
+            <FindUser FindUser={FindUser} />
           </Grid>
         </Grid>
       </Grid>
