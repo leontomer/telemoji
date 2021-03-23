@@ -79,11 +79,12 @@ export default function LoginPage({ history }) {
   };
 
   const handleGoogleLogin = (response) => {
+    // console.log(response);
     dispatch(
       loginGoogle({
-        firstName: response.Is.cT,
-        lastName: response.Is.eR,
-        email: response.Is.ot,
+        firstName: response.Rs.BT,
+        lastName: response.Rs.xR,
+        email: response.Rs.At,
       })
     );
     history.push("/dashboard");

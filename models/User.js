@@ -1,3 +1,9 @@
+//changes we need to do : 
+// 1. add the next fields : 
+// 1. a. availability
+// 1. b. about
+// 1. c. imageAddress
+
 const mongoose = require("mongoose");
 const UserSchema = new mongoose.Schema({
   firstName: {
@@ -28,7 +34,7 @@ const UserSchema = new mongoose.Schema({
       ref: "user",
     },
   ],
-  friendRequest: [
+  friendRequests: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",

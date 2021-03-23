@@ -13,6 +13,7 @@ import "./Navbar.css";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { openDrawer } from "../../actions/addonActions";
+import AsyncSearch from "./AsyncSearch/AsyncSearch";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,16 +82,8 @@ export default function SearchAppBar() {
     <>
       <div className={classes.search}>
         <div className={classes.searchIcon}>
-          <SearchIcon />
         </div>
-        <InputBase
-          placeholder="Search…"
-          classes={{
-            root: classes.inputRoot,
-            input: classes.inputInput,
-          }}
-          inputProps={{ "aria-label": "search" }}
-        />
+        <AsyncSearch />
       </div>
       <div style={{ marginLeft: 15 }}>
         <IconButton
