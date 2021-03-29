@@ -7,21 +7,40 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   ACCOUNT_DELETED,
-  LOGIN_SUCCESS_GOOGLE_FACEBOOK
+  LOGIN_SUCCESS_GOOGLE_FACEBOOK,
+  SET_FRIEND_REQUESTS,
+  GET_FRIEND_LIST,
 } from "../actions/types";
 
-const initialState: {
+export interface FriendProps {
+  date: string;
+  email: string;
+  firstName: string;
+  friendList: string[];
+  friendRequests: string[];
+  lastName: string[];
+  password: string;
+  __v: number;
+  _id: string[];
+}
+interface InitialStateProps {
   isAuthenticated: boolean | null;
   token: string | null;
   loading: boolean;
   user: object | null;
-} = {
+  friendRequests: FriendProps[];
+  friendList:FriendProps[]
+}
+
+export const initialState: InitialStateProps = {
   token: localStorage.getItem("token"),
   isAuthenticated: null,
   loading: true,
   user: null,
+  friendRequests: [],
+  friendList: [],
 };
-export default function (state = initialState, action) {
+export default function (state: InitialStateProps = initialState, action) {
   const { type, payload } = action;
   switch (type) {
     case REGISTER_SUCCESS:
@@ -34,15 +53,13 @@ export default function (state = initialState, action) {
         loading: false,
       };
 
-
-      case LOGIN_SUCCESS_GOOGLE_FACEBOOK:
-        return {
-          ...state,
-          isAuthenticated: true,
-          user:payload,
-          loading: false,
-        };
-
+    case LOGIN_SUCCESS_GOOGLE_FACEBOOK:
+      return {
+        ...state,
+        isAuthenticated: true,
+        user: payload,
+        loading: false,
+      };
 
     case REGISTER_FAIL:
     case AUTH_ERROR:
@@ -55,6 +72,8 @@ export default function (state = initialState, action) {
         token: null,
         isAuthenticated: false,
         loading: false,
+        friendRequests: [],
+        friendList: [],
       };
 
     case USER_LOADED:
@@ -65,6 +84,11 @@ export default function (state = initialState, action) {
         user: payload,
       };
 
+    case SET_FRIEND_REQUESTS:
+      return { ...state, friendRequests: payload };
+
+    case GET_FRIEND_LIST:
+      return { ...state, friendList: payload };
     default:
       return state;
   }

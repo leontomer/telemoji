@@ -7,7 +7,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { FriendProps } from "../Dashboard.api";
+import { FriendProps } from "../../../reducers/authReducer";
 
 const useStyles = makeStyles({
   root: {
@@ -29,17 +29,15 @@ export default function FriendInfoCard(props: FriendInfoCardProps) {
   return (
     <Card className={classes.root}>
       <CardActionArea>
-        <CardMedia
-          className={classes.media}
-          image={friend?.imageAddress}
-          title="Contemplative Reptile"
-        />
+        <CardMedia className={classes.media} title="Contemplative Reptile" />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            {friend ? friend.name : "Choose a friend to view :)"}
+            {friend
+              ? `${friend.firstName} ${friend.lastName}`
+              : "Choose a friend to view :)"}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            {friend?.about}
+            {friend ? "Hi there, im using Telemoji! 😎" : ""}
           </Typography>
         </CardContent>
       </CardActionArea>

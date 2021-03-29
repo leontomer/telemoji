@@ -67,13 +67,102 @@ router.post(
 );
 
 router.get("/finduser", async (req, res) => {
-  otherEmail = req.query.email;
+  const otherEmail = req.query.email;
   try {
     const otherUser = await User.findOne({ email: otherEmail }).select(
       "-password"
     );
 
     res.json({ other: otherUser });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ errors: [{ msg: err.message }] });
+  }
+});
+
+router.post("/addfriend", async (req, res) => {
+  try {
+    const { userEmail, userFriendEmail } = req.body;
+    const friend = await User.findOne({ email: userFriendEmail }).select(
+      "-password"
+    );
+    const user = await User.findOne({ email: userEmail }).select("-password");
+
+    friend.friendRequests.push(user._id);
+    await friend.save();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ errors: [{ msg: err.message }] });
+  }
+});
+
+router.get("/pendingFriendRequests", async (req, res) => {
+  try {
+    const email = req.query.email;
+    const user = await User.findOne({ email })
+      .select("-password")
+      .populate("friendRequests");
+
+    res.json({ user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ errors: [{ msg: err.message }] });
+  }
+});
+
+router.post("/approveFriend", async (req, res) => {
+  try {
+    const { userEmail, userFriendEmail } = req.body;
+    const friend = await User.findOne({ email: userFriendEmail }).select(
+      "-password"
+    );
+    const user = await User.findOne({ email: userEmail }).select("-password");
+
+    const updatedFriendRequests = user.friendRequests.filter((f) => {
+      return f.toString() !== friend._id.toString();
+    });
+
+    user.friendRequests = updatedFriendRequests;
+
+    if (friend.friendList.indexOf(user._id) < 0) {
+      friend.friendList.push(user._id);
+      await friend.save();
+    }
+
+    if (user.friendList.indexOf(friend._id) < 0) {
+      await user.friendList.push(friend._id);
+    }
+
+    await user.save();
+  } catch (e) {
+    console.error(e);
+  }
+});
+router.post("/rejectFriend", async (req, res) => {
+  try {
+    const { userEmail, userFriendEmail } = req.body;
+    const friend = await User.findOne({ email: userFriendEmail }).select(
+      "-password"
+    );
+    const user = await User.findOne({ email: userEmail }).select("-password");
+
+    const updatedFriendRequests = user.friendRequests.filter(
+      (f) => f.toString() !== friend._id.toString()
+    );
+    user.friendRequests = updatedFriendRequests;
+
+    await user.save();
+  } catch (e) {}
+});
+
+router.get("/friendList", async (req, res) => {
+  try {
+    const email = req.query.email;
+    const user = await User.findOne({ email })
+      .select("-password")
+      .populate("friendList");
+
+    res.json({ friendList: user.friendList });
   } catch (err) {
     console.error(err);
     res.status(500).json({ errors: [{ msg: err.message }] });

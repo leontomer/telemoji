@@ -3,8 +3,9 @@ import FriendInfoCard from "./FriendInfoCard/FriendInfoCard";
 import FriendsList from "./FriendsList/FriendsList";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import { FriendProps } from "./Dashboard.api";
+import { FriendProps } from "../../reducers/authReducer";
 import FindUser from "./FindUser/FindUser";
+import NotificationBar from "./NotificationBar/NotificationBar";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,8 +33,14 @@ const Dashboard = () => {
           <Grid item xs={4}>
             <FriendInfoCard friendInFocus={friendInFocus} />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={2}>
             <FindUser FindUser={FindUser} />
+          </Grid>
+          <Grid item xs={2}>
+            <NotificationBar numberOfPendingFriendRequest={0} />
+          </Grid>
+          <Grid item xs={2}>
+            
           </Grid>
         </Grid>
       </Grid>

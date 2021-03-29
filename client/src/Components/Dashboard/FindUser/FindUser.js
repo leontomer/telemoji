@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { findUser } from "../../../actions/usersActions";
+import { addFriend, findUser } from "../../../actions/usersActions";
 import { useDispatch, useSelector } from "react-redux";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -13,11 +13,12 @@ import SearchBar from "material-ui-search-bar";
 
 export default function FindUser(props) {
   const dispatch = useDispatch();
-  //const userEmail = useSelector((state) => state.user.email);
+  const user = useSelector((state) => state.authReducer.user);
   const [email, setEmail] = useState("");
-  const [user, setUser] = useState(null);
+  const [searchedFriend, setSearchedFriend] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAddFriendDisabled, setIsAddFriendDisabled] = useState(false);
   const [open, setOpen] = useState(false);
 
   function Alert(props) {
@@ -42,21 +43,22 @@ export default function FindUser(props) {
   const getProfileHandler = async (e) => {
     try {
       e.preventDefault();
-      const user = await dispatch(findUser(email));
-      console.log(user.firstName);
-      setUser(user);
+      const friend = await dispatch(findUser(email));
+      setSearchedFriend(friend);
       // }
     } catch (err) {
       setError(err.message);
     }
   };
 
-  const addFriend = async () => {
+  const handleAddFriend = async () => {
+    setIsAddFriendDisabled(true);
     try {
-      setIsLoading(true);
-      //    await dispatch(sendFriendRequest(user._id));
+      dispatch(addFriend({ userEmail: user.email, userFriendEmail: email }));
     } catch (err) {
       setError(err.message);
+    } finally {
+      setIsAddFriendDisabled(false);
     }
   };
 
@@ -87,14 +89,18 @@ export default function FindUser(props) {
         ></div>
       ) : (
         <div style={{ marginTop: 20, maxWidth: 290, marginLeft: -55 }}>
-          {user && (
-            <Card title={user.FirstName}>
+          {searchedFriend && (
+            <Card title={searchedFriend.FirstName}>
               <div style={{ float: "left" }}>
                 <Avatar size="xlarge" rounded />
               </div>
-              <div>{user.email}</div>
+              <div>{searchedFriend.email}</div>
               <div>
-                <Button title="Add as friend" onPress={addFriend}>
+                <Button
+                  disabled={isAddFriendDisabled}
+                  title="Add as friend"
+                  onClick={handleAddFriend}
+                >
                   Add as friend
                 </Button>
               </div>
