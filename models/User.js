@@ -1,5 +1,5 @@
-//changes we need to do : 
-// 1. add the next fields : 
+//changes we need to do :
+// 1. add the next fields :
 // 1. a. availability
 // 1. b. about
 // 1. c. imageAddress
@@ -23,6 +23,15 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+  },
+  available: {
+    type: Boolean,
+  },
+  about: {
+    type: String,
+  },
+  imageAddress: {
+    type: String,
   },
   date: {
     type: Date,

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_FRIEND_LIST, SET_FRIEND_REQUESTS } from "./types";
+import { GET_FRIEND_LIST, SET_FRIEND_REQUESTS, SET_ABOUT } from "./types";
 
 const baseRoute = "/api/users/";
 
@@ -89,5 +89,25 @@ export const getFriendList = (userEmail) => async (dispatch) => {
     dispatch({ type: GET_FRIEND_LIST, payload: data.friendList });
   } catch (e) {
     console.warn(e);
+  }
+};
+
+export const setAbout = ({
+  id,
+  about,
+}: {
+  id: string;
+  about: string;
+}) => async (dispatch) => {
+  try {
+    const res = await axios.post(`${baseRoute}about`, {
+      id,
+      about,
+    });
+    console.log(res);
+    console.log("before reducer ", about);
+    dispatch({ type: SET_ABOUT, payload: about });
+  } catch (err) {
+    console.log(err);
   }
 };
