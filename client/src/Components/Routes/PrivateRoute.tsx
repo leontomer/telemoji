@@ -11,15 +11,26 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   const [userIsAuthenticated, setUserIsAuthenticated] = useState<boolean>(
     isAuthenticated
   );
+  const [loadingPage, setLoadingPage] = useState(true);
+
   useEffect(() => {
     setUserIsAuthenticated(isAuthenticated);
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    if (localStorage.token) {
+      setUserIsAuthenticated(true);
+    }
+  }, []);
+  useEffect(() => {
+    console.log("second check");
+    setLoadingPage(false);
+  }, [userIsAuthenticated]);
   return (
     <Route
       {...rest}
       render={(props) =>
-        !userIsAuthenticated ? (
+        !loadingPage && !userIsAuthenticated ? (
           <Redirect to="/login" />
         ) : (
           <Component {...props} />

@@ -11,10 +11,8 @@ import { FriendProps } from "../../../reducers/authReducer";
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 345,
-  },
-  media: {
-    height: 140,
+    width: "100%",
+    height: "100%",
   },
 });
 
@@ -29,7 +27,6 @@ export default function FriendInfoCard(props: FriendInfoCardProps) {
   return (
     <Card className={classes.root}>
       <CardActionArea>
-        <CardMedia className={classes.media} title="Contemplative Reptile" />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             {friend

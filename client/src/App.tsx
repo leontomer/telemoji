@@ -11,7 +11,10 @@ import Dashboard from "./Components/Dashboard/Dashboard";
 import { Provider } from "react-redux";
 import PrivateRoute from "./Components/Routes/PrivateRoute";
 import { loadUser } from "./actions/authActions";
-import { loadFaceapi, loadEmotionRecognitionModel } from './actions/modelActions';
+import {
+  loadFaceapi,
+  loadEmotionRecognitionModel,
+} from "./actions/modelActions";
 import setAuthToken from "./utilities/setAuthToken";
 import { DrawerComponent } from "./Components/Drawer/Drawer";
 import store from "./store";
