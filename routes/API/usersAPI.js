@@ -32,7 +32,7 @@ router.post(
       if (user) {
         return res
           .status(400)
-          .json({ errors: [{ msg: "User allready exists" }] });
+          .json({ errors: [{ msg: "User already exists" }] });
       }
 
       user = new User({
@@ -167,6 +167,19 @@ router.get("/friendList", async (req, res) => {
     console.error(err);
     res.status(500).json({ errors: [{ msg: err.message }] });
   }
+});
+
+router.post("/about", async (req, res) => {
+  try {
+    const { id, about } = req.body;
+
+    const user = await User.findById(id);
+
+    user.about = about;
+    await user.save();
+
+    res.json("ok");
+  } catch (error) {}
 });
 
 module.exports = router;

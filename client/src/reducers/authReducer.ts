@@ -10,6 +10,7 @@ import {
   LOGIN_SUCCESS_GOOGLE_FACEBOOK,
   SET_FRIEND_REQUESTS,
   GET_FRIEND_LIST,
+  SET_ABOUT,
 } from "../actions/types";
 
 export interface FriendProps {
@@ -20,6 +21,9 @@ export interface FriendProps {
   friendRequests: string[];
   lastName: string[];
   password: string;
+  about: string;
+  imageAddress: string;
+  available: boolean;
   __v: number;
   _id: string[];
 }
@@ -29,7 +33,7 @@ interface InitialStateProps {
   loading: boolean;
   user: object | null;
   friendRequests: FriendProps[];
-  friendList:FriendProps[]
+  friendList: FriendProps[];
 }
 
 export const initialState: InitialStateProps = {
@@ -59,6 +63,13 @@ export default function (state: InitialStateProps = initialState, action) {
         isAuthenticated: true,
         user: payload,
         loading: false,
+      };
+
+    case SET_ABOUT:
+      // console.log({ ...state, user: { ...state.user, about: payload } });
+      return {
+        ...state,
+        user: { ...state.user, about: payload },
       };
 
     case REGISTER_FAIL:

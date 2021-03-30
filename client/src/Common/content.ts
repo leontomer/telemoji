@@ -8,6 +8,7 @@ export enum Content {
   login_page_sign_in_button = "Sign in",
   login_page_sign_up = "Don't have an account? Sign Up",
   login_page_forgot_password = "Forgot password?",
+  default_about = "Hi there, im using Telemoji! 😎",
   // register_page_register = "Sign up",
   // register_page_username = "Username",
   // register_page_password = "Password",
