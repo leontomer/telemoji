@@ -1,8 +1,17 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import "./LandingPage.css";
 import Button from "@material-ui/core/Button";
+import { useSelector } from "react-redux";
 
-function LandingPage() {
+function LandingPage(props) {
+  const isAuthenticated = useSelector(
+    (state) => state.authReducer.isAuthenticated
+  );
+  useEffect(() => {
+    if (isAuthenticated) {
+      props.history.push("/dashboard");
+    }
+  }, [isAuthenticated]);
   return <Frame1 {...frame1Data} />;
 }
 export default LandingPage;
@@ -52,6 +61,7 @@ function Frame1(props: any) {
       <img src={undrawWorkChatReQes41} alt="" />
     </div>
   );
+
   return (
     <>
       <div

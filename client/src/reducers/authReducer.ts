@@ -41,7 +41,12 @@ export const initialState: InitialStateProps = {
   token: localStorage.getItem("token"),
   isAuthenticated: null,
   loading: true,
-  user: null,
+  user: {
+    firstName: "",
+    lastName: "",
+    email: "",
+    friendList: [],
+  },
   friendRequests: [],
   friendList: [],
 };
