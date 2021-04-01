@@ -11,6 +11,7 @@ import {
   SET_FRIEND_REQUESTS,
   GET_FRIEND_LIST,
   SET_ABOUT,
+  SET_IMAGE,
 } from "../actions/types";
 
 export interface FriendProps {
@@ -72,6 +73,11 @@ export default function (state: InitialStateProps = initialState, action) {
         user: { ...state.user, about: payload },
       };
 
+    case SET_IMAGE:
+      return {
+        ...state,
+        user: { ...state.user, imageAddress: payload },
+      };
     case REGISTER_FAIL:
     case AUTH_ERROR:
     case LOGOUT:

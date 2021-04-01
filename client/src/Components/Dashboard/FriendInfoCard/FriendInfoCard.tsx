@@ -11,12 +11,17 @@ import { FriendProps } from "../../../reducers/authReducer";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import { Content } from "../../../Common/content";
-import { setAbout } from "../../../actions/usersActions";
+import { setAbout, setUserImageAction } from "../../../actions/usersActions";
 
 const useStyles = makeStyles({
   root: {
     width: "100%",
     height: "100%",
+  },
+  media: {
+    height: 250,
+    width: 200,
+    float: "right",
   },
 });
 
@@ -28,6 +33,8 @@ export default function FriendInfoCard(props: FriendInfoCardProps) {
   const { friendInFocus: friend } = props;
   const classes = useStyles();
   const [userAbout, setUserAbout] = useState<string>(Content.default_about);
+  const [userImage, setUserImage] = useState<string>(Content.default_image);
+
   const [saveButtonReady, setSaveButtonReady] = useState(true);
   const dispatch = useDispatch();
 
@@ -46,10 +53,17 @@ export default function FriendInfoCard(props: FriendInfoCardProps) {
     setUserAbout(value);
   };
 
+  const handleImageChange = ({
+    target: { value },
+  }: {
+    target: { value: string };
+  }) => {
+    setUserImage(value);
+  };
+
   const getUserAbout = () => {
     return (
       <TextField
-        label="About"
         value={userAbout}
         multiline
         variant="outlined"
@@ -58,10 +72,38 @@ export default function FriendInfoCard(props: FriendInfoCardProps) {
     );
   };
 
+  const setImage = () => {
+    return (
+      <TextField
+        label="Image"
+        value={userImage}
+        variant="outlined"
+        onChange={handleImageChange}
+      />
+    );
+  };
+
+  const getUserImage = () => {
+    if (user && user.imageAddress) {
+      return user.imageAddress;
+    } else {
+      return Content.default_image;
+    }
+  };
+
+  const getFriendImage = () => {
+    if (friend && friend.imageAddress) {
+      return friend.imageAddress;
+    } else {
+      return Content.default_image;
+    }
+  };
+
   const user = useSelector((state) => state.authReducer.user);
   useEffect(() => {
     if (user) {
       setUserAbout(user.about);
+      setUserImage(user.imageAddress);
     }
   }, [user]);
 
@@ -82,6 +124,7 @@ export default function FriendInfoCard(props: FriendInfoCardProps) {
     setSaveButtonReady(false);
     try {
       await dispatch(setAbout({ id: user._id, about: userAbout }));
+      await dispatch(setUserImageAction({ id: user._id, imgAdrss: userImage }));
     } catch (error) {
       console.error(error);
     } finally {
@@ -110,11 +153,29 @@ export default function FriendInfoCard(props: FriendInfoCardProps) {
   return (
     <Card className={classes.root}>
       <CardActionArea>
-        <CardMedia
-          component="img"
-          height="200"
-          image="https://media-exp1.licdn.com/dms/image/C4D03AQHniuo3G89_ww/profile-displayphoto-shrink_200_200/0/1595252175666?e=1619654400&v=beta&t=hqgjfoU_0yRUH7h0qSqzb4ENw_p9EC_0lwIeCuDHhhU"
-        />
+        {friend ? (
+          <CardMedia
+            component="img"
+            className={classes.media}
+            image={getFriendImage()}
+          />
+        ) : (
+          <div>
+            {" "}
+            <CardMedia
+              component="img"
+              className={classes.media}
+              image={getUserImage()}
+            />
+            <TextField
+              label="Image"
+              value={userImage}
+              variant="outlined"
+              onChange={handleImageChange}
+            />
+          </div>
+        )}
+
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             {friend

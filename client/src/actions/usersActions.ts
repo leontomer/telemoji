@@ -1,5 +1,10 @@
 import axios from "axios";
-import { GET_FRIEND_LIST, SET_FRIEND_REQUESTS, SET_ABOUT } from "./types";
+import {
+  GET_FRIEND_LIST,
+  SET_FRIEND_REQUESTS,
+  SET_ABOUT,
+  SET_IMAGE,
+} from "./types";
 
 const baseRoute = "/api/users/";
 
@@ -104,9 +109,27 @@ export const setAbout = ({
       id,
       about,
     });
-    console.log(res);
-    console.log("before reducer ", about);
+
     dispatch({ type: SET_ABOUT, payload: about });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const setUserImageAction = ({
+  id,
+  imgAdrss,
+}: {
+  id: string;
+  imgAdrss: string;
+}) => async (dispatch) => {
+  try {
+    const res = await axios.post(`${baseRoute}image`, {
+      id,
+      imgAdrss,
+    });
+
+    dispatch({ type: SET_IMAGE, payload: imgAdrss });
   } catch (err) {
     console.log(err);
   }
