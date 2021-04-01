@@ -10,8 +10,7 @@ const WelcomeBanner = () => {
       <div style={{ color: "white", fontSize: 30 }}>
         {firstName && (
           <h1>
-            Good evening,{" "}
-            {firstName.charAt(0).toUpperCase() + firstName.slice(1)}
+            ערב טוב, {firstName.charAt(0).toUpperCase() + firstName.slice(1)}
           </h1>
         )}
       </div>
