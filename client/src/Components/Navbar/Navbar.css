@@ -5,8 +5,3 @@
   font-weight: 500;
   /* font-size: 100px; */
 }
-.navbar {
-  align-self: flex-start;
-  width: 100vw;
-  position: fixed;
-}
