@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
+import Avatar from "@material-ui/core/Avatar";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -12,16 +12,23 @@ import { useDispatch, useSelector } from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import { Content } from "../../../Common/content";
 import { setAbout, setUserImageAction } from "../../../actions/usersActions";
-
+import Sprinkle from "../../../svgs/Sprinkle.svg";
+import "./FriendInfoCard.scss";
 const useStyles = makeStyles({
   root: {
     width: "100%",
-    height: "100%",
+    height: 500,
+    backgroundImage: Sprinkle,
+    backgroundSize: "cover",
   },
-  media: {
-    height: 250,
+  large: {
+    marginTop: 50,
+    margin: "auto",
     width: 200,
-    float: "right",
+    height: 200,
+  },
+  actions: {
+    padding: 30,
   },
 });
 
@@ -151,33 +158,15 @@ export default function FriendInfoCard(props: FriendInfoCardProps) {
   };
 
   return (
-    <Card className={classes.root}>
-      <CardActionArea>
-        {friend ? (
-          <CardMedia
-            component="img"
-            className={classes.media}
-            image={getFriendImage()}
-          />
-        ) : (
-          <div>
-            {" "}
-            <CardMedia
-              component="img"
-              className={classes.media}
-              image={getUserImage()}
-            />
-            <TextField
-              label="Image"
-              value={userImage}
-              variant="outlined"
-              onChange={handleImageChange}
-            />
-          </div>
-        )}
-
+    <div className="outer">
+      <Card className="root">
+        <Avatar
+          alt="Remy Sharp"
+          src={getUserImage()}
+          className={classes.large}
+        />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
+          <Typography gutterBottom variant="h4" component="h4">
             {friend
               ? `${friend.firstName} ${friend.lastName}`
               : user && `${user.firstName} ${user.lastName}`}
@@ -186,10 +175,11 @@ export default function FriendInfoCard(props: FriendInfoCardProps) {
             {friend ? getFriendAbout() : getUserAbout()}
           </Typography>
         </CardContent>
-      </CardActionArea>
-      <CardActions>
-        {friend ? getFriendActions() : getUserActions()}
-      </CardActions>
-    </Card>
+
+        <CardActions className={classes.actions}>
+          {friend ? getFriendActions() : getUserActions()}
+        </CardActions>
+      </Card>
+    </div>
   );
 }
