@@ -4,7 +4,6 @@ import Card from "@material-ui/core/Card";
 import Avatar from "@material-ui/core/Avatar";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { FriendProps } from "../../../reducers/authReducer";
@@ -12,15 +11,9 @@ import { useDispatch, useSelector } from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import { Content } from "../../../Common/content";
 import { setAbout, setUserImageAction } from "../../../actions/usersActions";
-import Sprinkle from "../../../svgs/Sprinkle.svg";
+
 import "./FriendInfoCard.scss";
 const useStyles = makeStyles({
-  root: {
-    width: "100%",
-    height: 500,
-    backgroundImage: Sprinkle,
-    backgroundSize: "cover",
-  },
   large: {
     marginTop: 50,
     margin: "auto",
