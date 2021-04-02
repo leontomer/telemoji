@@ -153,11 +153,28 @@ export default function FriendInfoCard(props: FriendInfoCardProps) {
   return (
     <div className="outer">
       <Card className="root">
-        <Avatar
-          alt="Remy Sharp"
-          src={getUserImage()}
-          className={classes.large}
-        />
+        {friend ? (
+          <Avatar
+            alt="Remy Sharp"
+            src={getFriendImage()}
+            className={classes.large}
+          />
+        ) : (
+          <div>
+            <Avatar
+              alt="Remy Sharp"
+              src={getUserImage()}
+              className={classes.large}
+            />
+            <TextField
+              label="Image"
+              value={userImage}
+              variant="outlined"
+              onChange={handleImageChange}
+            />
+          </div>
+        )}
+
         <CardContent>
           <Typography gutterBottom variant="h4" component="h4">
             {friend
