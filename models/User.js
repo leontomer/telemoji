@@ -1,8 +1,5 @@
 //changes we need to do :
-// 1. add the next fields :
-// 1. a. availability
-// 1. b. about
-// 1. c. imageAddress
+// add : friend requests the user sent
 
 const mongoose = require("mongoose");
 const UserSchema = new mongoose.Schema({

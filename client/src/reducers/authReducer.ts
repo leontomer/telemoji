@@ -12,7 +12,8 @@ import {
   GET_FRIEND_LIST,
   SET_ABOUT,
   SET_IMAGE,
-  SET_FRIEND_IN_FOCUS
+  SET_FRIEND_IN_FOCUS,
+  REMOVE_FRIEND,
 } from "../actions/types";
 
 export interface FriendProps {
@@ -27,7 +28,7 @@ export interface FriendProps {
   imageAddress: string;
   available: boolean;
   __v: number;
-  _id: string[];
+  _id: string;
 }
 interface InitialStateProps {
   isAuthenticated: boolean | null;
@@ -116,8 +117,14 @@ export default function (state: InitialStateProps = initialState, action) {
       return { ...state, friendList: payload };
 
     case SET_FRIEND_IN_FOCUS:
-      return {...state, friendInFocus: payload}
-      
+      return { ...state, friendInFocus: payload };
+
+    case REMOVE_FRIEND:
+      return {
+        ...state,
+        friendList: payload,
+      };
+
     default:
       return state;
   }
