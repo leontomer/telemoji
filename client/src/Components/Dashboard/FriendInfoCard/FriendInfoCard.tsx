@@ -25,18 +25,18 @@ const useStyles = makeStyles({
   },
 });
 
-interface FriendInfoCardProps {
-  friendInFocus: FriendProps | null;
-}
-
-export default function FriendInfoCard(props: FriendInfoCardProps) {
-  const { friendInFocus: friend } = props;
+export default function FriendInfoCard() {
   const classes = useStyles();
   const [userAbout, setUserAbout] = useState<string>(Content.default_about);
   const [userImage, setUserImage] = useState<string>(Content.default_image);
 
   const [saveButtonReady, setSaveButtonReady] = useState(true);
   const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.authReducer.user);
+  const friend: FriendProps = useSelector(
+    (state) => state.authReducer.friendInFocus
+  );
 
   const getFriendAbout = () => {
     if (friend && friend.about) {
@@ -64,8 +64,10 @@ export default function FriendInfoCard(props: FriendInfoCardProps) {
   const getUserAbout = () => {
     return (
       <TextField
+        style={{ width: "80%", maxHeight: "80px" }}
         value={userAbout}
         multiline
+        rowsMax={4}
         variant="outlined"
         onChange={handleAboutChange}
       />
@@ -99,7 +101,6 @@ export default function FriendInfoCard(props: FriendInfoCardProps) {
     }
   };
 
-  const user = useSelector((state) => state.authReducer.user);
   useEffect(() => {
     if (user) {
       setUserAbout(user.about);
@@ -185,7 +186,6 @@ export default function FriendInfoCard(props: FriendInfoCardProps) {
             {friend ? getFriendAbout() : getUserAbout()}
           </Typography>
         </CardContent>
-
         <CardActions className={classes.actions}>
           {friend ? getFriendActions() : getUserActions()}
         </CardActions>

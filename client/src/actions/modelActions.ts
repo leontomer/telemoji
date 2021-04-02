@@ -1,4 +1,3 @@
-import uuid from "uuid";
 import * as faceapi from "@vladmandic/face-api/dist/face-api.esm.js";
 import * as tf from "@tensorflow/tfjs";
 

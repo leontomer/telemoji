@@ -1,9 +1,11 @@
 import axios from "axios";
+import { FriendProps } from "../reducers/authReducer";
 import {
   GET_FRIEND_LIST,
   SET_FRIEND_REQUESTS,
   SET_ABOUT,
   SET_IMAGE,
+  SET_FRIEND_IN_FOCUS,
 } from "./types";
 
 const baseRoute = "/api/users/";
@@ -133,4 +135,20 @@ export const setUserImageAction = ({
   } catch (err) {
     console.log(err);
   }
+};
+
+export const getAllUsers = async () => {
+  try {
+    const res = await axios.get(`${baseRoute}allUsers`);
+    return res.data.users;
+  } catch (err) {
+    console.warn(err);
+  }
+};
+
+export const setFriendInFocus = (friend: FriendProps) => (dispatch) => {
+  dispatch({
+    type: SET_FRIEND_IN_FOCUS,
+    payload: friend,
+  });
 };

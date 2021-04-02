@@ -169,6 +169,17 @@ router.get("/friendList", async (req, res) => {
   }
 });
 
+router.get("/allUsers", async (req, res) => {
+  try {
+    const users = await User.find({}).select("-passwords");
+
+    res.json({ users });
+  } catch {
+    console.error(err);
+    res.status(500).json({ errors: [{ msg: err.message }] });
+  }
+});
+
 router.post("/about", async (req, res) => {
   try {
     const { id, about } = req.body;
