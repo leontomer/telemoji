@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
@@ -14,7 +14,7 @@ import Divider from "@material-ui/core/Divider";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getFriendList } from "../../../actions/usersActions";
+import { getFriendList, setFriendInFocus } from "../../../actions/usersActions";
 import { FriendProps } from "../../../reducers/authReducer";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -37,20 +37,18 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface FriendsListProps {
-  setFriendInFocus: any;
-}
 
-export default function FriendsList(props: FriendsListProps) {
-  const { setFriendInFocus } = props;
+
+export default function FriendsList() {
   const classes = useStyles();
   const { user, friendList } = useSelector((state) => state.authReducer);
 
   const handleFriendClick = (friend: FriendProps) => {
-    setFriendInFocus(friend);
+    dispatch(setFriendInFocus(friend))
   };
 
   const dispatch = useDispatch();
+
   useEffect(() => {
     (async () => {
       if (user) {
@@ -72,7 +70,7 @@ export default function FriendsList(props: FriendsListProps) {
       </ListItem>
       <Divider />
       {friendList.length !== 0 ? (
-        friendList.map((friend, index) => {
+        friendList.map((friend: FriendProps, index) => {
           const labelId = `checkbox-list-secondary-label-${friend}`;
           return (
             <ListItem
@@ -85,7 +83,7 @@ export default function FriendsList(props: FriendsListProps) {
                   alt={`${friend.firstName}`}
                   //TODO : replace with real picture mechanism
                   src={
-                    "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=10208010756503779&height=50&width=50&ext=1619626020&hash=AeS9WAo3l4oE8QEMYPQ"
+                    friend.imageAddress
                   }
                 />
               </ListItemAvatar>

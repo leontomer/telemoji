@@ -12,6 +12,7 @@ import {
   GET_FRIEND_LIST,
   SET_ABOUT,
   SET_IMAGE,
+  SET_FRIEND_IN_FOCUS
 } from "../actions/types";
 
 export interface FriendProps {
@@ -35,6 +36,7 @@ interface InitialStateProps {
   user: object | null;
   friendRequests: FriendProps[];
   friendList: FriendProps[];
+  friendInFocus: FriendProps | null;
 }
 
 export const initialState: InitialStateProps = {
@@ -49,6 +51,7 @@ export const initialState: InitialStateProps = {
   },
   friendRequests: [],
   friendList: [],
+  friendInFocus: null,
 };
 export default function (state: InitialStateProps = initialState, action) {
   const { type, payload } = action;
@@ -111,6 +114,10 @@ export default function (state: InitialStateProps = initialState, action) {
 
     case GET_FRIEND_LIST:
       return { ...state, friendList: payload };
+
+    case SET_FRIEND_IN_FOCUS:
+      return {...state, friendInFocus: payload}
+      
     default:
       return state;
   }
