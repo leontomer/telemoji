@@ -89,7 +89,37 @@ router.post("/addfriend", async (req, res) => {
     const user = await User.findOne({ email: userEmail }).select("-password");
 
     friend.friendRequests.push(user._id);
+    console.log(user);
     await friend.save();
+    console.log(friend);
+    res.json({ friend });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ errors: [{ msg: err.message }] });
+  }
+});
+
+router.post("/removeFriend", async (req, res) => {
+  try {
+    const { userId, userFriendId } = req.body;
+    const friend = await User.findById(userFriendId).select("-password");
+    const user = await User.findById(userId).select("-password");
+
+    user.friendList = user.friendList.filter(
+      (friend) => {
+        console.log(friend,userFriendId)
+        return friend.toString() !== userFriendId.toString()}
+    );
+    console.log(user.friendList)
+    friend.friendList = friend.friendList.filter(
+      (friend) => friend.toString() !== userId.toString()
+    );
+
+    
+    await friend.save();
+    await user.save();
+  
+    res.json({ user });
   } catch (err) {
     console.error(err);
     res.status(500).json({ errors: [{ msg: err.message }] });

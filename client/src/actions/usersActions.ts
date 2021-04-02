@@ -37,17 +37,40 @@ export const addFriend = ({
       userFriendEmail,
     });
     const { data } = res;
+    console.log({data})
     return res.data.other;
   } catch (err) {
     console.log(err);
   }
 };
 
+export const removeFriend = ({
+  userId,
+  userFriendId,
+}: {
+  userId: string;
+  userFriendId: string;
+}) => async (dispatch) => {
+  try {
+    const res = await axios.post(`${baseRoute}removeFriend`, {
+      userId,
+      userFriendId,
+    });
+    const { data } = res;
+    console.log({data})
+    return res.data.other;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
 export const updatePendingFriendRequests = (email) => async (dispatch) => {
   try {
     const res = await axios.get(`${baseRoute}pendingFriendRequests`, {
       params: { email },
     });
+    const user = res.data.user
     const friendRequests = res.data.user.friendRequests;
     dispatch({ type: SET_FRIEND_REQUESTS, payload: [...friendRequests] });
   } catch (err) {

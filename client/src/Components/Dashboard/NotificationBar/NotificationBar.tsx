@@ -89,11 +89,11 @@ function NotificationBar(props: NotificationBarProps) {
           <Divider />
           {numberOfPendingFriendRequest !== 0 ? (
             friendRequests.map((friendRequest, index) => {
-              const { firstName, lastName, email } = friendRequest;
+              const { firstName, lastName, email, imageAddress } = friendRequest;
               return (
                 <ListItem key={index}>
                   <ListItemAvatar>
-                    <Avatar alt={firstName} src="/static/images/avatar/1.jpg" />
+                    <Avatar alt={firstName} src={imageAddress} />
                   </ListItemAvatar>
                   <ListItemText primary={`${firstName} ${lastName}`} />
                   <ListItemSecondaryAction>

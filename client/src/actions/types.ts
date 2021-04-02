@@ -19,3 +19,4 @@ export const GET_FRIEND_LIST = "GET_FRIEND_LIST";
 export const SET_ABOUT = "SET_ABOUT";
 export const SET_IMAGE = "SET_IMAGE";
 export const SET_FRIEND_IN_FOCUS = "SET_FRIEND_IN_FOCUS";
+export const REMOVE_FRIEND = "REMOVE_FRIEND";

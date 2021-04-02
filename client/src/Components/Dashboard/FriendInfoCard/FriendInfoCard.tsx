@@ -10,7 +10,12 @@ import { FriendProps } from "../../../reducers/authReducer";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import { Content } from "../../../Common/content";
-import { setAbout, setUserImageAction } from "../../../actions/usersActions";
+import {
+  addFriend,
+  removeFriend,
+  setAbout,
+  setUserImageAction,
+} from "../../../actions/usersActions";
 
 import "./FriendInfoCard.scss";
 const useStyles = makeStyles({
@@ -108,15 +113,51 @@ export default function FriendInfoCard() {
     }
   }, [user]);
 
+  const usersAreFriends = () => {
+    for (let index = 0; index < user.friendList.length; index++) {
+      const friendToCheck = user.friendList[index];
+      if (friend._id === friendToCheck) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const handleAddFriend = async () => {
+    try {
+      await dispatch(
+        addFriend({ userEmail: user.email, userFriendEmail: friend.email })
+      );
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
+  const handleUnfriend = async () => {
+    try {
+      await dispatch(
+        removeFriend({ userId: user._id, userFriendId: friend._id })
+      );
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
   const getFriendActions = () => {
     return (
       <>
         <Button size="small" color="primary">
           Call
         </Button>
-        <Button size="small" color="primary">
-          Cool
-        </Button>
+        {usersAreFriends() ? (
+          <Button size="small" color="primary" onClick={handleUnfriend}>
+            Unfriend
+          </Button>
+        ) : (
+          <Button size="small" color="primary" onClick={handleAddFriend}>
+            Add Friend
+          </Button>
+        )}
       </>
     );
   };
@@ -143,9 +184,6 @@ export default function FriendInfoCard() {
           onClick={handleSaveUserDetails}
         >
           Save
-        </Button>
-        <Button size="small" color="primary">
-          Cool
         </Button>
       </>
     );
