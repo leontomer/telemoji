@@ -68,21 +68,25 @@ export function Webrtc() {
   const firstName = useSelector((state) => state.authReducer.user.firstName);
   const lastName = useSelector((state) => state.authReducer.user.lastName);
   useEffect(() => {
-    socket.current = io.connect("/");
+    // socket.current = io.connect("/");
     setYourName(`${firstName} ${lastName}`);
     getStreamFromVideoCamera();
-    socket.current.on("yourID", (id) => {
-      setYourID(id);
-    });
-    socket.current.on("allUsers", (users) => {
-      setUsers(users);
-    });
+    // socket.current.on("yourID", (id) => {
+    //   setYourID(id);
+    // });
+    // socket.current.on("allUsers", (users) => {
+    //   setUsers(users);
+    // });
 
     socket.current.on("hey", (data) => {
       setReceivingCall(true);
       setCaller(data.from);
       setCallerSignal(data.signal);
     });
+
+    return () => {
+      socket.current.emit("logout")
+    }
   }, []);
 
   useEffect(() => {

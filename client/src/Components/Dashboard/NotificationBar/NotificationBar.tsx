@@ -34,6 +34,7 @@ function NotificationBar(props: NotificationBarProps) {
   const { user, friendRequests } = useSelector((state) => state.authReducer);
 
   const dispatch = useDispatch();
+
   useEffect(() => {
     (async () => {
       if (user) {
@@ -43,7 +44,7 @@ function NotificationBar(props: NotificationBarProps) {
       }
       setNumberOfPendingFriendRequest(friendRequests.length);
     })();
-  }, [user, friendRequests]);
+  }, [user]);
 
   async function handleApproveFriendShip(userFriendEmail: string) {
     try {
@@ -108,8 +109,8 @@ function NotificationBar(props: NotificationBarProps) {
               );
             })
           ) : (
-            <div></div>
-          )}
+              <div></div>
+            )}
         </List>
       </Card>
     </>

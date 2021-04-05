@@ -16,6 +16,7 @@
     "@types/node": "^14.14.31",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
+    "@types/socket.io-client": "^1.4.36",
     "@vladmandic/face-api": "^0.8.1",
     "axios": "^0.21.1",
     "capture-video-frame": "^1.0.0",

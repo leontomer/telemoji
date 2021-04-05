@@ -6,9 +6,10 @@ const app = express();
 const path = require("path");
 const http = require("http");
 const server = http.createServer(app);
-var bodyParser = require("body-parser");
+global.io = require('socket.io')(server);
 
-require("./socket")(server);
+
+require("./socket")();
 connectDB();
 const port = process.env.PORT || 5000;
 app.use(express.json({ extended: false }));
