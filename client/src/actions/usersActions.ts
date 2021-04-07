@@ -1,5 +1,6 @@
 import axios from "axios";
 import { FriendProps } from "../reducers/authReducer";
+import socketReducer from "../reducers/socketReducer";
 import {
   GET_FRIEND_LIST,
   SET_FRIEND_REQUESTS,
@@ -30,18 +31,30 @@ export const addFriend = ({
 }: {
   userEmail: string;
   userFriendEmail: string;
-}) => async (dispatch) => {
+}) => async (dispatch, getState) => {
   try {
-    const res = await axios.post(`${baseRoute}addfriend`, {
+    const socket = getState().socketReducer.socket;
+    const userId = getState().authReducer.user._id;
+    const data = { userId, userFriendEmail };
+    await axios.post(`${baseRoute}addfriend`, {
       userEmail,
       userFriendEmail,
     });
-    const { data } = res;
-    console.log({data})
-    return res.data.other;
-  } catch (err) {
-    console.log(err);
+    socket.emit("addFriend", data);
+  } catch (error) {
+    console.error(error);
   }
+  // try {
+  //   const res = await axios.post(`${baseRoute}addfriend`, {
+  //     userEmail,
+  //     userFriendEmail,
+  //   });
+  //   const { data } = res;
+  //   console.log({ data });
+  //   return res.data.other;
+  // } catch (err) {
+  //   console.log(err);
+  // }
 };
 
 export const removeFriend = ({
@@ -57,22 +70,28 @@ export const removeFriend = ({
       userFriendId,
     });
     const { data } = res;
-    console.log({data})
+    console.log({ data });
     return res.data.other;
   } catch (err) {
     console.log(err);
   }
 };
 
-
-export const updatePendingFriendRequests = (email) => async (dispatch) => {
+export const updatePendingFriendRequests = (email) => async (
+  dispatch,
+  getState
+) => {
   try {
-    const res = await axios.get(`${baseRoute}pendingFriendRequests`, {
-      params: { email },
+    const socket = getState().socketReducer.socket;
+
+    socket.on("login", () => {
+      console.log("login!!!!!!!!!!!!!!");
     });
-    const user = res.data.user
-    const friendRequests = res.data.user.friendRequests;
-    dispatch({ type: SET_FRIEND_REQUESTS, payload: [...friendRequests] });
+    socket.on("friendRequestReceived", (data) => {
+      const user = data.user;
+      const friendRequests = data.user.friendRequests;
+      dispatch({ type: SET_FRIEND_REQUESTS, payload: [...friendRequests] });
+    });
   } catch (err) {
     console.log(err);
   }

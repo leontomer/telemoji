@@ -15,7 +15,7 @@ import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import { useDispatch, useSelector } from "react-redux";
 import { getFriendList, setFriendInFocus } from "../../../actions/usersActions";
 import { FriendProps } from "../../../reducers/authReducer";
-import { handleCallUser } from '../../../actions/callActions';
+import { handleCallUser } from "../../../actions/callActions";
 import { withRouter } from "react-router";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -38,14 +38,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-
-
 function FriendsList({ history }) {
   const classes = useStyles();
   const { user, friendList } = useSelector((state) => state.authReducer);
 
   const handleFriendClick = (friend: FriendProps) => {
-    dispatch(setFriendInFocus(friend))
+    dispatch(setFriendInFocus(friend));
   };
 
   const dispatch = useDispatch();
@@ -56,12 +54,12 @@ function FriendsList({ history }) {
         await dispatch(getFriendList(user.email));
       }
     })();
-  }, []);
+  }, [user, friendList]);
 
   const handleCall = (id) => {
     dispatch(handleCallUser(id));
-    history.push(`/video-chat/${id}`)
-  }
+    history.push(`/video-chat/${id}`);
+  };
 
   return (
     <List dense className={classes.root}>
@@ -88,14 +86,15 @@ function FriendsList({ history }) {
                 <Avatar
                   alt={`${friend.firstName}`}
                   //TODO : replace with real picture mechanism
-                  src={
-                    friend.imageAddress
-                  }
+                  src={friend.imageAddress}
                 />
               </ListItemAvatar>
               <ListItemText id={labelId} primary={friend.firstName} />
               <ListItemSecondaryAction>
-                <IconButton disabled={false} onClick={() => handleCall(friend._id)}>
+                <IconButton
+                  disabled={false}
+                  onClick={() => handleCall(friend._id)}
+                >
                   <PhoneIcon
                     style={
                       friend.firstName === "tom"
@@ -109,9 +108,9 @@ function FriendsList({ history }) {
           );
         })
       ) : (
-          <></>
-        )}
+        <></>
+      )}
     </List>
   );
 }
-export default withRouter(FriendsList)
+export default withRouter(FriendsList);

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import {
   approvePendingFriendRequest,
   rejectPendingFriendRequest,
-  updatePendingFriendRequests,
 } from "../../../actions/usersActions";
+import { updatePendingFriendRequests } from "../../../actions/socketActions";
 import { useDispatch, useSelector } from "react-redux";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
@@ -20,6 +20,7 @@ import {
   Divider,
   Card,
 } from "@material-ui/core";
+import socketReducer from "../../../reducers/socketReducer";
 
 interface NotificationBarProps {
   numberOfPendingFriendRequest: number;
@@ -89,7 +90,12 @@ function NotificationBar(props: NotificationBarProps) {
           <Divider />
           {numberOfPendingFriendRequest !== 0 ? (
             friendRequests.map((friendRequest, index) => {
-              const { firstName, lastName, email, imageAddress } = friendRequest;
+              const {
+                firstName,
+                lastName,
+                email,
+                imageAddress,
+              } = friendRequest;
               return (
                 <ListItem key={index}>
                   <ListItemAvatar>
@@ -108,8 +114,8 @@ function NotificationBar(props: NotificationBarProps) {
               );
             })
           ) : (
-              <div></div>
-            )}
+            <div></div>
+          )}
         </List>
       </Card>
     </>

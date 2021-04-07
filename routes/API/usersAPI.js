@@ -82,6 +82,7 @@ router.get("/finduser", async (req, res) => {
 
 router.post("/addfriend", async (req, res) => {
   try {
+    console.log("friend req");
     const { userEmail, userFriendEmail } = req.body;
     const friend = await User.findOne({ email: userFriendEmail }).select(
       "-password"
@@ -105,17 +106,14 @@ router.post("/removeFriend", async (req, res) => {
     const friend = await User.findById(userFriendId).select("-password");
     const user = await User.findById(userId).select("-password");
 
-    user.friendList = user.friendList.filter(
-      (friend) => {
-        console.log(friend, userFriendId)
-        return friend.toString() !== userFriendId.toString()
-      }
-    );
-    console.log(user.friendList)
+    user.friendList = user.friendList.filter((friend) => {
+      console.log(friend, userFriendId);
+      return friend.toString() !== userFriendId.toString();
+    });
+    console.log(user.friendList);
     friend.friendList = friend.friendList.filter(
       (friend) => friend.toString() !== userId.toString()
     );
-
 
     await friend.save();
     await user.save();
@@ -182,7 +180,7 @@ router.post("/rejectFriend", async (req, res) => {
     user.friendRequests = updatedFriendRequests;
 
     await user.save();
-  } catch (e) { }
+  } catch (e) {}
 });
 
 router.get("/friendList", async (req, res) => {
@@ -220,7 +218,7 @@ router.post("/about", async (req, res) => {
     await user.save();
 
     res.json("ok");
-  } catch (error) { }
+  } catch (error) {}
 });
 
 router.post("/image", async (req, res) => {
@@ -233,7 +231,7 @@ router.post("/image", async (req, res) => {
     await user.save();
 
     res.json("ok");
-  } catch (error) { }
+  } catch (error) {}
 });
 
 module.exports = router;
