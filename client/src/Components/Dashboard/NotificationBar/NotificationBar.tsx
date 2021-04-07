@@ -43,7 +43,7 @@ function NotificationBar(props: NotificationBarProps) {
       }
       setNumberOfPendingFriendRequest(friendRequests.length);
     })();
-  }, [user]);
+  }, []);
 
   async function handleApproveFriendShip(userFriendEmail: string) {
     try {

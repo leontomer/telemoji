@@ -1,6 +1,6 @@
 module.exports = () => {
 
-  const users = {};
+  global.users = {};
 
   io.on("connection", (socket) => {
     global.socket = socket;
@@ -31,7 +31,6 @@ module.exports = () => {
     });
 
     socket.on("acceptCall", (data) => {
-      console.log('call accepted', data);
       io.to(data.to).emit("callAccepted", data.signal);
     });
   });

@@ -107,18 +107,19 @@ router.post("/removeFriend", async (req, res) => {
 
     user.friendList = user.friendList.filter(
       (friend) => {
-        console.log(friend,userFriendId)
-        return friend.toString() !== userFriendId.toString()}
+        console.log(friend, userFriendId)
+        return friend.toString() !== userFriendId.toString()
+      }
     );
     console.log(user.friendList)
     friend.friendList = friend.friendList.filter(
       (friend) => friend.toString() !== userId.toString()
     );
 
-    
+
     await friend.save();
     await user.save();
-  
+
     res.json({ user });
   } catch (err) {
     console.error(err);
@@ -132,7 +133,6 @@ router.get("/pendingFriendRequests", async (req, res) => {
     const user = await User.findOne({ email })
       .select("-password")
       .populate("friendRequests");
-
     res.json({ user });
   } catch (err) {
     console.error(err);
@@ -182,7 +182,7 @@ router.post("/rejectFriend", async (req, res) => {
     user.friendRequests = updatedFriendRequests;
 
     await user.save();
-  } catch (e) {}
+  } catch (e) { }
 });
 
 router.get("/friendList", async (req, res) => {
@@ -220,7 +220,7 @@ router.post("/about", async (req, res) => {
     await user.save();
 
     res.json("ok");
-  } catch (error) {}
+  } catch (error) { }
 });
 
 router.post("/image", async (req, res) => {
@@ -233,7 +233,7 @@ router.post("/image", async (req, res) => {
     await user.save();
 
     res.json("ok");
-  } catch (error) {}
+  } catch (error) { }
 });
 
 module.exports = router;

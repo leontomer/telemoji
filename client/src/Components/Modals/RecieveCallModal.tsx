@@ -5,8 +5,9 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import { Button } from '@material-ui/core';
 import { useModal } from "../../Contexts/ModalContext";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { withRouter } from "react-router";
+import { handleAcceptCall } from '../../actions/callActions';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,11 +30,13 @@ const useStyles = makeStyles((theme) => ({
 //     acceptCall: Function;
 // }
 const RecieveCallModalComponent = ({ history }) => {
+    const dispatch = useDispatch();
     const { closeModal, isOpenModal, openModal } = useModal();
     const classes = useStyles();
     const caller = useSelector((state) => state.callReducer.callerName)
     const receivingCall = useSelector((state) => state.callReducer.receivingCall);
-    const handleAcceptCall = () => {
+    const handleAccept = () => {
+        dispatch(handleAcceptCall());
         history.push('/video-chat')
         closeModal();
     }
@@ -60,7 +63,7 @@ const RecieveCallModalComponent = ({ history }) => {
                 <Fade in={isOpenModal}>
                     <div className={classes.paper}>
                         <h2 id="transition-modal-title">{caller} is calling you</h2>
-                        <Button onClick={handleAcceptCall}>Accept call</Button>
+                        <Button onClick={handleAccept}>Accept call</Button>
                     </div>
                 </Fade>
             </Modal>

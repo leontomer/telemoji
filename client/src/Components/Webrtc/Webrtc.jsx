@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import Peer from "simple-peer";
+// import Peer from "simple-peer";
 import styled from "styled-components";
 import { DetectionVideo } from "../DetectionVideo/DetectionVideo";
 import { logoutUserFromSocket } from "../../actions/socketActions";
@@ -18,117 +18,49 @@ const Row = styled.div`
 `;
 
 
-export function Webrtc({ match }) {
+export function Webrtc() {
   const [stream, setStream] = useState();
-  const [callerSignalState, setCallerSignalState] = useState(null);
+  const [callerStream, setCallerStream] = useState(null);
   const [callAccepted, setCallAccepted] = useState(false);
 
   const userVideo = useRef();
   const partnerVideo = useRef();
-  const getStreamFromVideoCamera = () => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        setStream(stream);
-        if (userVideo.current) {
-          userVideo.current.srcObject = stream;
-        }
-      });
-  };
-  //webrtc
-  const socket = useSelector((state) => state.socketReducer.socket);
-  const callerSignal = useSelector((state) => state.callReducer.callerSignal)
-  const callerSocketId = useSelector((state) => state.callReducer.callerSocketId)
 
-
+  const callAcceptedReducer = useSelector((state) => state.callReducer.callAccepted);
+  const userStream = useSelector((state) => state.callReducer.userStream);
+  const callersStreamReducer = useSelector((state) => state.callReducer.callersStream)
 
 
   useEffect(() => {
-    getStreamFromVideoCamera();
-    if (socket) {
-      if (match.params.callerId) {
-        callPeer(match.params.callerId);
-      } else if (callerSignal) {
-        setCallerSignalState(callerSignal)
-      }
-    }
-
     return () => {
       logoutUserFromSocket();
     }
-  }, [callerSignal, socket]);
+  }, []);
 
 
   useEffect(() => {
-    if (callerSignalState && callerSocketId) {
-      acceptCall()
+    setCallAccepted(callAcceptedReducer)
+  }, [callAcceptedReducer]);
+
+  useEffect(() => {
+    setStream(userStream);
+  }, [userStream])
+
+  useEffect(() => {
+    if (userVideo.current && stream) {
+      userVideo.current.srcObject = stream;
     }
-  }, [callerSignalState, callerSocketId])
+  }, [stream])
 
+  useEffect(() => {
+    setCallerStream(callersStreamReducer)
+  }, [callersStreamReducer])
 
-
-  //call PEER
-  function callPeer(id) {
-    const peer = new Peer({
-      initiator: true,
-      trickle: false,
-      config: {
-        iceServers: [
-          {
-            urls: "turn:34.76.85.113:3478",
-            username: "guest",
-            credential: "somepassword",
-          },
-        ],
-      },
-      stream: stream,
-    });
-
-    peer.on("signal", (data) => {
-      console.log('callPeer signal');
-      socket.emit("callUser", {
-        userToCall: id,
-        signalData: data,
-        fromUser: socket.id
-      });
-    });
-
-    peer.on("stream", (stream) => {
-      console.log('callPeer streaming', stream, 'partnerVideo.current', partnerVideo.current)
-      if (partnerVideo.current) {
-        partnerVideo.current.srcObject = stream;
-      }
-    });
-
-    socket.on("callAccepted", (signal) => {
-      console.log('call accepted, the signal is', signal)
-      setCallAccepted(true);
-      peer.signal(signal);
-    });
-  }
-
-
-  //ACCEPT CALL
-  function acceptCall() {
-    setCallAccepted(true);
-    const peer = new Peer({
-      initiator: false,
-      trickle: false,
-      stream: stream,
-    });
-    peer.on("signal", (data) => {
-      console.log('accpetCall signal the signal is', data);
-      socket.emit("acceptCall", { signal: data, to: callerSocketId });
-    });
-
-    peer.on("stream", (stream) => {
-      console.log('acceptCall streaming!!!', stream);
-      partnerVideo.current.srcObject = stream;
-    });
-
-    console.log('acceptCall callerSignal', callerSignalState);
-    peer.signal(callerSignalState);
-  }
+  useEffect(() => {
+    if (partnerVideo.current && callerStream) {
+      partnerVideo.current.srcObject = callerStream;
+    }
+  }, [callerStream])
 
 
   let UserVideo;
