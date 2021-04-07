@@ -109,6 +109,7 @@ export function Webrtc() {
     });
 
     peer.on("signal", (data) => {
+      console.log('call peer signal');
       socket.current.emit("callUser", {
         userToCall: id,
         signalData: data,
@@ -117,12 +118,14 @@ export function Webrtc() {
     });
 
     peer.on("stream", (stream) => {
+      console.log('call peer stream', stream);
       if (partnerVideo.current) {
         partnerVideo.current.srcObject = stream;
       }
     });
 
     socket.current.on("callAccepted", (signal) => {
+      console.log('call peer call accepted');
       setCallAccepted(true);
       peer.signal(signal);
     });
@@ -136,13 +139,16 @@ export function Webrtc() {
       stream: stream,
     });
     peer.on("signal", (data) => {
+      console.log('accept call peer signal');
       socket.current.emit("acceptCall", { signal: data, to: caller });
     });
 
     peer.on("stream", (stream) => {
+      console.log('accept call peer stream', stream);
       partnerVideo.current.srcObject = stream;
     });
 
+    console.log('accept call peer callerSignal', callerSignal);
     peer.signal(callerSignal);
   }
 
