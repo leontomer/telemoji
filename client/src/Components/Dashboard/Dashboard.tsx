@@ -15,14 +15,13 @@ const Dashboard = () => {
         <FriendsList />
       </div>
       <div className="friendInfoCard">
-        <FriendInfoCard/>
+        <FriendInfoCard />
       </div>
       <div className="callHistory">
         <CallHistory />
       </div>
     </div>
   );
-
 };
 
 export default Dashboard;

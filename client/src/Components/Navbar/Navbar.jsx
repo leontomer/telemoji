@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { openDrawer } from "../../actions/addonActions";
 import AsyncSearch from "./AsyncSearch/AsyncSearch";
-
+import FriendRequests from "../Dashboard/FriendRequests"
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -78,6 +78,9 @@ export default function SearchAppBar() {
 
   const authenticatedContent = (
     <>
+    <div>
+      <FriendRequests/>
+    </div>
       <div className={classes.search}>
         <div className={classes.searchIcon}>
         </div>
