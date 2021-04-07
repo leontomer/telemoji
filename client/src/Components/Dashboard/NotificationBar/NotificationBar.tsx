@@ -34,7 +34,6 @@ function NotificationBar(props: NotificationBarProps) {
   const { user, friendRequests } = useSelector((state) => state.authReducer);
 
   const dispatch = useDispatch();
-
   useEffect(() => {
     (async () => {
       if (user) {

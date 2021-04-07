@@ -1,14 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
 import { DetectionVideo } from "../DetectionVideo/DetectionVideo";
-import { RecieveCallModal } from "../Modals/RecieveCallModal";
-import { makeStyles } from "@material-ui/core/styles";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import { logoutUserFromSocket } from "../../actions/socketActions";
 import { useSelector } from "react-redux";
 
 const Container = styled.div`
@@ -23,37 +17,14 @@ const Row = styled.div`
   width: 100%;
 `;
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
-  },
-  nested: {
-    paddingLeft: theme.spacing(4),
-  },
-}));
 
-export function Webrtc() {
-  const classes = useStyles();
-  const [yourID, setYourID] = useState("");
-  const [users, setUsers] = useState({});
+export function Webrtc({ match }) {
   const [stream, setStream] = useState();
-  const [receivingCall, setReceivingCall] = useState(false);
-  const [caller, setCaller] = useState("");
-  const [callerSignal, setCallerSignal] = useState();
+  const [callerSignalState, setCallerSignalState] = useState(null);
   const [callAccepted, setCallAccepted] = useState(false);
-  const [onCall, setOnCall] = useState(null);
-  const [yourName, setYourName] = useState("");
 
   const userVideo = useRef();
   const partnerVideo = useRef();
-  const socket = useRef();
-
-  const addNameToServer = () => {
-    socket.current.emit("new username", yourName);
-  };
-
   const getStreamFromVideoCamera = () => {
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
@@ -65,38 +36,37 @@ export function Webrtc() {
       });
   };
   //webrtc
-  const firstName = useSelector((state) => state.authReducer.user.firstName);
-  const lastName = useSelector((state) => state.authReducer.user.lastName);
-  useEffect(() => {
-    // socket.current = io.connect("/");
-    setYourName(`${firstName} ${lastName}`);
-    getStreamFromVideoCamera();
-    // socket.current.on("yourID", (id) => {
-    //   setYourID(id);
-    // });
-    // socket.current.on("allUsers", (users) => {
-    //   setUsers(users);
-    // });
+  const socket = useSelector((state) => state.socketReducer.socket);
+  const callerSignal = useSelector((state) => state.callReducer.callerSignal)
+  const callerSocketId = useSelector((state) => state.callReducer.callerSocketId)
 
-    socket.current.on("hey", (data) => {
-      setReceivingCall(true);
-      setCaller(data.from);
-      setCallerSignal(data.signal);
-    });
+
+
+
+  useEffect(() => {
+    getStreamFromVideoCamera();
+    if (socket) {
+      if (match.params.callerId) {
+        callPeer(match.params.callerId);
+      } else if (callerSignal) {
+        setCallerSignalState(callerSignal)
+      }
+    }
 
     return () => {
-      socket.current.emit("logout")
+      logoutUserFromSocket();
     }
-  }, []);
+  }, [callerSignal, socket]);
+
 
   useEffect(() => {
-    if (yourName) {
-      addNameToServer();
+    console.log('wah', callerSignalState, callerSocketId)
+    if (callerSignalState && callerSocketId) {
+      acceptCall()
     }
-  }, [yourName])
+  }, [callerSignalState, callerSocketId])
 
   function callPeer(id) {
-    setOnCall(id);
     const peer = new Peer({
       initiator: true,
       trickle: false,
@@ -113,20 +83,22 @@ export function Webrtc() {
     });
 
     peer.on("signal", (data) => {
-      socket.current.emit("callUser", {
+      socket.emit("callUser", {
         userToCall: id,
         signalData: data,
-        from: yourID,
+        fromUser: socket.id
       });
     });
 
     peer.on("stream", (stream) => {
+      console.log('callPear streaming', stream, 'partnerVideo.current', partnerVideo.current)
       if (partnerVideo.current) {
         partnerVideo.current.srcObject = stream;
       }
     });
 
-    socket.current.on("callAccepted", (signal) => {
+    socket.on("callAccepted", (signal) => {
+      console.log('call accepted!!!', signal)
       setCallAccepted(true);
       peer.signal(signal);
     });
@@ -140,15 +112,17 @@ export function Webrtc() {
       stream: stream,
     });
     peer.on("signal", (data) => {
-      socket.current.emit("acceptCall", { signal: data, to: caller });
+      socket.emit("acceptCall", { signal: data, to: callerSocketId });
     });
 
     peer.on("stream", (stream) => {
+      console.log('acceptCall streaming!!!', stream);
       partnerVideo.current.srcObject = stream;
     });
 
-    peer.signal(callerSignal);
+    peer.signal(callerSignalState);
   }
+
 
   let UserVideo;
   if (stream) {
@@ -162,51 +136,12 @@ export function Webrtc() {
     );
   }
 
-  const callList = Object.keys(users).map((key) => {
-    if (key === yourID || key === caller || (callAccepted && key === onCall)) {
-      return null;
-    }
-    if (key === onCall && !callAccepted)
-      return (
-        <ListItem>
-          <ListItemText primary={`Calling ${users[onCall].name}`} />
-        </ListItem>
-      );
-    return (
-      users[key].name && (
-        <ListItem button onClick={() => callPeer(key)}>
-          <ListItemText primary={`Call ${users[key].name}`} />
-        </ListItem>
-      )
-    );
-  });
-
   return (
     <Container>
       <Row>
         {UserVideo}
         {PartnerVideo}
       </Row>
-      <Row>
-        <List
-          component="nav"
-          aria-labelledby="nested-list-subheader"
-          subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
-              Users to chat
-            </ListSubheader>
-          }
-          className={classes.root}
-        >
-          {callList}
-        </List>
-      </Row>
-      <RecieveCallModal
-        open={receivingCall}
-        setOpen={setReceivingCall}
-        caller={users[caller] && users[caller].name}
-        acceptCall={acceptCall}
-      />
     </Container>
   );
 }

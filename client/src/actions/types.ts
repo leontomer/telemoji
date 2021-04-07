@@ -23,3 +23,5 @@ export const REMOVE_FRIEND = "REMOVE_FRIEND";
 export const CONNECT_TO_SOCKET = "CONNECT_TO_SOCKET";
 export const GET_SOCKET_USERS = "GET_SOCKET_USERS";
 export const LOGOUT_FROM_SOCKET = "LOGOUT_FROM_SOCKET";
+export const GET_CALL = "GET_CALL";
+export const ACCEPT_CALL = "ACCEPT_CALL"

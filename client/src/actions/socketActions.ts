@@ -22,8 +22,9 @@ export const connectToSocket = () => async (dispatch) => {
 export const loginUserToSocket = () => (_, getState) => {
     const socket = getState().socketReducer.socket;
     const _id = getState().authReducer.user._id;
-    const firstName = getState().authReducer.user.firstName
-    socket.emit("login", { _id, firstName });
+    const firstName = getState().authReducer.user.firstName;
+
+    socket.emit("login", { id: _id, firstName: firstName });
 };
 
 export const logoutUserFromSocket = () => (dispatch, getState) => {

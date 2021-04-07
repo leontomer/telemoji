@@ -18,7 +18,6 @@ import { connectToSocket, logoutUserFromSocket } from './socketActions'
 export const loadUser = () => async (dispatch) => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
-    dispatch(connectToSocket())
   }
   try {
     const res = await axios.get("/api/auth");
@@ -26,6 +25,7 @@ export const loadUser = () => async (dispatch) => {
       type: USER_LOADED,
       payload: res.data,
     });
+    dispatch(connectToSocket())
   } catch (err) {
     dispatch({ type: AUTH_ERROR });
   }

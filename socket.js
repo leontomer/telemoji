@@ -4,15 +4,11 @@ module.exports = () => {
 
   io.on("connection", (socket) => {
     global.socket = socket;
-    if (!users[socket.id]) {
-      users[socket.id] = { name: "", userId: "" };
-    }
+
     socket.on("login", (userdata) => {
-      users[socket.id] = { id: userdata._id, name: userdata.firstName };
+      users[userdata.id] = { socketId: socket.id, name: userdata.firstName };
       io.sockets.emit("allUsers", users);
     });
-
-    socket.emit("yourID", socket.id);
 
     io.sockets.emit("allUsers", users);
 
@@ -27,13 +23,15 @@ module.exports = () => {
     })
 
     socket.on("callUser", (data) => {
-      io.to(data.userToCall).emit("hey", {
+      const callToUser = users[data.userToCall]
+      io.to(callToUser.socketId).emit("callInit", {
         signal: data.signalData,
-        from: data.from,
+        to: data.fromUser
       });
     });
 
     socket.on("acceptCall", (data) => {
+      console.log('call accepted', data);
       io.to(data.to).emit("callAccepted", data.signal);
     });
   });

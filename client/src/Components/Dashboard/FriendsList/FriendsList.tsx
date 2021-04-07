@@ -55,7 +55,7 @@ export default function FriendsList() {
         await dispatch(getFriendList(user.email));
       }
     })();
-  }, [friendList, user]);
+  }, [user]);
 
   return (
     <List dense className={classes.root}>
@@ -90,7 +90,7 @@ export default function FriendsList() {
               <ListItemText id={labelId} primary={friend.firstName} />
               <ListItemSecondaryAction>
                 <IconButton disabled={false}>
-                  <Link to="/video-chat">
+                  <Link to={`/video-chat/${friend._id}`}>
                     <PhoneIcon
                       style={
                         friend.firstName === "tom"
@@ -105,8 +105,8 @@ export default function FriendsList() {
           );
         })
       ) : (
-        <></>
-      )}
+          <></>
+        )}
     </List>
   );
 }
