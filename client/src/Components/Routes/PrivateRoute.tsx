@@ -23,7 +23,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     }
   }, []);
   useEffect(() => {
-    console.log("second check");
     setLoadingPage(false);
   }, [userIsAuthenticated]);
   return (
@@ -33,8 +32,8 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         !loadingPage && !userIsAuthenticated ? (
           <Redirect to="/login" />
         ) : (
-          <Component {...props} />
-        )
+            <Component {...props} />
+          )
       }
     />
   );

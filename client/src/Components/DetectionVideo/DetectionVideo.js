@@ -12,21 +12,32 @@ export function DetectionVideo({
   const [userEmotion, setUserEmotion] = useState(
     "Detection initializing, please wait..."
   );
-  const canvasRef = useRef(null);
+  let canvasRef = useRef(null);
   const videoWidth = 640;
   const videoHeight = 480;
 
   const faceapiReducer = useSelector((state) => state.modelReducer.faceapi);
   const emotionRecognitionReducer = useSelector((state) => state.modelReducer.emotionRecognition);
-
+  let timeVarHolder;
+  let unmountingVideoChat = useRef(null);
   useEffect(() => {
+    console.log('mounting faceapi')
     if (faceapiReducer && !faceapi) {
       setFaceapi(faceapiReducer);
     }
     if (emotionRecognitionReducer && !emotionRecModel) {
       setEmotionRecModel(emotionRecognitionReducer);
     }
+
+    return () => {
+      console.log('this runs cleanup')
+      clearTimeout(timeVarHolder);
+      canvasRef = null;
+      unmountingVideoChat.current = true;
+    }
   }, [faceapiReducer, emotionRecognitionReducer])
+
+
 
   const predict = (data) => {
     if (emotionRecModel && data) {
@@ -58,6 +69,9 @@ export function DetectionVideo({
 
   const handleVideoOnPlay = () => {
     const videoToTensor = async () => {
+      if (unmountingVideoChat && unmountingVideoChat.current) {
+        return;
+      }
       let canvases;
       if (videoRef.current && canvasRef.current) {
         canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(
@@ -114,7 +128,7 @@ export function DetectionVideo({
       }
 
       if (!videoRef.current.paused) {
-        setTimeout(videoToTensor, 2000);
+        timeVarHolder = setTimeout(videoToTensor, 2000);
       }
     };
     videoToTensor();

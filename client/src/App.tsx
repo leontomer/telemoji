@@ -7,43 +7,56 @@ import LandingPage from "./Components/LandingPage/LandingPage";
 import Navbar from "./Components/Navbar/Navbar";
 import { SnackItem } from "./Components/SnackbarItem/SnackItem";
 import Dashboard from "./Components/Dashboard/Dashboard";
-//redux
-import { Provider } from "react-redux";
 import PrivateRoute from "./Components/Routes/PrivateRoute";
 import { loadUser } from "./actions/authActions";
 import {
   loadFaceapi,
   loadEmotionRecognitionModel,
 } from "./actions/modelActions";
+import { recieveCalls, getAnswerFromCall } from './actions/callActions';
 import setAuthToken from "./utilities/setAuthToken";
 import { DrawerComponent } from "./Components/Drawer/Drawer";
+import { useSelector } from "react-redux";
+import { TelemojiProvider } from './Contexts/TelemojiContext'
+import { RecieveCallModal } from './Components/Modals/RecieveCallModal';
 import store from "./store";
 
 function App() {
+
+  const socket = useSelector((state) => state.socketReducer.socket);
   useEffect(() => {
     store.dispatch(loadUser());
     store.dispatch(loadFaceapi());
     store.dispatch(loadEmotionRecognitionModel());
   }, []);
 
+  useEffect(() => {
+    if (socket) {
+      store.dispatch(recieveCalls())
+      store.dispatch(getAnswerFromCall())
+    }
+  }, [socket])
+
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
   return (
-    <Provider store={store}>
+    <TelemojiProvider>
       <Router>
         <Navbar />
         <Switch>
           <Route exact path="/" component={LandingPage} />
           <Route exact path="/login" component={LoginPage} />
           <PrivateRoute exact path="/video-chat" component={Webrtc} />
+          <PrivateRoute exact path="/video-chat/:callerId" component={Webrtc} />
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
           <Route exact path="/register" component={RegisterPage} />
         </Switch>
+        <RecieveCallModal />
       </Router>
       <SnackItem />
       <DrawerComponent />
-    </Provider>
+    </TelemojiProvider>
   );
 }
 
