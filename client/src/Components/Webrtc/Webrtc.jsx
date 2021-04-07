@@ -60,12 +60,14 @@ export function Webrtc({ match }) {
 
 
   useEffect(() => {
-    console.log('wah', callerSignalState, callerSocketId)
     if (callerSignalState && callerSocketId) {
       acceptCall()
     }
   }, [callerSignalState, callerSocketId])
 
+
+
+  //call PEER
   function callPeer(id) {
     const peer = new Peer({
       initiator: true,
@@ -83,6 +85,7 @@ export function Webrtc({ match }) {
     });
 
     peer.on("signal", (data) => {
+      console.log('callPeer signal');
       socket.emit("callUser", {
         userToCall: id,
         signalData: data,
@@ -91,19 +94,21 @@ export function Webrtc({ match }) {
     });
 
     peer.on("stream", (stream) => {
-      console.log('callPear streaming', stream, 'partnerVideo.current', partnerVideo.current)
+      console.log('callPeer streaming', stream, 'partnerVideo.current', partnerVideo.current)
       if (partnerVideo.current) {
         partnerVideo.current.srcObject = stream;
       }
     });
 
     socket.on("callAccepted", (signal) => {
-      console.log('call accepted!!!', signal)
+      console.log('call accepted, the signal is', signal)
       setCallAccepted(true);
       peer.signal(signal);
     });
   }
 
+
+  //ACCEPT CALL
   function acceptCall() {
     setCallAccepted(true);
     const peer = new Peer({
@@ -112,6 +117,7 @@ export function Webrtc({ match }) {
       stream: stream,
     });
     peer.on("signal", (data) => {
+      console.log('accpetCall signal the signal is', data);
       socket.emit("acceptCall", { signal: data, to: callerSocketId });
     });
 
@@ -120,6 +126,7 @@ export function Webrtc({ match }) {
       partnerVideo.current.srcObject = stream;
     });
 
+    console.log('acceptCall callerSignal', callerSignalState);
     peer.signal(callerSignalState);
   }
 
