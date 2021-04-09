@@ -3,11 +3,12 @@ import {
   approvePendingFriendRequest,
   rejectPendingFriendRequest,
 } from "../../../actions/usersActions";
-import { updatePendingFriendRequests } from "../../../actions/socketActions";
+import { updatePendingFriendRequests } from "../../../actions/usersActions";
 import { useDispatch, useSelector } from "react-redux";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
+
 import {
   Avatar,
   IconButton,
@@ -31,20 +32,51 @@ function NotificationBar(props: NotificationBarProps) {
     numberOfPendingFriendRequest,
     setNumberOfPendingFriendRequest,
   ] = useState<number | null>(null);
-
-  const { user, friendRequests } = useSelector((state) => state.authReducer);
+  const [isFirstRender, setIsFirstRender] = React.useState(true);
+  const { user, friendRequests, updateNeeded } = useSelector(
+    (state) => state.authReducer
+  );
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    (async () => {
+      console.log("enter ", user, isFirstRender);
+      if (user && isFirstRender) {
+        const requestCount = await dispatch(
+          updatePendingFriendRequests(user.email)
+        );
+        console.log("user ", user, isFirstRender, friendRequests.length);
+        setIsFirstRender(false);
+        setNumberOfPendingFriendRequest(friendRequests.length);
+      }
+    })();
+  }, [user]);
+
+  useEffect(() => {
+    (async () => {
+      console.log("enter ", user, isFirstRender);
+      if (user) {
+        const requestCount = await dispatch(
+          updatePendingFriendRequests(user.email)
+        );
+        console.log("user ", user, isFirstRender, friendRequests.length);
+        setIsFirstRender(false);
+        setNumberOfPendingFriendRequest(friendRequests.length);
+      }
+    })();
+  }, []);
+
   useEffect(() => {
     (async () => {
       if (user) {
         const requestCount = await dispatch(
           updatePendingFriendRequests(user.email)
         );
+        setNumberOfPendingFriendRequest(friendRequests.length);
       }
-      setNumberOfPendingFriendRequest(friendRequests.length);
     })();
-  }, []);
+  }, [updateNeeded.friendRequests]);
 
   async function handleApproveFriendShip(userFriendEmail: string) {
     try {
@@ -88,7 +120,7 @@ function NotificationBar(props: NotificationBarProps) {
             />
           </ListItem>
           <Divider />
-          {numberOfPendingFriendRequest !== 0 ? (
+          {user?.friendRequests?.length !== 0 ? (
             friendRequests.map((friendRequest, index) => {
               const {
                 firstName,

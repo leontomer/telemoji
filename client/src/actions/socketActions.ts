@@ -41,6 +41,13 @@ export const loginUserToSocket = () => (_, getState) => {
   socket.emit("login", { id: _id, firstName: firstName });
 };
 
+export const sendFriendRequest = (friendEmail) => (_, getState) => {
+  const socket = getState().socketReducer.socket;
+  const _id = getState().authReducer.user._id;
+
+  socket.emit("sendFriendRequest", { id: _id, friendEmail });
+};
+
 export const logoutUserFromSocket = () => (dispatch, getState) => {
   const socket = getState().socketReducer.socket;
   socket.emit("logout");
@@ -79,24 +86,4 @@ export const addFriend = ({
   // } catch (err) {
   //   console.log(err);
   // }
-};
-
-export const updatePendingFriendRequests = (email) => async (
-  dispatch,
-  getState
-) => {
-  try {
-    const socket = getState().socketReducer.socket;
-
-    socket.on("login", () => {
-      console.log("login!!!!!!!!!!!!!!");
-    });
-    socket.on("friendRequestReceived", (data) => {
-      const user = data.user;
-      const friendRequests = data.user.friendRequests;
-      dispatch({ type: SET_FRIEND_REQUESTS, payload: [...friendRequests] });
-    });
-  } catch (err) {
-    console.log(err);
-  }
 };

@@ -77,26 +77,18 @@ export const removeFriend = ({
   }
 };
 
-export const updatePendingFriendRequests = (email) => async (
-  dispatch,
-  getState
-) => {
+export const updatePendingFriendRequests = (email) => async (dispatch) => {
   try {
-    const socket = getState().socketReducer.socket;
-
-    socket.on("login", () => {
-      console.log("login!!!!!!!!!!!!!!");
+    const res = await axios.get(`${baseRoute}pendingFriendRequests`, {
+      params: { email },
     });
-    socket.on("friendRequestReceived", (data) => {
-      const user = data.user;
-      const friendRequests = data.user.friendRequests;
-      dispatch({ type: SET_FRIEND_REQUESTS, payload: [...friendRequests] });
-    });
+    const user = res.data.user;
+    const friendRequests = res.data.user.friendRequests;
+    dispatch({ type: SET_FRIEND_REQUESTS, payload: [...friendRequests] });
   } catch (err) {
     console.log(err);
   }
 };
-
 export const approvePendingFriendRequest = async ({
   userEmail,
   userFriendEmail,

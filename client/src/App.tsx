@@ -13,16 +13,19 @@ import {
   loadFaceapi,
   loadEmotionRecognitionModel,
 } from "./actions/modelActions";
-import { recieveCalls, getAnswerFromCall } from './actions/callActions';
+import {
+  recieveCalls,
+  getAnswerFromCall,
+  updateFriendRequests,
+} from "./actions/callActions";
 import setAuthToken from "./utilities/setAuthToken";
 import { DrawerComponent } from "./Components/Drawer/Drawer";
 import { useSelector } from "react-redux";
-import { TelemojiProvider } from './Contexts/TelemojiContext'
-import { RecieveCallModal } from './Components/Modals/RecieveCallModal';
+import { TelemojiProvider } from "./Contexts/TelemojiContext";
+import { RecieveCallModal } from "./Components/Modals/RecieveCallModal";
 import store from "./store";
 
 function App() {
-
   const socket = useSelector((state) => state.socketReducer.socket);
   useEffect(() => {
     store.dispatch(loadUser());
@@ -32,10 +35,11 @@ function App() {
 
   useEffect(() => {
     if (socket) {
-      store.dispatch(recieveCalls())
-      store.dispatch(getAnswerFromCall())
+      store.dispatch(recieveCalls());
+      store.dispatch(getAnswerFromCall());
+      store.dispatch(updateFriendRequests());
     }
-  }, [socket])
+  }, [socket]);
 
   if (localStorage.token) {
     setAuthToken(localStorage.token);

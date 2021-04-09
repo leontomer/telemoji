@@ -33,16 +33,5 @@ module.exports = () => {
     socket.on("acceptCall", (data) => {
       io.to(data.to).emit("callAccepted", data.signal);
     });
-
-    socket.on("addFriend", (data) => {
-      console.log(data);
-      const FriendId = dbHelper.convertEmailToId(data.userFriendEmail);
-      if (users[FriendId]) {
-        const userToAdd = users[FriendId];
-        io.to(userToAdd.socketId).emit("friendRequestReceived", {
-          from: data.userId,
-        });
-      }
-    });
   });
 };

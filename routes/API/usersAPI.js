@@ -93,6 +93,12 @@ router.post("/addfriend", async (req, res) => {
     console.log(user);
     await friend.save();
     console.log(friend);
+    if (users[friend._id]) {
+      const userToUpdate = users[friend._id];
+      io.to(userToUpdate.socketId).emit("recieveFriendRequest", {
+        numberOfFriendRequests: friend.friendRequests.length,
+      });
+    }
     res.json({ friend });
   } catch (err) {
     console.error(err);

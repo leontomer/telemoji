@@ -83,11 +83,7 @@ function FriendsList({ history }) {
               onClick={() => handleFriendClick(friend)}
             >
               <ListItemAvatar>
-                <Avatar
-                  alt={`${friend.firstName}`}
-                  //TODO : replace with real picture mechanism
-                  src={friend.imageAddress}
-                />
+                <Avatar alt={`${friend.firstName}`} src={friend.imageAddress} />
               </ListItemAvatar>
               <ListItemText id={labelId} primary={friend.firstName} />
               <ListItemSecondaryAction>
