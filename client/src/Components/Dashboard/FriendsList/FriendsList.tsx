@@ -13,7 +13,7 @@ import { ListItemIcon } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import { useDispatch, useSelector } from "react-redux";
-import { getFriendList, setFriendInFocus } from "../../../actions/usersActions";
+import { getFriendList, setFriendInFocus } from "../../../actions/friendActions";
 import { FriendProps } from "../../../reducers/authReducer";
 import { handleCallUser } from "../../../actions/callActions";
 import { withRouter } from "react-router";
@@ -104,8 +104,8 @@ function FriendsList({ history }) {
           );
         })
       ) : (
-        <></>
-      )}
+          <></>
+        )}
     </List>
   );
 }

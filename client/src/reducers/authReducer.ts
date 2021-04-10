@@ -14,7 +14,8 @@ import {
   SET_IMAGE,
   SET_FRIEND_IN_FOCUS,
   REMOVE_FRIEND,
-  UPDATE_FRIEND_REQUESTS,
+  UPDATE_FRIEND_REQUESTS
+
 } from "../actions/types";
 
 export interface FriendProps {
@@ -39,14 +40,11 @@ interface InitialStateProps {
   friendRequests: FriendProps[];
   friendList: FriendProps[];
   friendInFocus: FriendProps | null;
-  updateNeeded: {
-    friendRequests: number;
-  };
 }
 
 export const initialState: InitialStateProps = {
   token: localStorage.getItem("token"),
-  isAuthenticated: null,
+  isAuthenticated: false,
   loading: true,
   user: {
     firstName: "",
@@ -57,7 +55,6 @@ export const initialState: InitialStateProps = {
   friendRequests: [],
   friendList: [],
   friendInFocus: null,
-  updateNeeded: { friendRequests: 0 },
 };
 export default function (state: InitialStateProps = initialState, action) {
   const { type, payload } = action;
@@ -112,14 +109,7 @@ export default function (state: InitialStateProps = initialState, action) {
       return { ...state, friendRequests: payload };
 
     case UPDATE_FRIEND_REQUESTS:
-      console.log("payload", payload);
-      return {
-        ...state,
-        updateNeeded: {
-          ...state.updateNeeded,
-          friendRequests: payload,
-        },
-      };
+      return { ...state, friendRequests: [...state.friendRequests, payload] };
 
     case GET_FRIEND_LIST:
       return { ...state, friendList: payload };

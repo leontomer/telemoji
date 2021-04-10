@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import {
   approvePendingFriendRequest,
   rejectPendingFriendRequest,
-} from "../../../actions/usersActions";
-import { updatePendingFriendRequests } from "../../../actions/usersActions";
+  updatePendingFriendRequests
+} from "../../../actions/friendActions";
+
 import { useDispatch, useSelector } from "react-redux";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
@@ -21,71 +22,32 @@ import {
   Divider,
   Card,
 } from "@material-ui/core";
-import socketReducer from "../../../reducers/socketReducer";
 
-interface NotificationBarProps {
-  numberOfPendingFriendRequest: number;
-}
 
-function NotificationBar(props: NotificationBarProps) {
-  const [
-    numberOfPendingFriendRequest,
-    setNumberOfPendingFriendRequest,
-  ] = useState<number | null>(null);
-  const [isFirstRender, setIsFirstRender] = React.useState(true);
-  const [
-    friendRequestsNotifications,
-    setFriendRequestsNotifications,
-  ] = React.useState([]);
-  const { user, friendRequests, updateNeeded } = useSelector(
-    (state) => state.authReducer
-  );
 
+function NotificationBar() {
+  const [numberOfPendingFriendRequest, setNumberOfPendingFriendRequest] = useState<number | null>(null);
+  const [friendRequestsNotifications, setFriendRequestsNotifications,] = React.useState<any>([]);
+  const { user, friendRequests } = useSelector((state) => state.authReducer);
   const dispatch = useDispatch();
 
   useEffect(() => {
     setFriendRequestsNotifications(friendRequests);
+    setNumberOfPendingFriendRequest(friendRequests.length)
   }, [friendRequests]);
 
   useEffect(() => {
-    (async () => {
-      console.log("enter ", user, isFirstRender);
-      if (user && isFirstRender) {
-        const requestCount = await dispatch(
-          updatePendingFriendRequests(user.email)
-        );
-        console.log("user ", user, isFirstRender, friendRequests.length);
-        setIsFirstRender(false);
-        setNumberOfPendingFriendRequest(friendRequests.length);
-      }
-    })();
+    if (user.email) {
+      dispatch(updatePendingFriendRequests())
+    }
   }, [user]);
 
-  useEffect(() => {
-    (async () => {
-      console.log("enter ", user, isFirstRender);
-      if (user) {
-        const requestCount = await dispatch(
-          updatePendingFriendRequests(user.email)
-        );
-        console.log("user ", user, isFirstRender, friendRequests.length);
-        setIsFirstRender(false);
-        setNumberOfPendingFriendRequest(friendRequests.length);
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      if (user) {
-        const requestCount = await dispatch(
-          updatePendingFriendRequests(user.email)
-        );
-        setNumberOfPendingFriendRequest(friendRequests.length);
-      }
-    })();
-  }, [updateNeeded.friendRequests]);
-
+  const clearSpecificFriendRequest = (email: string) => {
+    console.log('clear specific', friendRequestsNotifications);
+    const filteredFriendRequest = friendRequestsNotifications.filter(friendReq => friendReq.email !== email);
+    console.log('filtered', filteredFriendRequest)
+    setFriendRequestsNotifications(filteredFriendRequest)
+  }
   async function handleApproveFriendShip(userFriendEmail: string) {
     try {
       dispatch(
@@ -93,8 +55,9 @@ function NotificationBar(props: NotificationBarProps) {
           userEmail: user.email,
           userFriendEmail,
         })
+
       );
-      dispatch(updatePendingFriendRequests(user.email));
+      clearSpecificFriendRequest(userFriendEmail)
     } catch (e) {
       console.warn(e);
     }
@@ -107,8 +70,8 @@ function NotificationBar(props: NotificationBarProps) {
           userEmail: user.email,
           userFriendEmail,
         })
-      );
-      dispatch(updatePendingFriendRequests(user.email));
+      )
+      clearSpecificFriendRequest(userFriendEmail)
     } catch (e) {
       console.warn(e);
     }

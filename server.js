@@ -2,6 +2,7 @@ const express = require("express");
 const connectDB = require("./config/db");
 const users = require("./routes/API/usersAPI");
 const auth = require("./routes/API/authAPI");
+const friends = require('./routes/API/friendsAPI');
 const app = express();
 const path = require("path");
 const http = require("http");
@@ -15,6 +16,7 @@ const port = process.env.PORT || 5000;
 app.use(express.json({ extended: false }));
 app.use("/api/users", users);
 app.use("/api/auth", auth);
+app.use('/api/friends', friends);
 
 server.listen(port, () => console.log("server is running on port 5000"));
 

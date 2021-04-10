@@ -3,10 +3,9 @@ import {
   ACCEPT_CALL,
   GET_CAMERA_STREAM,
   SET_CALLERS_STREAM,
-  ANSWER_CALL,
-  SET_FRIEND_REQUESTS,
-  UPDATE_FRIEND_REQUESTS,
+  ANSWER_CALL
 } from "./types";
+
 import Peer from "simple-peer";
 
 export const recieveCalls = () => async (dispatch, getState) => {
@@ -24,20 +23,6 @@ export const recieveCalls = () => async (dispatch, getState) => {
   });
 };
 
-export const sendFriendRequest = () => async (dispatch, getState) => {
-  const socket = getState().socketReducer.socket;
-
-  socket.on("addFriend", (data) => {
-    dispatch({
-      type: GET_CALL,
-      payload: {
-        callerSignal: data.signal,
-        callerSocketId: data.to,
-        receivingCall: true,
-      },
-    });
-  });
-};
 
 export const getAnswerFromCall = () => async (dispatch, getState) => {
   const socket = getState().socketReducer.socket;
@@ -49,16 +34,7 @@ export const getAnswerFromCall = () => async (dispatch, getState) => {
     });
   });
 };
-export const updateFriendRequests = () => async (dispatch, getState) => {
-  const socket = getState().socketReducer.socket;
 
-  socket.on("recieveFriendRequest", (data) => {
-    dispatch({
-      type: UPDATE_FRIEND_REQUESTS,
-      payload: data.numberOfFriendRequests,
-    });
-  });
-};
 export const getStreamFromVideoCamera = (id?: string) => (dispatch) => {
   navigator.mediaDevices
     .getUserMedia({ video: true, audio: true })

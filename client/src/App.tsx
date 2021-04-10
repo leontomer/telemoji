@@ -15,14 +15,14 @@ import {
 } from "./actions/modelActions";
 import {
   recieveCalls,
-  getAnswerFromCall,
-  updateFriendRequests,
+  getAnswerFromCall
 } from "./actions/callActions";
 import setAuthToken from "./utilities/setAuthToken";
 import { DrawerComponent } from "./Components/Drawer/Drawer";
 import { useSelector } from "react-redux";
 import { TelemojiProvider } from "./Contexts/TelemojiContext";
 import { RecieveCallModal } from "./Components/Modals/RecieveCallModal";
+import { updateFriendRequests } from './actions/friendActions';
 import store from "./store";
 
 function App() {
