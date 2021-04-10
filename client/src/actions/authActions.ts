@@ -13,6 +13,7 @@ import {
 import { setError } from "./errorsActions";
 import { snackbarType } from "../Common/dataTypes";
 import setAuthToken from "../utilities/setAuthToken";
+import { connectToSocket, logoutUserFromSocket } from './socketActions'
 
 export const loadUser = () => async (dispatch) => {
   if (localStorage.token) {
@@ -24,6 +25,7 @@ export const loadUser = () => async (dispatch) => {
       type: USER_LOADED,
       payload: res.data,
     });
+    dispatch(connectToSocket())
   } catch (err) {
     dispatch({ type: AUTH_ERROR });
   }
@@ -87,7 +89,7 @@ export const login = ({
 };
 
 
-export const loginGoogle=({
+export const loginGoogle = ({
   firstName,
   lastName,
   email
@@ -95,11 +97,11 @@ export const loginGoogle=({
   firstName: string;
   lastName: string;
   email: string
-}) =>(dispatch)=>{
+}) => (dispatch) => {
   dispatch({
-    type:  LOGIN_SUCCESS_GOOGLE_FACEBOOK,
-    payload: {firstName:firstName,lastName:lastName,email:email}
- 
+    type: LOGIN_SUCCESS_GOOGLE_FACEBOOK,
+    payload: { firstName: firstName, lastName: lastName, email: email }
+
   });
 }
 
@@ -107,4 +109,5 @@ export const loginGoogle=({
 export const logout = () => (dispatch) => {
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: LOGOUT });
+  dispatch(logoutUserFromSocket());
 };

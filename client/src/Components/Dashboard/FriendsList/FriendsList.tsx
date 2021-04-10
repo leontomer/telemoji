@@ -12,10 +12,11 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { ListItemIcon } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getFriendList, setFriendInFocus } from "../../../actions/usersActions";
 import { FriendProps } from "../../../reducers/authReducer";
+import { handleCallUser } from '../../../actions/callActions';
+import { withRouter } from "react-router";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 
-export default function FriendsList() {
+function FriendsList({ history }) {
   const classes = useStyles();
   const { user, friendList } = useSelector((state) => state.authReducer);
 
@@ -55,7 +56,12 @@ export default function FriendsList() {
         await dispatch(getFriendList(user.email));
       }
     })();
-  }, [friendList, user]);
+  }, []);
+
+  const handleCall = (id) => {
+    dispatch(handleCallUser(id));
+    history.push(`/video-chat/${id}`)
+  }
 
   return (
     <List dense className={classes.root}>
@@ -89,24 +95,23 @@ export default function FriendsList() {
               </ListItemAvatar>
               <ListItemText id={labelId} primary={friend.firstName} />
               <ListItemSecondaryAction>
-                <IconButton disabled={false}>
-                  <Link to="/video-chat">
-                    <PhoneIcon
-                      style={
-                        friend.firstName === "tom"
-                          ? { color: green[500] }
-                          : { color: grey[500] }
-                      }
-                    />
-                  </Link>
+                <IconButton disabled={false} onClick={() => handleCall(friend._id)}>
+                  <PhoneIcon
+                    style={
+                      friend.firstName === "tom"
+                        ? { color: green[500] }
+                        : { color: grey[500] }
+                    }
+                  />
                 </IconButton>
               </ListItemSecondaryAction>
             </ListItem>
           );
         })
       ) : (
-        <></>
-      )}
+          <></>
+        )}
     </List>
   );
 }
+export default withRouter(FriendsList)

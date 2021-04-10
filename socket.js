@@ -1,29 +1,32 @@
-module.exports = (server) => {
-  const socket = require("socket.io");
-  const io = socket(server);
+module.exports = () => {
 
-  const users = {};
+  global.users = {};
 
   io.on("connection", (socket) => {
-    if (!users[socket.id]) {
-      users[socket.id] = { name: "" };
-    }
-    socket.on("new username", (userdata) => {
-      users[socket.id] = { name: userdata };
+    global.socket = socket;
+
+    socket.on("login", (userdata) => {
+      users[userdata.id] = { socketId: socket.id, name: userdata.firstName };
       io.sockets.emit("allUsers", users);
     });
 
-    socket.emit("yourID", socket.id);
     io.sockets.emit("allUsers", users);
+
     socket.on("disconnect", () => {
       delete users[socket.id];
       io.sockets.emit("allUsers", users);
     });
 
+    socket.on("logout", () => {
+      delete users[socket.id];
+      io.sockets.emit("allUsers", users);
+    })
+
     socket.on("callUser", (data) => {
-      io.to(data.userToCall).emit("hey", {
+      const callToUser = users[data.userToCall]
+      io.to(callToUser.socketId).emit("callInit", {
         signal: data.signalData,
-        from: data.from,
+        to: data.fromUser
       });
     });
 

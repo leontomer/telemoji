@@ -1,10 +1,14 @@
-import * as React from 'react'
+import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-// import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
+import { useModal } from "../../Contexts/ModalContext";
+import { useDispatch, useSelector } from "react-redux";
+import { withRouter } from "react-router";
+import { handleAcceptCall } from '../../actions/callActions';
+
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -19,19 +23,28 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2, 4, 3),
     },
 }));
-interface setYourModalNameProps {
-    open: boolean;
-    setOpen: Function;
-    caller: string;
-    acceptCall: Function;
-}
-export const RecieveCallModal = ({ open, setOpen, caller, acceptCall }: setYourModalNameProps) => {
+// interface setYourModalNameProps {
+//     open: boolean;
+//     setOpen: Function;
+//     caller: string;
+//     acceptCall: Function;
+// }
+const RecieveCallModalComponent = ({ history }) => {
+    const dispatch = useDispatch();
+    const { closeModal, isOpenModal, openModal } = useModal();
     const classes = useStyles();
-
-    const handleClose = () => {
-        acceptCall();
-        setOpen(false);
-    };
+    const caller = useSelector((state) => state.callReducer.callerName)
+    const receivingCall = useSelector((state) => state.callReducer.receivingCall);
+    const handleAccept = () => {
+        dispatch(handleAcceptCall());
+        history.push('/video-chat')
+        closeModal();
+    }
+    useEffect(() => {
+        if (receivingCall) {
+            openModal();
+        }
+    }, [receivingCall])
 
     return (
         <div>
@@ -39,22 +52,22 @@ export const RecieveCallModal = ({ open, setOpen, caller, acceptCall }: setYourM
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 className={classes.modal}
-                open={open}
-                // onClose={handleClose}
+                open={isOpenModal}
+                onClose={closeModal}
                 closeAfterTransition
                 BackdropComponent={Backdrop}
                 BackdropProps={{
                     timeout: 500,
                 }}
             >
-                <Fade in={open}>
+                <Fade in={isOpenModal}>
                     <div className={classes.paper}>
                         <h2 id="transition-modal-title">{caller} is calling you</h2>
-                        <Button onClick={handleClose}>Accept call</Button>
+                        <Button onClick={handleAccept}>Accept call</Button>
                     </div>
                 </Fade>
             </Modal>
         </div>
     )
 }
-
+export const RecieveCallModal = withRouter(RecieveCallModalComponent)
