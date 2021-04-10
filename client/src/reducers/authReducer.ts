@@ -98,14 +98,7 @@ export default function (state: InitialStateProps = initialState, action) {
     case LOGIN_FAIL:
     case ACCOUNT_DELETED:
       localStorage.removeItem("token");
-      return {
-        ...state,
-        token: null,
-        isAuthenticated: false,
-        loading: false,
-        friendRequests: [],
-        friendList: [],
-      };
+      return initialState;
 
     case USER_LOADED:
       return {

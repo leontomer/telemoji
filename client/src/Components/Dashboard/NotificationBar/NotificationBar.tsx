@@ -33,11 +33,19 @@ function NotificationBar(props: NotificationBarProps) {
     setNumberOfPendingFriendRequest,
   ] = useState<number | null>(null);
   const [isFirstRender, setIsFirstRender] = React.useState(true);
+  const [
+    friendRequestsNotifications,
+    setFriendRequestsNotifications,
+  ] = React.useState([]);
   const { user, friendRequests, updateNeeded } = useSelector(
     (state) => state.authReducer
   );
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setFriendRequestsNotifications(friendRequests);
+  }, [friendRequests]);
 
   useEffect(() => {
     (async () => {
@@ -120,34 +128,25 @@ function NotificationBar(props: NotificationBarProps) {
             />
           </ListItem>
           <Divider />
-          {user?.friendRequests?.length !== 0 ? (
-            friendRequests.map((friendRequest, index) => {
-              const {
-                firstName,
-                lastName,
-                email,
-                imageAddress,
-              } = friendRequest;
-              return (
-                <ListItem key={index}>
-                  <ListItemAvatar>
-                    <Avatar alt={firstName} src={imageAddress} />
-                  </ListItemAvatar>
-                  <ListItemText primary={`${firstName} ${lastName}`} />
-                  <ListItemSecondaryAction>
-                    <IconButton onClick={() => handleApproveFriendShip(email)}>
-                      <AddIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handleRejectFriendShip(email)}>
-                      <RemoveIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              );
-            })
-          ) : (
-            <div></div>
-          )}
+          {friendRequestsNotifications.map((friendRequest, index) => {
+            const { firstName, lastName, email, imageAddress } = friendRequest;
+            return (
+              <ListItem key={index}>
+                <ListItemAvatar>
+                  <Avatar alt={firstName} src={imageAddress} />
+                </ListItemAvatar>
+                <ListItemText primary={`${firstName} ${lastName}`} />
+                <ListItemSecondaryAction>
+                  <IconButton onClick={() => handleApproveFriendShip(email)}>
+                    <AddIcon />
+                  </IconButton>
+                  <IconButton onClick={() => handleRejectFriendShip(email)}>
+                    <RemoveIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            );
+          })}
         </List>
       </Card>
     </>
