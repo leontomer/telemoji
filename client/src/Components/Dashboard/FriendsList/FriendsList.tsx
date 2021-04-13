@@ -7,6 +7,7 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import PhoneIcon from "@material-ui/icons/Phone";
 import IconButton from "@material-ui/core/IconButton";
 import Avatar from "@material-ui/core/Avatar";
+import Badge from "@material-ui/core/Badge";
 import { green, grey } from "@material-ui/core/colors";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { ListItemIcon } from "@material-ui/core";
@@ -35,6 +36,12 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: "inherit",
       padding: 0,
     },
+    onlineBadge: {
+      backgroundColor: "green",
+    },
+    offlineBadge: {
+      backgroundColor: "red",
+    }
   })
 );
 
@@ -42,7 +49,15 @@ function FriendsList({ history }) {
   const classes = useStyles();
   const { user } = useSelector((state) => state.authReducer);
   const { friendList: globalFriendList } = useSelector((state) => state.friendReducer);
+  const allConnectedUsers = useSelector((state) => state.socketReducer.allConnectedUsers)
+
   const [userFriendList, setUserFriendList] = useState([]);
+  const [connectedUsers, setConnectedUsers] = useState(allConnectedUsers)
+
+  useEffect(() => {
+    setConnectedUsers(allConnectedUsers)
+  }, [allConnectedUsers])
+
   const handleFriendClick = (friend: FriendProps) => {
     dispatch(setFriendInFocus(friend));
   };
@@ -87,18 +102,24 @@ function FriendsList({ history }) {
               button
               onClick={() => handleFriendClick(friend)}
             >
+
               <ListItemAvatar>
-                <Avatar alt={`${friend.firstName}`} src={friend.imageAddress} />
+                <Badge invisible={false} variant="dot" classes={{ badge: connectedUsers[friend._id] ? classes.onlineBadge : classes.offlineBadge }} overlap="circle" >
+                  <Avatar alt={`${friend.firstName}`} src={friend.imageAddress} />
+
+                </Badge>
               </ListItemAvatar>
+
+
               <ListItemText id={labelId} primary={friend.firstName} />
               <ListItemSecondaryAction>
                 <IconButton
-                  disabled={false}
+                  disabled={!connectedUsers[friend._id]}
                   onClick={() => handleCall(friend._id)}
                 >
                   <PhoneIcon
                     style={
-                      friend.firstName === "tom"
+                      connectedUsers[friend._id]
                         ? { color: green[500] }
                         : { color: grey[500] }
                     }

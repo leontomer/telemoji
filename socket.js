@@ -1,24 +1,28 @@
-const dbHelper = require("./server/utils/dbHelper");
+
 module.exports = () => {
   global.users = {};
+  clientIdToSocketId = {}
 
   io.on("connection", (socket) => {
     global.socket = socket;
 
     socket.on("login", (userdata) => {
       users[userdata.id] = { socketId: socket.id, name: userdata.firstName };
+      clientIdToSocketId[socket.id] = userdata.id
       io.sockets.emit("allUsers", users);
     });
 
     io.sockets.emit("allUsers", users);
 
     socket.on("disconnect", () => {
-      delete users[socket.id];
+      delete users[clientIdToSocketId[socket.id]];
+      delete clientIdToSocketId[socket.id];
       io.sockets.emit("allUsers", users);
     });
 
     socket.on("logout", () => {
-      delete users[socket.id];
+      delete users[clientIdToSocketId[socket.id]];
+      delete clientIdToSocketId[socket.id];
       io.sockets.emit("allUsers", users);
     });
 

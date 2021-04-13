@@ -1,20 +1,16 @@
-import React from "react";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import React, { useState, useEffect } from "react";
 import Popover from "@material-ui/core/Popover";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import IconButton from '@material-ui/core/IconButton';
 import NotificationBar from "../NotificationBar/NotificationBar";
+import Badge from '@material-ui/core/Badge';
+import { useDispatch, useSelector } from "react-redux";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    typography: {
-      padding: theme.spacing(2),
-    },
-  })
-);
+
 
 export default function FriendRequests() {
-  const classes = useStyles();
+
+  const friendRequestsGlobal = useSelector((state) => state.friendReducer.friendRequests)
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
@@ -29,17 +25,22 @@ export default function FriendRequests() {
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-
+  const [friendRequest, setFriendRequests] = useState(friendRequestsGlobal);
+  useEffect(() => {
+    setFriendRequests(friendRequestsGlobal)
+  }, [friendRequestsGlobal])
   return (
     <div>
-      <Button
-        aria-describedby={id}
-        variant="contained"
-        color="primary"
-        onClick={handleClick}
-      >
-        Show Requests
-      </Button>
+      <Badge badgeContent={friendRequest.length} color="primary" overlap="circle" style={{ marginRight: 10 }} >
+        <IconButton
+          style={{ backgroundColor: 'white', color: 'rgb(83,49,126)' }}
+          onClick={handleClick}
+        >
+          <SupervisorAccountIcon />
+        </IconButton>
+      </Badge>
+
+
       <Popover
         id={id}
         open={open}

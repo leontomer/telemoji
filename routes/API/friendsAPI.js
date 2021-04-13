@@ -110,13 +110,16 @@ router.post("/rejectFriend", auth, async (req, res) => {
             "-password"
         );
         const user = await User.findById(req.user.id).select("-password");
-
+        console.log('user.friendRequests', user.friendRequests)
         const updatedFriendRequests = user.friendRequests.filter(
             (f) => f.toString() !== friend._id.toString()
         );
+        console.log('updatedFriendRequests', updatedFriendRequests);
         user.friendRequests = updatedFriendRequests;
+        console.log('user.friendRequests', user.friendRequests)
 
         await user.save();
+        res.status(200).json({});
     } catch (e) { }
 });
 

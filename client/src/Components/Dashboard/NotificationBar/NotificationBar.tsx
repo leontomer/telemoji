@@ -6,8 +6,8 @@ import {
 } from "../../../actions/friendActions";
 
 import { useDispatch, useSelector } from "react-redux";
-import AddIcon from "@material-ui/icons/Add";
-import RemoveIcon from "@material-ui/icons/Remove";
+import CheckIcon from '@material-ui/icons/Check';
+import ClearIcon from '@material-ui/icons/Clear';
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 
 import {
@@ -26,7 +26,7 @@ import {
 
 
 function NotificationBar() {
-  const [numberOfPendingFriendRequest, setNumberOfPendingFriendRequest] = useState<number | null>(null);
+  const [numberOfPendingFriendRequest, setNumberOfPendingFriendRequest] = useState<number>(0);
   const [friendRequestsNotifications, setFriendRequestsNotifications,] = React.useState<any>([]);
   const { user } = useSelector((state) => state.authReducer);
   const { friendRequests } = useSelector((state) => state.friendReducer)
@@ -50,13 +50,12 @@ function NotificationBar() {
   }
   async function handleApproveFriendShip(userFriendEmail: string) {
     try {
-      clearSpecificFriendRequest(userFriendEmail)
       dispatch(
         approvePendingFriendRequest({
           userFriendEmail,
         })
       );
-
+      clearSpecificFriendRequest(userFriendEmail)
     } catch (e) {
       console.warn(e);
     }
@@ -64,16 +63,14 @@ function NotificationBar() {
 
   async function handleRejectFriendShip(userFriendEmail: string) {
     try {
-      clearSpecificFriendRequest(userFriendEmail)
       dispatch(
         rejectPendingFriendRequest({
-          userEmail: user.email,
           userFriendEmail,
         })
       )
-
+      clearSpecificFriendRequest(userFriendEmail)
     } catch (e) {
-      console.warn(e);
+      console.log('error reject is', e);
     }
   }
 
@@ -87,7 +84,7 @@ function NotificationBar() {
             </ListItemIcon>
             <ListItemText
               primary="Friend Requests"
-              secondary={`Number of pending friend request :${numberOfPendingFriendRequest}`}
+              secondary={numberOfPendingFriendRequest > 0 ? `Number of pending friend request :${numberOfPendingFriendRequest}` : 'You have no pending requests at the moment'}
             />
           </ListItem>
           <Divider />
@@ -101,10 +98,10 @@ function NotificationBar() {
                 <ListItemText primary={`${firstName} ${lastName}`} />
                 <ListItemSecondaryAction>
                   <IconButton onClick={() => handleApproveFriendShip(email)}>
-                    <AddIcon />
+                    <CheckIcon style={{ color: 'green' }} />
                   </IconButton>
                   <IconButton onClick={() => handleRejectFriendShip(email)}>
-                    <RemoveIcon />
+                    <ClearIcon style={{ color: 'red' }} />
                   </IconButton>
                 </ListItemSecondaryAction>
               </ListItem>

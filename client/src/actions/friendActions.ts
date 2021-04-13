@@ -57,22 +57,21 @@ export const approvePendingFriendRequest = ({
     await axios.post(`${baseRoute}approveFriend`, {
         userFriendEmail,
     });
+    dispatch(updatePendingFriendRequests())
     dispatch(getFriendList())
 };
 
-export const rejectPendingFriendRequest = async ({
-    userEmail,
+export const rejectPendingFriendRequest = ({
     userFriendEmail,
 }: {
-    userEmail: string;
     userFriendEmail: string;
 }) => async (dispatch) => {
     await axios.post(`${baseRoute}rejectFriend`, {
-        userEmail,
         userFriendEmail,
     });
-    dispatch(getFriendList())
+    dispatch(updatePendingFriendRequests())
 };
+
 
 export const getFriendList = () => async (dispatch) => {
     try {
