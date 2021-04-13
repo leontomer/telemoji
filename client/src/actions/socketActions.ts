@@ -6,13 +6,6 @@ import {
 import io from "socket.io-client";
 
 import axios from "axios";
-import {
-  GET_FRIEND_LIST,
-  SET_FRIEND_REQUESTS,
-  SET_ABOUT,
-  SET_IMAGE,
-  SET_FRIEND_IN_FOCUS,
-} from "./types";
 
 const baseRoute = "/api/users/";
 export const connectToSocket = () => async (dispatch) => {
