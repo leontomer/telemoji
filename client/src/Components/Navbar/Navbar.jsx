@@ -70,6 +70,7 @@ export default function SearchAppBar() {
   const isAuthenticated = useSelector(
     (state) => state.authReducer.isAuthenticated
   );
+  const firstName = useSelector((state) => state.authReducer.user.firstName);
   const userImage = useSelector((state) => state.authReducer.user.imageAddress)
 
   const authenticatedContent = (
@@ -86,11 +87,15 @@ export default function SearchAppBar() {
           color="inherit"
           aria-label="open drawer"
           onClick={() => dispatch(openDrawer())}
+          style={{ marginLeft: 30 }}
         >
+          {firstName &&
+            firstName.charAt(0).toUpperCase() + firstName.slice(1)
+          }
           <Avatar
             alt="Remy Sharp"
             src={userImage}
-            style={{ marginLeft: 30 }}
+            style={{ margin: 10 }}
           />
         </IconButton>
       </div>
