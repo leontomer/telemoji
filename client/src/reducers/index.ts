@@ -5,7 +5,7 @@ import addonReducer from "./addonReducer";
 import modelReducer from './modelReducer';
 import socketReducer from './socketReducer';
 import callReducer from './callReducer';
-import friendReducer from './friendReducer';
+// import friendReducer from './friendReducer';
 
 export default combineReducers({
   authReducer,
@@ -14,5 +14,5 @@ export default combineReducers({
   modelReducer,
   socketReducer,
   callReducer,
-  friendReducer
+  // friendReducer
 });
