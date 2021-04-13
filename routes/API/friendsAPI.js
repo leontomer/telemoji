@@ -3,7 +3,21 @@ const router = express.Router();
 const auth = require('../../middleware/auth');
 const User = require("../../models/User");
 
+const updateClientFriendList = (clientIdToUpdate) => {
+    if (users[clientIdToUpdate]) {
+        console.log('emitting to', users[clientIdToUpdate]);
+        const userToUpdate = users[clientIdToUpdate];
+        io.to(userToUpdate.socketId).emit("friendListUpdate");
+    }
+}
 
+const updateClientFriendRequestList = (clientIdToUpdate) => {
+    if (users[clientIdToUpdate]) {
+        console.log('emitting to', users[clientIdToUpdate]);
+        const userToUpdate = users[clientIdToUpdate];
+        io.to(userToUpdate.socketId).emit("friendRequestListUpdate");
+    }
+}
 
 router.post("/addfriend", auth, async (req, res) => {
     try {
@@ -15,15 +29,8 @@ router.post("/addfriend", auth, async (req, res) => {
         const user = await User.findById(userID).select("-password");
 
         friend.friendRequests.push(user._id);
-        console.log(user);
         await friend.save();
-        console.log(friend);
-        if (users[friend._id]) {
-            const userToUpdate = users[friend._id];
-            io.to(userToUpdate.socketId).emit("recieveFriendRequest", {
-                requestFrom: user
-            });
-        }
+        updateClientFriendRequestList(friend._id);
         res.json({ friend });
     } catch (err) {
         console.error(err);
@@ -33,23 +40,21 @@ router.post("/addfriend", auth, async (req, res) => {
 
 router.post("/removeFriend", auth, async (req, res) => {
     try {
-        const { userId, userFriendId } = req.body;
+        const userId = req.user.id;
+        const { userFriendId } = req.body;
         const friend = await User.findById(userFriendId).select("-password");
         const user = await User.findById(userId).select("-password");
 
         user.friendList = user.friendList.filter((friend) => {
-            console.log(friend, userFriendId);
             return friend.toString() !== userFriendId.toString();
         });
-        console.log(user.friendList);
         friend.friendList = friend.friendList.filter(
             (friend) => friend.toString() !== userId.toString()
         );
 
         await friend.save();
         await user.save();
-
-        res.json({ user });
+        updateClientFriendList(friend._id);
     } catch (err) {
         console.error(err);
         res.status(500).json({ errors: [{ msg: err.message }] });
@@ -93,6 +98,8 @@ router.post("/approveFriend", auth, async (req, res) => {
         }
 
         await user.save();
+        updateClientFriendList(friend._id);
+        res.status(200).json({});
     } catch (e) {
         console.error(e);
     }
@@ -116,8 +123,8 @@ router.post("/rejectFriend", auth, async (req, res) => {
 
 router.get("/friendList", auth, async (req, res) => {
     try {
-        const email = req.query.email;
-        const user = await User.findOne({ email })
+        const userId = req.user.id;
+        const user = await User.findById(userId)
             .select("-password")
             .populate("friendList");
 

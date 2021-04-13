@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
@@ -40,8 +40,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function FriendsList({ history }) {
   const classes = useStyles();
-  const { user, friendList } = useSelector((state) => state.authReducer);
-
+  const { user, friendList: globalFriendList } = useSelector((state) => state.authReducer);
+  const [userFriendList, setUserFriendList] = useState([]);
   const handleFriendClick = (friend: FriendProps) => {
     dispatch(setFriendInFocus(friend));
   };
@@ -51,10 +51,14 @@ function FriendsList({ history }) {
   useEffect(() => {
     (async () => {
       if (user) {
-        await dispatch(getFriendList(user.email));
+        await dispatch(getFriendList());
       }
     })();
-  }, [user, friendList]);
+  }, [user]);
+
+  useEffect(() => {
+    setUserFriendList(globalFriendList)
+  }, [globalFriendList])
 
   const handleCall = (id) => {
     dispatch(handleCallUser(id));
@@ -73,8 +77,8 @@ function FriendsList({ history }) {
         />
       </ListItem>
       <Divider />
-      {friendList.length !== 0 ? (
-        friendList.map((friend: FriendProps, index) => {
+      {
+        userFriendList.map((friend: FriendProps, index) => {
           const labelId = `checkbox-list-secondary-label-${friend}`;
           return (
             <ListItem
@@ -103,9 +107,7 @@ function FriendsList({ history }) {
             </ListItem>
           );
         })
-      ) : (
-          <></>
-        )}
+      }
     </List>
   );
 }

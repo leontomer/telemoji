@@ -22,20 +22,16 @@ export const sendFriendRequest = () => async (_, getState) => {
 };
 
 export const removeFriend = ({
-    userId,
     userFriendId,
 }: {
-    userId: string;
     userFriendId: string;
 }) => async (dispatch) => {
     try {
-        const res = await axios.post(`${baseRoute}removeFriend`, {
-            userId,
+        await axios.post(`${baseRoute}removeFriend`, {
             userFriendId,
         });
-        const { data } = res;
-        console.log({ data });
-        return res.data.other;
+        dispatch(getFriendList())
+
     } catch (err) {
         console.log(err);
     }
@@ -53,20 +49,19 @@ export const updatePendingFriendRequests = () => async (dispatch, getState) => {
         console.log(err);
     }
 };
-export const approvePendingFriendRequest = async ({
+export const approvePendingFriendRequest = ({
     userEmail,
     userFriendEmail,
 }: {
     userEmail: string;
     userFriendEmail: string;
-}) => {
-    const res = await axios.post(`${baseRoute}approveFriend`, {
+}) => async (dispatch) => {
+    await axios.post(`${baseRoute}approveFriend`, {
         userEmail,
         userFriendEmail,
     });
-    const { data } = res;
-    console.log({ data });
-    return res.data.other;
+    console.log('approving friend request')
+    dispatch(getFriendList())
 };
 
 export const rejectPendingFriendRequest = async ({
@@ -75,21 +70,17 @@ export const rejectPendingFriendRequest = async ({
 }: {
     userEmail: string;
     userFriendEmail: string;
-}) => {
-    const res = await axios.post(`${baseRoute}rejectFriend`, {
+}) => async (dispatch) => {
+    await axios.post(`${baseRoute}rejectFriend`, {
         userEmail,
         userFriendEmail,
     });
-    const { data } = res;
-    console.log({ data });
-    return res.data.other;
+    dispatch(getFriendList())
 };
 
-export const getFriendList = (userEmail) => async (dispatch) => {
+export const getFriendList = () => async (dispatch) => {
     try {
-        const res = await axios.get(`${baseRoute}friendList`, {
-            params: { email: userEmail },
-        });
+        const res = await axios.get(`${baseRoute}friendList`);
         const { data } = res;
         dispatch({ type: GET_FRIEND_LIST, payload: data.friendList });
     } catch (e) {
@@ -104,10 +95,18 @@ export const setFriendInFocus = (friend: FriendProps) => (dispatch) => {
     });
 };
 
-export const updateFriendRequests = () => async (dispatch, getState) => {
+export const friendListListener = () => async (dispatch, getState) => {
     const socket = getState().socketReducer.socket;
 
-    socket.on("recieveFriendRequest", (data) => {
-        dispatch({ type: UPDATE_FRIEND_REQUESTS, payload: data.requestFrom });
+    socket.on("friendListUpdate", () => {
+        dispatch(getFriendList());
     });
 };
+
+export const pendingFriendRequestsListener = () => async (dispatch, getState) => {
+    const socket = getState().socketReducer.socket;
+
+    socket.on("friendRequestListUpdate", () => {
+        dispatch(updatePendingFriendRequests());
+    });
+}

@@ -22,7 +22,7 @@ import { DrawerComponent } from "./Components/Drawer/Drawer";
 import { useSelector } from "react-redux";
 import { TelemojiProvider } from "./Contexts/TelemojiContext";
 import { RecieveCallModal } from "./Components/Modals/RecieveCallModal";
-import { updateFriendRequests } from './actions/friendActions';
+import { friendListListener, pendingFriendRequestsListener } from './actions/friendActions';
 import store from "./store";
 
 function App() {
@@ -37,7 +37,8 @@ function App() {
     if (socket) {
       store.dispatch(recieveCalls());
       store.dispatch(getAnswerFromCall());
-      store.dispatch(updateFriendRequests());
+      store.dispatch(friendListListener());
+      store.dispatch(pendingFriendRequestsListener());
     }
   }, [socket]);
 

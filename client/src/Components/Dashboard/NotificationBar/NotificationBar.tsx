@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   approvePendingFriendRequest,
   rejectPendingFriendRequest,
-  updatePendingFriendRequests
+  updatePendingFriendRequests,
 } from "../../../actions/friendActions";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -43,21 +43,20 @@ function NotificationBar() {
   }, [user]);
 
   const clearSpecificFriendRequest = (email: string) => {
-    console.log('clear specific', friendRequestsNotifications);
     const filteredFriendRequest = friendRequestsNotifications.filter(friendReq => friendReq.email !== email);
-    console.log('filtered', filteredFriendRequest)
     setFriendRequestsNotifications(filteredFriendRequest)
+    setNumberOfPendingFriendRequest(filteredFriendRequest.length)
   }
   async function handleApproveFriendShip(userFriendEmail: string) {
     try {
+      clearSpecificFriendRequest(userFriendEmail)
       dispatch(
-        await approvePendingFriendRequest({
+        approvePendingFriendRequest({
           userEmail: user.email,
           userFriendEmail,
         })
-
       );
-      clearSpecificFriendRequest(userFriendEmail)
+
     } catch (e) {
       console.warn(e);
     }
@@ -65,13 +64,14 @@ function NotificationBar() {
 
   async function handleRejectFriendShip(userFriendEmail: string) {
     try {
+      clearSpecificFriendRequest(userFriendEmail)
       dispatch(
-        await rejectPendingFriendRequest({
+        rejectPendingFriendRequest({
           userEmail: user.email,
           userFriendEmail,
         })
       )
-      clearSpecificFriendRequest(userFriendEmail)
+
     } catch (e) {
       console.warn(e);
     }

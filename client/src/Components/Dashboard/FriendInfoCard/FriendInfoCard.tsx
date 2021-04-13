@@ -138,7 +138,7 @@ export default function FriendInfoCard() {
   const handleUnfriend = async () => {
     try {
       await dispatch(
-        removeFriend({ userId: user._id, userFriendId: friend._id })
+        removeFriend({ userFriendId: friend._id })
       );
     } catch (error) {
       console.warn(error);
