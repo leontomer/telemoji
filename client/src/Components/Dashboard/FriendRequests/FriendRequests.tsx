@@ -54,7 +54,7 @@ export default function FriendRequests() {
           horizontal: "center",
         }}
       >
-        <NotificationBar numberOfPendingFriendRequest={5} />
+        <NotificationBar />
       </Popover>
     </div>
   );
