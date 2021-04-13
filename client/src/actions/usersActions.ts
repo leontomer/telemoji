@@ -1,11 +1,8 @@
 import axios from "axios";
-import { FriendProps } from "../reducers/authReducer";
+
 import {
-  GET_FRIEND_LIST,
-  SET_FRIEND_REQUESTS,
   SET_ABOUT,
   SET_IMAGE,
-  SET_FRIEND_IN_FOCUS,
 } from "./types";
 
 const baseRoute = "/api/users/";
@@ -24,103 +21,6 @@ export const findUser = (email) => async (dispatch) => {
   }
 };
 
-export const addFriend = ({
-  userEmail,
-  userFriendEmail,
-}: {
-  userEmail: string;
-  userFriendEmail: string;
-}) => async (dispatch) => {
-  try {
-    const res = await axios.post(`${baseRoute}addfriend`, {
-      userEmail,
-      userFriendEmail,
-    });
-    const { data } = res;
-    console.log({data})
-    return res.data.other;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const removeFriend = ({
-  userId,
-  userFriendId,
-}: {
-  userId: string;
-  userFriendId: string;
-}) => async (dispatch) => {
-  try {
-    const res = await axios.post(`${baseRoute}removeFriend`, {
-      userId,
-      userFriendId,
-    });
-    const { data } = res;
-    console.log({data})
-    return res.data.other;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-
-export const updatePendingFriendRequests = (email) => async (dispatch) => {
-  try {
-    const res = await axios.get(`${baseRoute}pendingFriendRequests`, {
-      params: { email },
-    });
-    const user = res.data.user
-    const friendRequests = res.data.user.friendRequests;
-    dispatch({ type: SET_FRIEND_REQUESTS, payload: [...friendRequests] });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const approvePendingFriendRequest = async ({
-  userEmail,
-  userFriendEmail,
-}: {
-  userEmail: string;
-  userFriendEmail: string;
-}) => {
-  const res = await axios.post(`${baseRoute}approveFriend`, {
-    userEmail,
-    userFriendEmail,
-  });
-  const { data } = res;
-  console.log({ data });
-  return res.data.other;
-};
-
-export const rejectPendingFriendRequest = async ({
-  userEmail,
-  userFriendEmail,
-}: {
-  userEmail: string;
-  userFriendEmail: string;
-}) => {
-  const res = await axios.post(`${baseRoute}rejectFriend`, {
-    userEmail,
-    userFriendEmail,
-  });
-  const { data } = res;
-  console.log({ data });
-  return res.data.other;
-};
-
-export const getFriendList = (userEmail) => async (dispatch) => {
-  try {
-    const res = await axios.get(`${baseRoute}friendList`, {
-      params: { email: userEmail },
-    });
-    const { data } = res;
-    dispatch({ type: GET_FRIEND_LIST, payload: data.friendList });
-  } catch (e) {
-    console.warn(e);
-  }
-};
 
 export const setAbout = ({
   id,
@@ -162,16 +62,13 @@ export const setUserImageAction = ({
 
 export const getAllUsers = async () => {
   try {
+    console.log('getting all users!!')
     const res = await axios.get(`${baseRoute}allUsers`);
+
+    console.log('res', res);
     return res.data.users;
   } catch (err) {
     console.warn(err);
   }
 };
 
-export const setFriendInFocus = (friend: FriendProps) => (dispatch) => {
-  dispatch({
-    type: SET_FRIEND_IN_FOCUS,
-    payload: friend,
-  });
-};

@@ -4,7 +4,8 @@ import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Card } from "material-ui";
-import { getAllUsers, setFriendInFocus } from "../../../actions/usersActions";
+import { getAllUsers } from "../../../actions/usersActions";
+import { setFriendInFocus } from '../../../actions/friendActions';
 import { FriendProps } from "../../../reducers/authReducer";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -21,7 +22,7 @@ export default function AsyncSearch() {
   const [input, setInput] = React.useState<string>("");
   const [users, setUsers] = React.useState<FriendProps[]>([]);
   const dispatch = useDispatch();
-  const loading = open && options.length === 0;
+  const loading = open && options && options.length === 0;
 
   const fetchUsers = async () => {
     const users = await getAllUsers();
@@ -70,11 +71,11 @@ export default function AsyncSearch() {
 
   React.useEffect(() => {
     users.forEach(user => {
-      if(input === `${user.firstName} ${user.lastName}`){
-        console.log("we got match", {user})
+      if (input === `${user.firstName} ${user.lastName}`) {
+        console.log("we got match", { user })
       }
     })
-  },[input])
+  }, [input])
   return (
     <Autocomplete
       id="asynchronous-demo"
@@ -87,14 +88,14 @@ export default function AsyncSearch() {
         setOpen(false);
       }}
       getOptionSelected={(option, value) => {
-        if(option.email === value.email){
+        if (option.email === value.email) {
           handleOptionSelected(option);
         }
         return option.email === value.email
       }}
       getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
       options={options}
-      
+
       loading={loading}
       renderInput={(params) => (
         <TextField

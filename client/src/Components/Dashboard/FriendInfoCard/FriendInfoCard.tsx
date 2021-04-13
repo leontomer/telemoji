@@ -11,11 +11,13 @@ import { useDispatch, useSelector } from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import { Content } from "../../../Common/content";
 import {
-  addFriend,
-  removeFriend,
   setAbout,
   setUserImageAction,
 } from "../../../actions/usersActions";
+import {
+  sendFriendRequest,
+  removeFriend
+} from '../../../actions/friendActions';
 
 import "./FriendInfoCard.scss";
 const useStyles = makeStyles({
@@ -126,7 +128,7 @@ export default function FriendInfoCard() {
   const handleAddFriend = async () => {
     try {
       await dispatch(
-        addFriend({ userEmail: user.email, userFriendEmail: friend.email })
+        sendFriendRequest()
       );
     } catch (error) {
       console.warn(error);
@@ -136,7 +138,7 @@ export default function FriendInfoCard() {
   const handleUnfriend = async () => {
     try {
       await dispatch(
-        removeFriend({ userId: user._id, userFriendId: friend._id })
+        removeFriend({ userFriendId: friend._id })
       );
     } catch (error) {
       console.warn(error);
@@ -154,10 +156,10 @@ export default function FriendInfoCard() {
             Unfriend
           </Button>
         ) : (
-          <Button size="small" color="primary" onClick={handleAddFriend}>
-            Add Friend
-          </Button>
-        )}
+            <Button size="small" color="primary" onClick={handleAddFriend}>
+              Add Friend
+            </Button>
+          )}
       </>
     );
   };
@@ -199,20 +201,20 @@ export default function FriendInfoCard() {
             className={classes.large}
           />
         ) : (
-          <div>
-            <Avatar
-              alt="Remy Sharp"
-              src={getUserImage()}
-              className={classes.large}
-            />
-            <TextField
-              label="Image"
-              value={userImage}
-              variant="outlined"
-              onChange={handleImageChange}
-            />
-          </div>
-        )}
+            <div>
+              <Avatar
+                alt="Remy Sharp"
+                src={getUserImage()}
+                className={classes.large}
+              />
+              <TextField
+                label="Image"
+                value={userImage}
+                variant="outlined"
+                onChange={handleImageChange}
+              />
+            </div>
+          )}
 
         <CardContent>
           <Typography gutterBottom variant="h4" component="h4">
