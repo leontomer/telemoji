@@ -5,10 +5,9 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Card } from "material-ui";
 import { getAllUsers } from "../../../actions/usersActions";
-import { setFriendInFocus } from '../../../actions/friendActions';
+import { setFriendInFocus } from "../../../actions/friendActions";
 import { FriendProps } from "../../../reducers/authReducer";
 import { useDispatch, useSelector } from "react-redux";
-
 
 function sleep(delay = 0) {
   return new Promise((resolve) => {
@@ -21,47 +20,46 @@ export default function AsyncSearch() {
   const [options, setOptions] = React.useState<FriendProps[]>([]);
   const [input, setInput] = React.useState<string>("");
   const [users, setUsers] = React.useState<FriendProps[]>([]);
+  const [changed, setChanged] = React.useState<boolean>(false);
   const dispatch = useDispatch();
-  const loading = open && options && options.length === 0;
+  const [loading, setLoading] = React.useState<boolean>(
+    open && options && options.length === 0
+  );
 
   const fetchUsers = async () => {
     const users = await getAllUsers();
-    setUsers(users)
+    setUsers(users);
     return users;
   };
 
   const handleInputChance = ({ target: { value } }) => {
     setInput(value);
+    setChanged(true);
   };
 
   const handleOptionSelected = (friend: FriendProps) => {
-    dispatch(setFriendInFocus(friend))
-  }
+    dispatch(setFriendInFocus(friend));
+  };
 
   React.useEffect(() => {
     (async () => {
       await fetchUsers();
-      setOptions(users)
+      setOptions(users);
     })();
   }, []);
 
   React.useEffect(() => {
     let active = true;
 
-    if (!loading) {
-      return undefined;
-    }
-
     (async () => {
-      if (active) {
-        setOptions(users)
+      if (active && changed && input) {
+        setOptions(users);
+      } else if (!input) {
+        setOptions([]);
+        setLoading(false);
       }
     })();
-
-    return () => {
-      active = false;
-    };
-  }, [loading]);
+  }, [loading, changed, input]);
 
   React.useEffect(() => {
     if (!open) {
@@ -70,17 +68,18 @@ export default function AsyncSearch() {
   }, [open]);
 
   React.useEffect(() => {
-    users.forEach(user => {
+    users.forEach((user) => {
       if (input === `${user.firstName} ${user.lastName}`) {
-        console.log("we got match", { user })
+        console.log("we got match", { user });
       }
-    })
-  }, [input])
+    });
+  }, [input]);
   return (
     <Autocomplete
       id="asynchronous-demo"
       style={{ width: 300 }}
       open={open}
+      freeSolo={true}
       onOpen={() => {
         setOpen(true);
       }}
@@ -91,11 +90,10 @@ export default function AsyncSearch() {
         if (option.email === value.email) {
           handleOptionSelected(option);
         }
-        return option.email === value.email
+        return option.email === value.email;
       }}
       getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
       options={options}
-
       loading={loading}
       renderInput={(params) => (
         <TextField
