@@ -2,8 +2,7 @@ import axios from "axios";
 import {
     GET_FRIEND_LIST,
     SET_FRIEND_REQUESTS,
-    SET_FRIEND_IN_FOCUS,
-    UPDATE_FRIEND_REQUESTS
+    SET_FRIEND_IN_FOCUS
 } from "./types";
 import { FriendProps } from "../reducers/authReducer";
 
@@ -11,7 +10,8 @@ const baseRoute = "/api/friends/";
 
 
 export const sendFriendRequest = () => async (_, getState) => {
-    const friendReuqestID = getState().authReducer.friendInFocus._id;
+    console.log('sending friend req');
+    const friendReuqestID = getState().friendReducer.friendInFocus._id;
     try {
         await axios.post(`${baseRoute}addfriend`, {
             friendReuqestID,
@@ -50,17 +50,13 @@ export const updatePendingFriendRequests = () => async (dispatch, getState) => {
     }
 };
 export const approvePendingFriendRequest = ({
-    userEmail,
     userFriendEmail,
 }: {
-    userEmail: string;
     userFriendEmail: string;
 }) => async (dispatch) => {
     await axios.post(`${baseRoute}approveFriend`, {
-        userEmail,
         userFriendEmail,
     });
-    console.log('approving friend request')
     dispatch(getFriendList())
 };
 

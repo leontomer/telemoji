@@ -40,7 +40,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function FriendsList({ history }) {
   const classes = useStyles();
-  const { user, friendList: globalFriendList } = useSelector((state) => state.authReducer);
+  const { user } = useSelector((state) => state.authReducer);
+  const { friendList: globalFriendList } = useSelector((state) => state.friendReducer);
   const [userFriendList, setUserFriendList] = useState([]);
   const handleFriendClick = (friend: FriendProps) => {
     dispatch(setFriendInFocus(friend));

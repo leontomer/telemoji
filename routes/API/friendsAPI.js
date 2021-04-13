@@ -5,7 +5,6 @@ const User = require("../../models/User");
 
 const updateClientFriendList = (clientIdToUpdate) => {
     if (users[clientIdToUpdate]) {
-        console.log('emitting to', users[clientIdToUpdate]);
         const userToUpdate = users[clientIdToUpdate];
         io.to(userToUpdate.socketId).emit("friendListUpdate");
     }
@@ -13,7 +12,6 @@ const updateClientFriendList = (clientIdToUpdate) => {
 
 const updateClientFriendRequestList = (clientIdToUpdate) => {
     if (users[clientIdToUpdate]) {
-        console.log('emitting to', users[clientIdToUpdate]);
         const userToUpdate = users[clientIdToUpdate];
         io.to(userToUpdate.socketId).emit("friendRequestListUpdate");
     }
@@ -55,6 +53,7 @@ router.post("/removeFriend", auth, async (req, res) => {
         await friend.save();
         await user.save();
         updateClientFriendList(friend._id);
+        res.status(200).json({})
     } catch (err) {
         console.error(err);
         res.status(500).json({ errors: [{ msg: err.message }] });
@@ -76,11 +75,11 @@ router.get("/pendingFriendRequests", auth, async (req, res) => {
 
 router.post("/approveFriend", auth, async (req, res) => {
     try {
-        const { userEmail, userFriendEmail } = req.body;
+        const { userFriendEmail } = req.body;
         const friend = await User.findOne({ email: userFriendEmail }).select(
             "-password"
         );
-        const user = await User.findOne({ email: userEmail }).select("-password");
+        const user = await User.findById(req.user.id).select("-password");
 
         const updatedFriendRequests = user.friendRequests.filter((f) => {
             return f.toString() !== friend._id.toString();
@@ -106,11 +105,11 @@ router.post("/approveFriend", auth, async (req, res) => {
 });
 router.post("/rejectFriend", auth, async (req, res) => {
     try {
-        const { userEmail, userFriendEmail } = req.body;
+        const { userFriendEmail } = req.body;
         const friend = await User.findOne({ email: userFriendEmail }).select(
             "-password"
         );
-        const user = await User.findOne({ email: userEmail }).select("-password");
+        const user = await User.findById(req.user.id).select("-password");
 
         const updatedFriendRequests = user.friendRequests.filter(
             (f) => f.toString() !== friend._id.toString()
@@ -138,7 +137,6 @@ router.get("/friendList", auth, async (req, res) => {
 router.get("/allUsers", auth, async (req, res) => {
     try {
         const users = await User.find({}).select("-passwords");
-
         res.json({ users });
     } catch {
         console.error(err);
@@ -149,7 +147,6 @@ router.get("/allUsers", auth, async (req, res) => {
 router.post("/about", auth, async (req, res) => {
     try {
         const { id, about } = req.body;
-
         const user = await User.findById(id);
 
         user.about = about;

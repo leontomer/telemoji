@@ -34,20 +34,28 @@ const useStyles = makeStyles({
 
 export default function FriendInfoCard() {
   const classes = useStyles();
+
+  const user = useSelector((state) => state.authReducer.user);
+  const globalFriendList = useSelector((state) => state.friendReducer.friendList);
+  const friendInFocus: FriendProps = useSelector(
+    (state) => state.friendReducer.friendInFocus
+  );
+
   const [userAbout, setUserAbout] = useState<string>(Content.default_about);
   const [userImage, setUserImage] = useState<string>(Content.default_image);
+  const [friendList, setFriendList] = useState(globalFriendList)
 
   const [saveButtonReady, setSaveButtonReady] = useState(true);
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.authReducer.user);
-  const friend: FriendProps = useSelector(
-    (state) => state.authReducer.friendInFocus
-  );
+
+  useEffect(() => {
+    setFriendList(globalFriendList);
+  }, [globalFriendList])
 
   const getFriendAbout = () => {
-    if (friend && friend.about) {
-      return friend.about;
+    if (friendInFocus && friendInFocus.about) {
+      return friendInFocus.about;
     } else {
       return Content.default_about;
     }
@@ -101,8 +109,8 @@ export default function FriendInfoCard() {
   };
 
   const getFriendImage = () => {
-    if (friend && friend.imageAddress) {
-      return friend.imageAddress;
+    if (friendInFocus && friendInFocus.imageAddress) {
+      return friendInFocus.imageAddress;
     } else {
       return Content.default_image;
     }
@@ -116,13 +124,11 @@ export default function FriendInfoCard() {
   }, [user]);
 
   const usersAreFriends = () => {
-    for (let index = 0; index < user.friendList.length; index++) {
-      const friendToCheck = user.friendList[index];
-      if (friend._id === friendToCheck) {
-        return true;
-      }
+    if (friendList.length === 0 || !friendInFocus) {
+      return false;
     }
-    return false;
+    const userFriendListIndex = friendList.find(friend => friend.id === friendInFocus._id);
+    return userFriendListIndex !== -1;
   };
 
   const handleAddFriend = async () => {
@@ -138,7 +144,7 @@ export default function FriendInfoCard() {
   const handleUnfriend = async () => {
     try {
       await dispatch(
-        removeFriend({ userFriendId: friend._id })
+        removeFriend({ userFriendId: friendInFocus._id })
       );
     } catch (error) {
       console.warn(error);
@@ -163,7 +169,6 @@ export default function FriendInfoCard() {
       </>
     );
   };
-
   const handleSaveUserDetails = async () => {
     setSaveButtonReady(false);
     try {
@@ -194,7 +199,7 @@ export default function FriendInfoCard() {
   return (
     <div className="outer">
       <Card className="root">
-        {friend ? (
+        {friendInFocus ? (
           <Avatar
             alt="Remy Sharp"
             src={getFriendImage()}
@@ -218,16 +223,16 @@ export default function FriendInfoCard() {
 
         <CardContent>
           <Typography gutterBottom variant="h4" component="h4">
-            {friend
-              ? `${friend.firstName} ${friend.lastName}`
+            {friendInFocus
+              ? `${friendInFocus.firstName} ${friendInFocus.lastName}`
               : user && `${user.firstName} ${user.lastName}`}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            {friend ? getFriendAbout() : getUserAbout()}
+            {friendInFocus ? getFriendAbout() : getUserAbout()}
           </Typography>
         </CardContent>
         <CardActions className={classes.actions}>
-          {friend ? getFriendActions() : getUserActions()}
+          {friendInFocus ? getFriendActions() : getUserActions()}
         </CardActions>
       </Card>
     </div>

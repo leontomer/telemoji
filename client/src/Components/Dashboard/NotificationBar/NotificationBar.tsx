@@ -28,7 +28,8 @@ import {
 function NotificationBar() {
   const [numberOfPendingFriendRequest, setNumberOfPendingFriendRequest] = useState<number | null>(null);
   const [friendRequestsNotifications, setFriendRequestsNotifications,] = React.useState<any>([]);
-  const { user, friendRequests } = useSelector((state) => state.authReducer);
+  const { user } = useSelector((state) => state.authReducer);
+  const { friendRequests } = useSelector((state) => state.friendReducer)
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -52,7 +53,6 @@ function NotificationBar() {
       clearSpecificFriendRequest(userFriendEmail)
       dispatch(
         approvePendingFriendRequest({
-          userEmail: user.email,
           userFriendEmail,
         })
       );

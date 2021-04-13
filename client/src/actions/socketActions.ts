@@ -75,15 +75,4 @@ export const addFriend = ({
   } catch (error) {
     console.error(error);
   }
-  // try {
-  //   const res = await axios.post(`${baseRoute}addfriend`, {
-  //     userEmail,
-  //     userFriendEmail,
-  //   });
-  //   const { data } = res;
-  //   console.log({ data });
-  //   return res.data.other;
-  // } catch (err) {
-  //   console.log(err);
-  // }
 };

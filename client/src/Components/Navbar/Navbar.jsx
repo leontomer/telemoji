@@ -1,11 +1,6 @@
 import React from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
+import { Avatar, Typography, IconButton, Toolbar, AppBar, Button } from "@material-ui/core";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
-import Button from "@material-ui/core/Button";
 import CastConnectedIcon from "@material-ui/icons/CastConnected";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
@@ -75,6 +70,8 @@ export default function SearchAppBar() {
   const isAuthenticated = useSelector(
     (state) => state.authReducer.isAuthenticated
   );
+  const firstName = useSelector((state) => state.authReducer.user.firstName);
+  const userImage = useSelector((state) => state.authReducer.user.imageAddress)
 
   const authenticatedContent = (
     <>
@@ -90,8 +87,16 @@ export default function SearchAppBar() {
           color="inherit"
           aria-label="open drawer"
           onClick={() => dispatch(openDrawer())}
+          style={{ marginLeft: 30 }}
         >
-          <MenuIcon />
+          {firstName &&
+            firstName.charAt(0).toUpperCase() + firstName.slice(1)
+          }
+          <Avatar
+            alt="Remy Sharp"
+            src={userImage}
+            style={{ margin: 10 }}
+          />
         </IconButton>
       </div>
     </>
@@ -156,8 +161,8 @@ export default function SearchAppBar() {
           {isAuthenticated === null
             ? null
             : isAuthenticated
-            ? authenticatedContent
-            : notAuthenticatedContent}
+              ? authenticatedContent
+              : notAuthenticatedContent}
         </Toolbar>
       </AppBar>
     </div>
