@@ -30,7 +30,6 @@ export function DetectionVideo({
     }
 
     return () => {
-      console.log('this runs cleanup')
       clearTimeout(timeVarHolder);
       canvasRef = null;
       unmountingVideoChat.current = true;
@@ -120,7 +119,6 @@ export function DetectionVideo({
       //tf.browser.toPixels((data.toFloat().div(tf.scalar(255.0))), canvasRef.current)
       if (emotionRecModel && data) {
         try {
-          //console.log('predicting');
           predict(data);
         } catch (error) {
           console.log(error);

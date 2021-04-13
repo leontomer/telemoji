@@ -1,5 +1,5 @@
+const dbHelper = require("./server/utils/dbHelper");
 module.exports = () => {
-
   global.users = {};
 
   io.on("connection", (socket) => {
@@ -20,13 +20,13 @@ module.exports = () => {
     socket.on("logout", () => {
       delete users[socket.id];
       io.sockets.emit("allUsers", users);
-    })
+    });
 
     socket.on("callUser", (data) => {
-      const callToUser = users[data.userToCall]
+      const callToUser = users[data.userToCall];
       io.to(callToUser.socketId).emit("callInit", {
         signal: data.signalData,
-        to: data.fromUser
+        to: data.fromUser,
       });
     });
 

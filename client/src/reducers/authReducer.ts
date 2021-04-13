@@ -8,12 +8,8 @@ import {
   LOGOUT,
   ACCOUNT_DELETED,
   LOGIN_SUCCESS_GOOGLE_FACEBOOK,
-  SET_FRIEND_REQUESTS,
-  GET_FRIEND_LIST,
   SET_ABOUT,
   SET_IMAGE,
-  SET_FRIEND_IN_FOCUS,
-  REMOVE_FRIEND,
 } from "../actions/types";
 
 export interface FriendProps {
@@ -35,24 +31,19 @@ interface InitialStateProps {
   token: string | null;
   loading: boolean;
   user: object | null;
-  friendRequests: FriendProps[];
-  friendList: FriendProps[];
-  friendInFocus: FriendProps | null;
 }
 
 export const initialState: InitialStateProps = {
   token: localStorage.getItem("token"),
-  isAuthenticated: null,
+  isAuthenticated: false,
   loading: true,
   user: {
     firstName: "",
     lastName: "",
     email: "",
     friendList: [],
-  },
-  friendRequests: [],
-  friendList: [],
-  friendInFocus: null,
+    imageAddress: ''
+  }
 };
 export default function (state: InitialStateProps = initialState, action) {
   const { type, payload } = action;
@@ -76,7 +67,6 @@ export default function (state: InitialStateProps = initialState, action) {
       };
 
     case SET_ABOUT:
-      // console.log({ ...state, user: { ...state.user, about: payload } });
       return {
         ...state,
         user: { ...state.user, about: payload },
@@ -93,14 +83,7 @@ export default function (state: InitialStateProps = initialState, action) {
     case LOGIN_FAIL:
     case ACCOUNT_DELETED:
       localStorage.removeItem("token");
-      return {
-        ...state,
-        token: null,
-        isAuthenticated: false,
-        loading: false,
-        friendRequests: [],
-        friendList: [],
-      };
+      return initialState;
 
     case USER_LOADED:
       return {
@@ -110,20 +93,6 @@ export default function (state: InitialStateProps = initialState, action) {
         user: payload,
       };
 
-    case SET_FRIEND_REQUESTS:
-      return { ...state, friendRequests: payload };
-
-    case GET_FRIEND_LIST:
-      return { ...state, friendList: payload };
-
-    case SET_FRIEND_IN_FOCUS:
-      return { ...state, friendInFocus: payload };
-
-    case REMOVE_FRIEND:
-      return {
-        ...state,
-        friendList: payload,
-      };
 
     default:
       return state;

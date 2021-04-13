@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
@@ -13,9 +13,9 @@ import { ListItemIcon } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import { useDispatch, useSelector } from "react-redux";
-import { getFriendList, setFriendInFocus } from "../../../actions/usersActions";
+import { getFriendList, setFriendInFocus } from "../../../actions/friendActions";
 import { FriendProps } from "../../../reducers/authReducer";
-import { handleCallUser } from '../../../actions/callActions';
+import { handleCallUser } from "../../../actions/callActions";
 import { withRouter } from "react-router";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -38,14 +38,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-
-
 function FriendsList({ history }) {
   const classes = useStyles();
-  const { user, friendList } = useSelector((state) => state.authReducer);
-
+  const { user } = useSelector((state) => state.authReducer);
+  const { friendList: globalFriendList } = useSelector((state) => state.friendReducer);
+  const [userFriendList, setUserFriendList] = useState([]);
   const handleFriendClick = (friend: FriendProps) => {
-    dispatch(setFriendInFocus(friend))
+    dispatch(setFriendInFocus(friend));
   };
 
   const dispatch = useDispatch();
@@ -53,15 +52,19 @@ function FriendsList({ history }) {
   useEffect(() => {
     (async () => {
       if (user) {
-        await dispatch(getFriendList(user.email));
+        await dispatch(getFriendList());
       }
     })();
-  }, []);
+  }, [user]);
+
+  useEffect(() => {
+    setUserFriendList(globalFriendList)
+  }, [globalFriendList])
 
   const handleCall = (id) => {
     dispatch(handleCallUser(id));
-    history.push(`/video-chat/${id}`)
-  }
+    history.push(`/video-chat/${id}`);
+  };
 
   return (
     <List dense className={classes.root}>
@@ -75,8 +78,8 @@ function FriendsList({ history }) {
         />
       </ListItem>
       <Divider />
-      {friendList.length !== 0 ? (
-        friendList.map((friend: FriendProps, index) => {
+      {
+        userFriendList.map((friend: FriendProps, index) => {
           const labelId = `checkbox-list-secondary-label-${friend}`;
           return (
             <ListItem
@@ -85,17 +88,14 @@ function FriendsList({ history }) {
               onClick={() => handleFriendClick(friend)}
             >
               <ListItemAvatar>
-                <Avatar
-                  alt={`${friend.firstName}`}
-                  //TODO : replace with real picture mechanism
-                  src={
-                    friend.imageAddress
-                  }
-                />
+                <Avatar alt={`${friend.firstName}`} src={friend.imageAddress} />
               </ListItemAvatar>
               <ListItemText id={labelId} primary={friend.firstName} />
               <ListItemSecondaryAction>
-                <IconButton disabled={false} onClick={() => handleCall(friend._id)}>
+                <IconButton
+                  disabled={false}
+                  onClick={() => handleCall(friend._id)}
+                >
                   <PhoneIcon
                     style={
                       friend.firstName === "tom"
@@ -108,10 +108,8 @@ function FriendsList({ history }) {
             </ListItem>
           );
         })
-      ) : (
-          <></>
-        )}
+      }
     </List>
   );
 }
-export default withRouter(FriendsList)
+export default withRouter(FriendsList);

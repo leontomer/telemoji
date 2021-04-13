@@ -3,11 +3,13 @@ import {
   approvePendingFriendRequest,
   rejectPendingFriendRequest,
   updatePendingFriendRequests,
-} from "../../../actions/usersActions";
+} from "../../../actions/friendActions";
+
 import { useDispatch, useSelector } from "react-redux";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
+
 import {
   Avatar,
   IconButton,
@@ -21,39 +23,40 @@ import {
   Card,
 } from "@material-ui/core";
 
-interface NotificationBarProps {
-  numberOfPendingFriendRequest: number;
-}
 
-function NotificationBar(props: NotificationBarProps) {
-  const [
-    numberOfPendingFriendRequest,
-    setNumberOfPendingFriendRequest,
-  ] = useState<number | null>(null);
 
-  const { user, friendRequests } = useSelector((state) => state.authReducer);
-
+function NotificationBar() {
+  const [numberOfPendingFriendRequest, setNumberOfPendingFriendRequest] = useState<number | null>(null);
+  const [friendRequestsNotifications, setFriendRequestsNotifications,] = React.useState<any>([]);
+  const { user } = useSelector((state) => state.authReducer);
+  const { friendRequests } = useSelector((state) => state.friendReducer)
   const dispatch = useDispatch();
-  useEffect(() => {
-    (async () => {
-      if (user) {
-        const requestCount = await dispatch(
-          updatePendingFriendRequests(user.email)
-        );
-      }
-      setNumberOfPendingFriendRequest(friendRequests.length);
-    })();
-  }, []);
 
+  useEffect(() => {
+    setFriendRequestsNotifications(friendRequests);
+    setNumberOfPendingFriendRequest(friendRequests.length)
+  }, [friendRequests]);
+
+  useEffect(() => {
+    if (user.email) {
+      dispatch(updatePendingFriendRequests())
+    }
+  }, [user]);
+
+  const clearSpecificFriendRequest = (email: string) => {
+    const filteredFriendRequest = friendRequestsNotifications.filter(friendReq => friendReq.email !== email);
+    setFriendRequestsNotifications(filteredFriendRequest)
+    setNumberOfPendingFriendRequest(filteredFriendRequest.length)
+  }
   async function handleApproveFriendShip(userFriendEmail: string) {
     try {
+      clearSpecificFriendRequest(userFriendEmail)
       dispatch(
-        await approvePendingFriendRequest({
-          userEmail: user.email,
+        approvePendingFriendRequest({
           userFriendEmail,
         })
       );
-      dispatch(updatePendingFriendRequests(user.email));
+
     } catch (e) {
       console.warn(e);
     }
@@ -61,13 +64,14 @@ function NotificationBar(props: NotificationBarProps) {
 
   async function handleRejectFriendShip(userFriendEmail: string) {
     try {
+      clearSpecificFriendRequest(userFriendEmail)
       dispatch(
-        await rejectPendingFriendRequest({
+        rejectPendingFriendRequest({
           userEmail: user.email,
           userFriendEmail,
         })
-      );
-      dispatch(updatePendingFriendRequests(user.email));
+      )
+
     } catch (e) {
       console.warn(e);
     }
@@ -87,29 +91,25 @@ function NotificationBar(props: NotificationBarProps) {
             />
           </ListItem>
           <Divider />
-          {numberOfPendingFriendRequest !== 0 ? (
-            friendRequests.map((friendRequest, index) => {
-              const { firstName, lastName, email, imageAddress } = friendRequest;
-              return (
-                <ListItem key={index}>
-                  <ListItemAvatar>
-                    <Avatar alt={firstName} src={imageAddress} />
-                  </ListItemAvatar>
-                  <ListItemText primary={`${firstName} ${lastName}`} />
-                  <ListItemSecondaryAction>
-                    <IconButton onClick={() => handleApproveFriendShip(email)}>
-                      <AddIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handleRejectFriendShip(email)}>
-                      <RemoveIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              );
-            })
-          ) : (
-              <div></div>
-            )}
+          {friendRequestsNotifications.map((friendRequest, index) => {
+            const { firstName, lastName, email, imageAddress } = friendRequest;
+            return (
+              <ListItem key={index}>
+                <ListItemAvatar>
+                  <Avatar alt={firstName} src={imageAddress} />
+                </ListItemAvatar>
+                <ListItemText primary={`${firstName} ${lastName}`} />
+                <ListItemSecondaryAction>
+                  <IconButton onClick={() => handleApproveFriendShip(email)}>
+                    <AddIcon />
+                  </IconButton>
+                  <IconButton onClick={() => handleRejectFriendShip(email)}>
+                    <RemoveIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            );
+          })}
         </List>
       </Card>
     </>
