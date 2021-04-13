@@ -1,4 +1,3 @@
-// *https://www.registers.service.gov.uk/registers/country/use-the-api*
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
@@ -51,6 +50,10 @@ export default function AsyncSearch() {
   React.useEffect(() => {
     let active = true;
 
+    // if (!loading) {
+    //   return undefined;
+    // }
+
     (async () => {
       if (active && changed && input) {
         setOptions(users);
@@ -59,6 +62,10 @@ export default function AsyncSearch() {
         setLoading(false);
       }
     })();
+
+    // return () => {
+    //   active = false;
+    // };
   }, [loading, changed, input]);
 
   React.useEffect(() => {
@@ -79,7 +86,6 @@ export default function AsyncSearch() {
       id="asynchronous-demo"
       style={{ width: 300 }}
       open={open}
-      freeSolo={true}
       onOpen={() => {
         setOpen(true);
       }}
