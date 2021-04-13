@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import "./LandingPage.css";
 import Button from "@material-ui/core/Button";
 import { useSelector } from "react-redux";
@@ -7,7 +7,7 @@ function LandingPage(props) {
   const isAuthenticated = useSelector(
     (state) => state.authReducer.isAuthenticated
   );
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isAuthenticated) {
       props.history.push("/dashboard");
     }
