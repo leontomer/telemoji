@@ -11,6 +11,7 @@ function GoogleLoginHooks({ goToDashboard }) {
     (state) => state.authReducer.isAuthenticated
   );
   useLayoutEffect(() => {
+    console.log('isAuthenticated: ', isAuthenticated)
     if (isAuthenticated) {
       goToDashboard();
     }
@@ -18,8 +19,10 @@ function GoogleLoginHooks({ goToDashboard }) {
 
   const dispatch = useDispatch();
   const onSuccess = (res) => {
+    console.log("on success has been called")
     dispatch(loginWithGoogle(res.tokenId));
     refreshTokenSetup(res);
+
   };
   const onFailure = (res) => {
     console.error("login failed: res:", res);
@@ -29,14 +32,15 @@ function GoogleLoginHooks({ goToDashboard }) {
     onSuccess,
     onFailure,
     clientId,
-    isSignedIn: true,
+    isSignedIn: false,
     accessType: "offline",
   });
 
   return (
     <button
       onClick={() => {
-        signIn();
+        console.log("sign in has been called")
+        signIn()
       }}
       type="button"
       className="login-with-google-btn"
