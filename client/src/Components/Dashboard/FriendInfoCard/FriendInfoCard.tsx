@@ -124,7 +124,6 @@ export default function FriendInfoCard() {
   }, [user]);
 
   const usersAreFriends = () => {
-    console.log(friendList, friendInFocus)
     if (friendList.length === 0 || !friendInFocus) {
       return false;
     }
