@@ -96,7 +96,7 @@ export default function AsyncSearch() {
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Search..."
+          placeholder="Search..."
           variant="outlined"
           value={input}
           onChange={handleInputChance}
