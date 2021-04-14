@@ -42,8 +42,8 @@ export const initialState: InitialStateProps = {
     lastName: "",
     email: "",
     friendList: [],
-    imageAddress: ''
-  }
+    imageAddress: "",
+  },
 };
 export default function (state: InitialStateProps = initialState, action) {
   const { type, payload } = action;
@@ -92,7 +92,6 @@ export default function (state: InitialStateProps = initialState, action) {
         loading: false,
         user: payload,
       };
-
 
     default:
       return state;

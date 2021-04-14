@@ -10,8 +10,7 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import { useDispatch } from "react-redux";
 import { closeDrawer } from "../../../actions/addonActions";
-import Button from "@material-ui/core/Button";
-import { logout } from "../../../actions/authActions";
+import LogoutHooks from "./LogoutHooks/LogoutHooks";
 
 const useStyles = makeStyles({
   list: {
@@ -49,20 +48,7 @@ export const DrawerMenu = (props) => {
             <ListItemText primary={text} />
           </ListItem>
         ))}
-        <ListItem>
-          <Button
-            style={{
-              background: "  #ec7063  ",
-              color: "white",
-              fontWeight: "bold",
-              margin: "auto",
-              marginTop: 20,
-            }}
-            onClick={() => dispatch(logout())}
-          >
-            Logout
-          </Button>
-        </ListItem>
+        <ListItem>{LogoutHooks()}</ListItem>
       </List>
     </div>
   );

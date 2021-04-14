@@ -46,6 +46,10 @@ const UserSchema = new mongoose.Schema({
       ref: "user",
     },
   ],
+  thirdPartyAuthentication : {
+    type: Boolean,
+    default: false,
+  }
 });
 
 module.exports = User = mongoose.model("user", UserSchema);

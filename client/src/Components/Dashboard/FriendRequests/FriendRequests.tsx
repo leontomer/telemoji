@@ -4,7 +4,7 @@ import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import IconButton from '@material-ui/core/IconButton';
 import NotificationBar from "../NotificationBar/NotificationBar";
 import Badge from '@material-ui/core/Badge';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 
 
