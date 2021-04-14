@@ -58,14 +58,6 @@ export default function (state: InitialStateProps = initialState, action) {
         loading: false,
       };
 
-    case LOGIN_SUCCESS_GOOGLE_FACEBOOK:
-      return {
-        ...state,
-        isAuthenticated: true,
-        user: payload,
-        loading: false,
-      };
-
     case SET_ABOUT:
       return {
         ...state,
