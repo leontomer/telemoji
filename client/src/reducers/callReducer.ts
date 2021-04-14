@@ -1,4 +1,4 @@
-import { GET_CALL, ACCEPT_CALL, GET_CAMERA_STREAM, SET_CALLERS_STREAM, ANSWER_CALL } from "../actions/types";
+import { GET_CALL, ACCEPT_CALL, GET_CAMERA_STREAM, SET_CALLERS_STREAM, ANSWER_CALL, END_CALL } from "../actions/types";
 
 
 const initialState = {
@@ -29,7 +29,6 @@ export default function (state = initialState, action) {
             }
 
         case GET_CAMERA_STREAM:
-            console.log('getting stream!', payload)
             return {
                 ...state,
                 userStream: payload.stream
@@ -44,6 +43,8 @@ export default function (state = initialState, action) {
                 ...state,
                 callAccepted: true
             }
+        case END_CALL:
+            return initialState;
         default:
             return state;
     }

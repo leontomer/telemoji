@@ -10,7 +10,6 @@ const baseRoute = "/api/friends/";
 
 
 export const sendFriendRequest = () => async (_, getState) => {
-    console.log('sending friend req');
     const friendReuqestID = getState().friendReducer.friendInFocus._id;
     try {
         await axios.post(`${baseRoute}addfriend`, {

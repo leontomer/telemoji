@@ -4,12 +4,13 @@ import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import IconButton from '@material-ui/core/IconButton';
 import NotificationBar from "../NotificationBar/NotificationBar";
 import Badge from '@material-ui/core/Badge';
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { updatePendingFriendRequests } from '../../../actions/friendActions';
 
 
 export default function FriendRequests() {
 
+  const dispatch = useDispatch();
   const friendRequestsGlobal = useSelector((state) => state.friendReducer.friendRequests)
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -26,9 +27,15 @@ export default function FriendRequests() {
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
   const [friendRequest, setFriendRequests] = useState(friendRequestsGlobal);
+
+  useEffect(() => {
+    dispatch(updatePendingFriendRequests());
+  }, []);
+
   useEffect(() => {
     setFriendRequests(friendRequestsGlobal)
   }, [friendRequestsGlobal])
+
   return (
     <div>
       <Badge badgeContent={friendRequest.length} color="primary" overlap="circle" style={{ marginRight: 10 }} >

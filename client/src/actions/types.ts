@@ -27,3 +27,4 @@ export const ACCEPT_CALL = "ACCEPT_CALL";
 export const GET_CAMERA_STREAM = "GET_CAMERA_STREAM";
 export const SET_CALLERS_STREAM = "SET_CALLERS_STREAM";
 export const ANSWER_CALL = "ANSWER_CALL";
+export const END_CALL = "END_CALL";

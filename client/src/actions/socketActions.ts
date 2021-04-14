@@ -5,6 +5,7 @@ import {
 } from "./types";
 import io from "socket.io-client";
 
+
 import axios from "axios";
 
 const baseRoute = "/api/users/";
@@ -69,3 +70,9 @@ export const addFriend = ({
     console.error(error);
   }
 };
+
+export const endCallForMyCaller = (id) => (_, getState) => {
+  const callerSocketId = getState().callReducer.callerSocketId
+  const socket = getState().socketReducer.socket;
+  socket.emit("endCallForUser", { id: id ? id : callerSocketId });
+}
