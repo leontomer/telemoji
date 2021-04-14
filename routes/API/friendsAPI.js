@@ -147,29 +147,4 @@ router.get("/allUsers", auth, async (req, res) => {
     }
 });
 
-router.post("/about", auth, async (req, res) => {
-    try {
-        const { id, about } = req.body;
-        const user = await User.findById(id);
-
-        user.about = about;
-        await user.save();
-
-        res.json("ok");
-    } catch (error) { }
-});
-
-router.post("/image", async (req, res) => {
-    try {
-        const { id, imgAdrss } = req.body;
-
-        const user = await User.findById(id);
-
-        user.imageAddress = imgAdrss;
-        await user.save();
-
-        res.json("ok");
-    } catch (error) { }
-});
-
 module.exports = router;
