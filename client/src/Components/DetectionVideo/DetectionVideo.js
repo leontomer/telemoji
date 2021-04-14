@@ -101,7 +101,7 @@ export function DetectionVideo({
         );
       }
       let data = null;
-      if (canvases.length > 0) {
+      if (canvases && canvases.length > 0) {
         try {
           data = tf.browser
             .fromPixels(canvases[0], 3)
@@ -159,10 +159,10 @@ export function DetectionVideo({
         <div
           style={{
             backgroundColor: "black",
-            marginTop: "-60px",
             width: videoWidth,
             color: "white",
             textAlign: "center",
+            fontSize: 40,
             zIndex: 100,
           }}
         >

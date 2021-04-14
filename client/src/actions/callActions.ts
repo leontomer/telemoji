@@ -3,10 +3,12 @@ import {
   ACCEPT_CALL,
   GET_CAMERA_STREAM,
   SET_CALLERS_STREAM,
-  ANSWER_CALL
+  ANSWER_CALL,
+  END_CALL
 } from "./types";
 
 import Peer from "simple-peer";
+let peer;
 
 export const recieveCalls = () => async (dispatch, getState) => {
   const socket = getState().socketReducer.socket;
@@ -37,7 +39,12 @@ export const getAnswerFromCall = () => async (dispatch, getState) => {
 
 export const getStreamFromVideoCamera = (id?: string) => (dispatch) => {
   navigator.mediaDevices
-    .getUserMedia({ video: true, audio: true })
+    .getUserMedia({
+      audio: true, video: {
+        width: 640,
+        height: 480
+      }
+    })
     .then((stream) => {
       dispatch({
         type: GET_CAMERA_STREAM,
@@ -62,7 +69,7 @@ export const makeCall = (id: string) => async (dispatch, getState) => {
   const socket = getState().socketReducer.socket;
   const userStream = getState().callReducer.userStream;
 
-  const peer = new Peer({
+  peer = new Peer({
     initiator: true,
     trickle: false,
     config: {
@@ -109,7 +116,7 @@ export const acceptCall = () => async (dispatch, getState) => {
   dispatch({
     type: ANSWER_CALL,
   });
-  const peer = new Peer({
+  peer = new Peer({
     initiator: false,
     trickle: false,
     stream: userStream,
@@ -127,3 +134,20 @@ export const acceptCall = () => async (dispatch, getState) => {
 
   peer.signal(callerSignal);
 };
+
+export const endCall = () => async (dispatch, getState) => {
+  const userStream = getState().callReducer.userStream;
+  if (userStream) {
+    const tracks = userStream.getTracks();
+    tracks.forEach(function (track) {
+      track.stop();
+    });
+  }
+  if (peer) {
+    peer.destroy()
+  }
+
+  dispatch({
+    type: END_CALL,
+  });
+}

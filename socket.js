@@ -37,5 +37,10 @@ module.exports = () => {
     socket.on("acceptCall", (data) => {
       io.to(data.to).emit("callAccepted", data.signal);
     });
+
+    socket.on('endCallForUser', (data) => {
+      const sendTo = users[data.id] ? users[data.id].socketId : data.id
+      io.to(sendTo).emit("endCall");
+    })
   });
 };

@@ -62,10 +62,7 @@ export const setUserImageAction = ({
 
 export const getAllUsers = async () => {
   try {
-    console.log('getting all users!!')
     const res = await axios.get(`${baseRoute}allUsers`);
-
-    console.log('res', res);
     return res.data.users;
   } catch (err) {
     console.warn(err);
