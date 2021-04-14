@@ -5,7 +5,7 @@ const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
-const auth = require('../../middleware/auth');
+const auth = require("../../middleware/auth");
 
 router.post(
   "/register",
@@ -75,6 +75,34 @@ router.get("/allUsers", async (req, res) => {
   } catch {
     console.error(err);
     res.status(500).json({ errors: [{ msg: err.message }] });
+  }
+});
+
+router.post("/about", auth, async (req, res) => {
+  try {
+    const { id, about } = req.body;
+    const user = await User.findById(id);
+
+    user.about = about;
+    await user.save();
+
+    res.json("ok");
+  } catch (error) {}
+});
+
+router.post("/image", async (req, res) => {
+  try {
+    const { id, imageAddress } = req.body;
+    console.log(id, imageAddress);
+    let user = await User.findOne({ email: id });
+    user.imageAddress = imageAddress;
+
+    await user.save();
+    console.log(user);
+
+    res.status(200).json({ msg: "done" });
+  } catch (error) {
+    console.error(error);
   }
 });
 

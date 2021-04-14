@@ -10,16 +10,14 @@ import { FriendProps } from "../../../reducers/authReducer";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import { Content } from "../../../Common/content";
-import {
-  setAbout,
-  setUserImageAction,
-} from "../../../actions/usersActions";
+import { setAbout, setUserImageAction } from "../../../actions/usersActions";
 import {
   sendFriendRequest,
-  removeFriend
-} from '../../../actions/friendActions';
+  removeFriend,
+} from "../../../actions/friendActions";
 
 import "./FriendInfoCard.scss";
+import CloudinaryUploadButton from "./CloudinaryIntegration/CloudinaryUploadButton";
 const useStyles = makeStyles({
   large: {
     marginTop: 50,
@@ -36,29 +34,41 @@ export default function FriendInfoCard() {
   const classes = useStyles();
 
   const user = useSelector((state) => state.authReducer.user);
-  const globalFriendList = useSelector((state) => state.friendReducer.friendList);
+  const globalFriendList = useSelector(
+    (state) => state.friendReducer.friendList
+  );
   const friendInFocus: FriendProps = useSelector(
     (state) => state.friendReducer.friendInFocus
   );
 
   const [userAbout, setUserAbout] = useState<string>(Content.default_about);
   const [userImage, setUserImage] = useState<string>(Content.default_image);
-  const [friendList, setFriendList] = useState(globalFriendList)
+  const [friendList, setFriendList] = useState(globalFriendList);
 
   const [saveButtonReady, setSaveButtonReady] = useState(true);
   const dispatch = useDispatch();
 
-
   useEffect(() => {
     setFriendList(globalFriendList);
-  }, [globalFriendList])
+  }, [globalFriendList]);
 
   const getFriendAbout = () => {
-    if (friendInFocus && friendInFocus.about) {
-      return friendInFocus.about;
-    } else {
-      return Content.default_about;
-    }
+    return (
+      <TextField
+        style={{ width: "80%", maxHeight: "80px" }}
+        value={
+          friendInFocus && friendInFocus.about
+            ? friendInFocus.about
+            : Content.default_about
+        }
+        multiline
+        variant="outlined"
+        id="outlined-multiline-static"
+        label="About"
+        rows={8}
+        disabled
+      />
+    );
   };
   const handleAboutChange = ({
     target: { value },
@@ -82,20 +92,11 @@ export default function FriendInfoCard() {
         style={{ width: "80%", maxHeight: "80px" }}
         value={userAbout}
         multiline
-        rowsMax={4}
         variant="outlined"
         onChange={handleAboutChange}
-      />
-    );
-  };
-
-  const setImage = () => {
-    return (
-      <TextField
-        label="Image"
-        value={userImage}
-        variant="outlined"
-        onChange={handleImageChange}
+        id="outlined-multiline-static"
+        label="About"
+        rows={8}
       />
     );
   };
@@ -127,15 +128,15 @@ export default function FriendInfoCard() {
     if (friendList.length === 0 || !friendInFocus) {
       return false;
     }
-    const userFriendListIndex = friendList.find(friend => friend._id === friendInFocus._id);
+    const userFriendListIndex = friendList.find(
+      (friend) => friend._id === friendInFocus._id
+    );
     return !!userFriendListIndex;
   };
 
   const handleAddFriend = async () => {
     try {
-      await dispatch(
-        sendFriendRequest()
-      );
+      await dispatch(sendFriendRequest());
     } catch (error) {
       console.warn(error);
     }
@@ -143,9 +144,7 @@ export default function FriendInfoCard() {
 
   const handleUnfriend = async () => {
     try {
-      await dispatch(
-        removeFriend({ userFriendId: friendInFocus._id })
-      );
+      await dispatch(removeFriend({ userFriendId: friendInFocus._id }));
     } catch (error) {
       console.warn(error);
     }
@@ -162,10 +161,10 @@ export default function FriendInfoCard() {
             Unfriend
           </Button>
         ) : (
-            <Button size="small" color="primary" onClick={handleAddFriend}>
-              Add Friend
-            </Button>
-          )}
+          <Button size="small" color="primary" onClick={handleAddFriend}>
+            Add Friend
+          </Button>
+        )}
       </>
     );
   };
@@ -173,7 +172,6 @@ export default function FriendInfoCard() {
     setSaveButtonReady(false);
     try {
       await dispatch(setAbout({ id: user._id, about: userAbout }));
-      await dispatch(setUserImageAction({ id: user._id, imgAdrss: userImage }));
     } catch (error) {
       console.error(error);
     } finally {
@@ -189,9 +187,11 @@ export default function FriendInfoCard() {
           color="primary"
           disabled={!saveButtonReady}
           onClick={handleSaveUserDetails}
+          style={{ height: "25px" }}
         >
           Save
         </Button>
+        <CloudinaryUploadButton />
       </>
     );
   };
@@ -199,27 +199,23 @@ export default function FriendInfoCard() {
   return (
     <div className="outer">
       <Card className="root">
-        {friendInFocus ? (
-          <Avatar
-            alt="Remy Sharp"
-            src={getFriendImage()}
-            className={classes.large}
-          />
-        ) : (
+        <div style={{ marginBottom: 50 }}>
+          {friendInFocus ? (
+            <Avatar
+              alt="Remy Sharp"
+              src={getFriendImage()}
+              className={classes.large}
+            />
+          ) : (
             <div>
               <Avatar
                 alt="Remy Sharp"
                 src={getUserImage()}
                 className={classes.large}
               />
-              <TextField
-                label="Image"
-                value={userImage}
-                variant="outlined"
-                onChange={handleImageChange}
-              />
             </div>
           )}
+        </div>
 
         <CardContent>
           <Typography gutterBottom variant="h4" component="h4">
@@ -231,7 +227,7 @@ export default function FriendInfoCard() {
             {friendInFocus ? getFriendAbout() : getUserAbout()}
           </Typography>
         </CardContent>
-        <CardActions className={classes.actions}>
+        <CardActions className={classes.actions} style={{marginTop:'80px'}}>
           {friendInFocus ? getFriendActions() : getUserActions()}
         </CardActions>
       </Card>

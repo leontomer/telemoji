@@ -1,9 +1,6 @@
 import axios from "axios";
 
-import {
-  SET_ABOUT,
-  SET_IMAGE,
-} from "./types";
+import { SET_ABOUT, SET_IMAGE } from "./types";
 
 const baseRoute = "/api/users/";
 
@@ -20,7 +17,6 @@ export const findUser = (email) => async (dispatch) => {
     console.log(err);
   }
 };
-
 
 export const setAbout = ({
   id,
@@ -42,19 +38,20 @@ export const setAbout = ({
 };
 
 export const setUserImageAction = ({
-  id,
-  imgAdrss,
+  imageAddress,
 }: {
-  id: string;
-  imgAdrss: string;
-}) => async (dispatch) => {
+  imageAddress: string;
+}) => async (dispatch, getState) => {
   try {
+    console.log(`from action imageAddress : ${imageAddress}`);
+    const id = getState().authReducer.user.email;
     const res = await axios.post(`${baseRoute}image`, {
       id,
-      imgAdrss,
+      imageAddress: imageAddress.toString(),
     });
-
-    dispatch({ type: SET_IMAGE, payload: imgAdrss });
+    console.log("got here");
+    dispatch({ type: SET_IMAGE, payload: imageAddress });
+    console.log("and also got here");
   } catch (err) {
     console.log(err);
   }
@@ -68,4 +65,3 @@ export const getAllUsers = async () => {
     console.warn(err);
   }
 };
-

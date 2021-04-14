@@ -8,6 +8,7 @@ import {
   LOGIN_SUCCESS,
   LOGOUT,
   LOGIN_SUCCESS_GOOGLE_FACEBOOK,
+  SET_FRIEND_IN_FOCUS,
 } from "./types";
 import { setError } from "./errorsActions";
 import { snackbarType } from "../Common/dataTypes";
@@ -109,7 +110,7 @@ export const loginWithGoogle = (tokenId) => async (dispatch) => {
   try {
     const body = { tokenId };
     const res = await axios.post("/api/auth/google", body);
-    console.log('login with google has been called')
+    console.log("login with google has been called");
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data,
@@ -122,5 +123,6 @@ export const loginWithGoogle = (tokenId) => async (dispatch) => {
 
 export const logout = () => (dispatch) => {
   dispatch({ type: LOGOUT });
+  dispatch({ type: SET_FRIEND_IN_FOCUS, payload: null });
   dispatch(logoutUserFromSocket());
 };

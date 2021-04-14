@@ -167,15 +167,15 @@ export default function LoginPage({ history }) {
           </Grid>
         </form>
       </div>
-      <div style={{ width: "450px", height: "250px" }}>
-        <FacebookLogin
+      <div style={{ width: "400px", height: "100px", marginTop:'20px' }}>
+        {/* <FacebookLogin
           appId="1090947474723893"
           fields="name,email,picture"
           callback={handleFacebookLogin}
           onFailure={() => console.log("failed")}
           icon="fa-facebook"
           render={() => <button>facebook button</button>}
-        />
+        /> */}
         <GoogleLoginHooks goToDashboard={() => goToDashboard()} />
       </div>
       <Box mt={8}>
