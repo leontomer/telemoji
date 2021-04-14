@@ -128,7 +128,6 @@ export default function FriendInfoCard() {
       return false;
     }
     const userFriendListIndex = friendList.find(friend => friend._id === friendInFocus._id);
-    console.log('userFriendListIndex', userFriendListIndex, !!userFriendListIndex)
     return !!userFriendListIndex;
   };
 
