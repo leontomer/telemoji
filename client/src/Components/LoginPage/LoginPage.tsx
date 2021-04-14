@@ -15,9 +15,9 @@ import Container from "@material-ui/core/Container";
 import { DataHook } from "../../Common/DataHooks";
 import { Content } from "../../Common/content";
 import { useDispatch } from "react-redux";
-import { login, loginGoogle } from "../../actions/authActions";
-import { GoogleLogin } from "react-google-login";
+import { login, thirdPartyLogin } from "../../actions/authActions";
 import FacebookLogin from "react-facebook-login";
+import GoogleLoginHooks from "./GoogleLogin/GoogleLogin";
 
 function Copyright() {
   return (
@@ -78,21 +78,13 @@ export default function LoginPage({ history }) {
     }
   };
 
-  const handleGoogleLogin = (response) => {
-    // console.log(response);
-    dispatch(
-      loginGoogle({
-        firstName: response.Rs.BT,
-        lastName: response.Rs.xR,
-        email: response.Rs.At,
-      })
-    );
+  const goToDashboard = () => {
     history.push("/dashboard");
   };
 
   const handleFacebookLogin = (response) => {
     dispatch(
-      loginGoogle({
+      thirdPartyLogin({
         firstName: response.name.substr(0, response.name.indexOf(" ")),
         lastName: response.name.substr(response.name.indexOf(" ") + 1),
         email: response.email,
@@ -182,15 +174,9 @@ export default function LoginPage({ history }) {
           callback={handleFacebookLogin}
           onFailure={() => console.log("failed")}
           icon="fa-facebook"
+          render={() => <button>facebook button</button>}
         />
-
-        <GoogleLogin
-          clientId="678350980728-ovb0o4qai1kcfqohoe0qrnhbso20vua3.apps.googleusercontent.com"
-          buttonText="Login With Google"
-          onSuccess={handleGoogleLogin}
-          onFailure={() => console.log("failed")}
-          cookiePolicy={"single_host_origin"}
-        />
+        <GoogleLoginHooks goToDashboard={() => goToDashboard()} />
       </div>
       <Box mt={8}>
         <Copyright />

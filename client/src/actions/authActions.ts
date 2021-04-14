@@ -7,13 +7,12 @@ import {
   LOGIN_FAIL,
   LOGIN_SUCCESS,
   LOGOUT,
-  CLEAR_PROFILE,
-  LOGIN_SUCCESS_GOOGLE_FACEBOOK
+  LOGIN_SUCCESS_GOOGLE_FACEBOOK,
 } from "./types";
 import { setError } from "./errorsActions";
 import { snackbarType } from "../Common/dataTypes";
 import setAuthToken from "../utilities/setAuthToken";
-import { connectToSocket, logoutUserFromSocket } from './socketActions'
+import { connectToSocket, logoutUserFromSocket } from "./socketActions";
 
 export const loadUser = () => async (dispatch) => {
   if (localStorage.token) {
@@ -25,7 +24,7 @@ export const loadUser = () => async (dispatch) => {
       type: USER_LOADED,
       payload: res.data,
     });
-    dispatch(connectToSocket())
+    dispatch(connectToSocket());
   } catch (err) {
     dispatch({ type: AUTH_ERROR });
   }
@@ -88,26 +87,40 @@ export const login = ({
   }
 };
 
-
-export const loginGoogle = ({
+export const thirdPartyLogin = ({
   firstName,
   lastName,
-  email
+  email,
 }: {
   firstName: string;
   lastName: string;
-  email: string
-}) => (dispatch) => {
-  dispatch({
-    type: LOGIN_SUCCESS_GOOGLE_FACEBOOK,
-    payload: { firstName: firstName, lastName: lastName, email: email }
+  email: string;
+}) => async (dispatch) => {
+  try {
+    const res = await axios.post("/api/auth/thirdPartyLogin");
+    dispatch({
+      type: LOGIN_SUCCESS_GOOGLE_FACEBOOK,
+      payload: { firstName: firstName, lastName: lastName, email: email },
+    });
+  } catch (error) {}
+};
 
-  });
-}
-
+export const loginWithGoogle = (tokenId) => async (dispatch) => {
+  try {
+    const body = { tokenId };
+    const res = await axios.post("/api/auth/google", body);
+    console.log('login with google has been called')
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: res.data,
+    });
+    dispatch(loadUser());
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export const logout = () => (dispatch) => {
-  dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: LOGOUT });
   dispatch(logoutUserFromSocket());
 };
