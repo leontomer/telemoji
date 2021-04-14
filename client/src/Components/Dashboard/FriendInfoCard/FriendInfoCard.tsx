@@ -127,8 +127,8 @@ export default function FriendInfoCard() {
     if (friendList.length === 0 || !friendInFocus) {
       return false;
     }
-    const userFriendListIndex = friendList.find(friend => friend.id === friendInFocus._id);
-    return userFriendListIndex !== -1;
+    const userFriendListIndex = friendList.find(friend => friend._id === friendInFocus._id);
+    return !!userFriendListIndex;
   };
 
   const handleAddFriend = async () => {
