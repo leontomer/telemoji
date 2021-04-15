@@ -6,9 +6,7 @@ const User = require("../../models/User");
 const updateClientFriendList = (clientIdToUpdate) => {
   if (users[clientIdToUpdate]) {
     const userToUpdate = users[clientIdToUpdate];
-    const clientToUpdate = users[clientIdToUpdate];
     io.to(userToUpdate.socketId).emit("friendListUpdate");
-    io.to(clientToUpdate.socketId).emit("friendListUpdate");
   }
 };
 
@@ -98,6 +96,7 @@ router.post("/approveFriend", auth, async (req, res) => {
 
     await user.save();
     updateClientFriendList(friend._id);
+    updateClientFriendList(user._id);
     res.status(200).json({});
   } catch (e) {
     console.error(e);
