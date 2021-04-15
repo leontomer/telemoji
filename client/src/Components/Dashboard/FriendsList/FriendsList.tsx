@@ -10,7 +10,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Badge from "@material-ui/core/Badge";
 import { green, grey } from "@material-ui/core/colors";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { ListItemIcon } from "@material-ui/core";
+import { ListItemIcon, withStyles } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import { useDispatch, useSelector } from "react-redux";
@@ -44,6 +44,34 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 );
+const StyledBadge = withStyles((theme) => ({
+  badge: {
+    backgroundColor: '#44b700',
+    color: '#44b700',
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    '&::after': {
+      position: 'absolute',
+      top: -1,
+      left: -1,
+      width: '100%',
+      height: '100%',
+      borderRadius: '50%',
+      animation: '$ripple 1.2s infinite ease-in-out',
+      border: '1px solid currentColor',
+      content: '""',
+    },
+  },
+  '@keyframes ripple': {
+    '0%': {
+      transform: 'scale(.8)',
+      opacity: 1,
+    },
+    '100%': {
+      transform: 'scale(2.4)',
+      opacity: 0,
+    },
+  },
+}))(Badge);
 
 function FriendsList({ history }) {
   const classes = useStyles();
@@ -104,10 +132,26 @@ function FriendsList({ history }) {
             >
 
               <ListItemAvatar>
-                <Badge invisible={false} variant="dot" classes={{ badge: connectedUsers[friend._id] ? classes.onlineBadge : classes.offlineBadge }} overlap="circle" >
-                  <Avatar alt={`${friend.firstName}`} src={friend.imageAddress} />
-
-                </Badge>
+                {
+                  connectedUsers[friend._id] ? (
+                    <StyledBadge
+                      overlap="circle"
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                      }}
+                      variant="dot"
+                    >
+                      <Avatar alt={`${friend.firstName}`} src={friend.imageAddress} />
+                    </StyledBadge>
+                  ) :
+                    (<Badge invisible={false} variant="dot" anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'right',
+                    }} classes={{ badge: classes.offlineBadge }} overlap="circle" >
+                      <Avatar alt={`${friend.firstName}`} src={friend.imageAddress} />
+                    </Badge>)
+                }
               </ListItemAvatar>
 
 

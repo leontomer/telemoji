@@ -18,7 +18,9 @@ export const recieveCalls = () => async (dispatch, getState) => {
       type: GET_CALL,
       payload: {
         callerSignal: data.signal,
-        callerSocketId: data.to,
+        callerSocketId: data.from,
+        fromImageAddress: data.fromImageAddress,
+        callerName: data.callerName,
         receivingCall: true,
       },
     });
@@ -68,7 +70,8 @@ export const handleAcceptCall = () => (dispatch) => {
 export const makeCall = (id: string) => async (dispatch, getState) => {
   const socket = getState().socketReducer.socket;
   const userStream = getState().callReducer.userStream;
-
+  const imageAddress = getState().authReducer.user.imageAddress;
+  const userName = getState().authReducer.user.firstName;
   peer = new Peer({
     initiator: true,
     trickle: false,
@@ -89,6 +92,8 @@ export const makeCall = (id: string) => async (dispatch, getState) => {
       userToCall: id,
       signalData: data,
       fromUser: socket.id,
+      fromImageAddress: imageAddress,
+      callerName: userName
     });
   });
 

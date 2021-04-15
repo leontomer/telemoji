@@ -8,7 +8,9 @@ const initialState = {
     callAccepted: false,
     callerSocketId: '',
     userStream: null,
-    callersStream: null
+    callersStream: null,
+    callerImage: '',
+    callerName: ''
 }
 
 export default function (state = initialState, action) {
@@ -20,7 +22,9 @@ export default function (state = initialState, action) {
                 ...state,
                 callerSignal: payload.callerSignal,
                 receivingCall: payload.receivingCall,
-                callerSocketId: payload.callerSocketId
+                callerSocketId: payload.callerSocketId,
+                callerImage: payload.fromImageAddress,
+                callerName: payload.callerName
             };
         case ACCEPT_CALL:
             return {
