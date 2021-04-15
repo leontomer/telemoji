@@ -43,6 +43,7 @@ const WebrtcComponent = ({ history, match }) => {
     dispatch(endCall());
     history.push('/');
   }
+
   useEffect(() => {
     return () => {
       handleEndCall();

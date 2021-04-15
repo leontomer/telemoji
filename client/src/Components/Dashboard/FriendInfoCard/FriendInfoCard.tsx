@@ -22,8 +22,8 @@ const useStyles = makeStyles({
   large: {
     marginTop: 50,
     margin: "auto",
-    width: 200,
-    height: 200,
+    width: 160,
+    height: 160,
   },
   actions: {
     padding: 30,
@@ -55,7 +55,7 @@ export default function FriendInfoCard() {
   const getFriendAbout = () => {
     return (
       <TextField
-        style={{ width: "80%", maxHeight: "80px" }}
+        style={{ width: "80%", maxHeight: "30px" }}
         value={
           friendInFocus && friendInFocus.about
             ? friendInFocus.about
@@ -65,7 +65,7 @@ export default function FriendInfoCard() {
         variant="outlined"
         id="outlined-multiline-static"
         label="About"
-        rows={8}
+        rows={4}
         disabled
       />
     );
@@ -161,10 +161,10 @@ export default function FriendInfoCard() {
             Unfriend
           </Button>
         ) : (
-          <Button size="small" color="primary" onClick={handleAddFriend}>
-            Add Friend
-          </Button>
-        )}
+            <Button size="small" color="primary" onClick={handleAddFriend}>
+              Add Friend
+            </Button>
+          )}
       </>
     );
   };
@@ -199,7 +199,7 @@ export default function FriendInfoCard() {
   return (
     <div className="outer">
       <Card className="root">
-        <div style={{ marginBottom: 50 }}>
+        <div >
           {friendInFocus ? (
             <Avatar
               alt="Remy Sharp"
@@ -207,14 +207,14 @@ export default function FriendInfoCard() {
               className={classes.large}
             />
           ) : (
-            <div>
-              <Avatar
-                alt="Remy Sharp"
-                src={getUserImage()}
-                className={classes.large}
-              />
-            </div>
-          )}
+              <div>
+                <Avatar
+                  alt="Remy Sharp"
+                  src={getUserImage()}
+                  className={classes.large}
+                />
+              </div>
+            )}
         </div>
 
         <CardContent>
@@ -227,7 +227,7 @@ export default function FriendInfoCard() {
             {friendInFocus ? getFriendAbout() : getUserAbout()}
           </Typography>
         </CardContent>
-        <CardActions className={classes.actions} style={{marginTop:'80px'}}>
+        <CardActions className={classes.actions} style={{ marginTop: '80px' }}>
           {friendInFocus ? getFriendActions() : getUserActions()}
         </CardActions>
       </Card>

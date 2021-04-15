@@ -30,7 +30,9 @@ module.exports = () => {
       const callToUser = users[data.userToCall];
       io.to(callToUser.socketId).emit("callInit", {
         signal: data.signalData,
-        to: data.fromUser,
+        from: data.fromUser,
+        fromImageAddress: data.fromImageAddress,
+        callerName: data.callerName
       });
     });
 

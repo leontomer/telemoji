@@ -3,11 +3,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import { useModal } from "../../Contexts/ModalContext";
 import { useDispatch, useSelector } from "react-redux";
 import { withRouter } from "react-router";
 import { handleAcceptCall } from '../../actions/callActions';
+import gifCall from '../../gifs/ringwhite.gif';
+import { Avatar } from "@material-ui/core";
+import PhoneDisabledIcon from '@material-ui/icons/PhoneDisabled';
+import PhoneCallbackIcon from '@material-ui/icons/PhoneCallback';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -21,23 +25,30 @@ const useStyles = makeStyles((theme) => ({
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
+        display: 'flex',
+        flexDirection: 'column'
+    },
+    large: {
+        margin: "auto",
+        width: 100,
+        height: 100,
+        marginLeft: -100,
     },
 }));
-// interface setYourModalNameProps {
-//     open: boolean;
-//     setOpen: Function;
-//     caller: string;
-//     acceptCall: Function;
-// }
+
 const RecieveCallModalComponent = ({ history }) => {
     const dispatch = useDispatch();
     const { closeModal, isOpenModal, openModal } = useModal();
     const classes = useStyles();
     const caller = useSelector((state) => state.callReducer.callerName)
     const receivingCall = useSelector((state) => state.callReducer.receivingCall);
+    const callerImage = useSelector((state) => state.callReducer.callerImage);
     const handleAccept = () => {
         dispatch(handleAcceptCall());
         history.push('/video-chat')
+        closeModal();
+    }
+    const handleDecline = () => {
         closeModal();
     }
     useEffect(() => {
@@ -53,17 +64,49 @@ const RecieveCallModalComponent = ({ history }) => {
                 aria-describedby="transition-modal-description"
                 className={classes.modal}
                 open={isOpenModal}
-                onClose={closeModal}
                 closeAfterTransition
                 BackdropComponent={Backdrop}
                 BackdropProps={{
                     timeout: 500,
                 }}
+                style={{ border: 'none' }}
             >
-                <Fade in={isOpenModal}>
-                    <div className={classes.paper}>
-                        <h2 id="transition-modal-title">{caller} is calling you</h2>
-                        <Button onClick={handleAccept}>Accept call</Button>
+                <Fade in={isOpenModal} style={{ border: 'none' }}>
+                    <div className={classes.paper} >
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginRight: 120 }}>
+                            <img src={gifCall} alt="loading..." style={{ height: 300, width: 400 }} />
+                            <Avatar
+                                alt="Remy Sharp"
+                                src={callerImage}
+                                className={classes.large}
+                            />
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', zIndex: 100, marginTop: -20, backgroundColor: 'white', width: '100%' }}>
+                            <Typography variant="h4" gutterBottom>
+                                {caller} is calling you
+                           </Typography>
+                            <div style={{ display: 'flex' }}>
+                                <Button onClick={handleAccept}  >
+                                    <Avatar style={{
+                                        background: "#42a160",
+                                        color: "white",
+                                        fontWeight: "bold",
+                                    }}>
+                                        <PhoneCallbackIcon />
+                                    </Avatar>
+                                </Button>
+                                <Button onClick={handleDecline}  >
+                                    <Avatar style={{
+                                        background: "#ec7063",
+                                        color: "white",
+                                        fontWeight: "bold",
+                                    }}>
+                                        <PhoneDisabledIcon />
+                                    </Avatar>
+                                </Button>
+                            </div>
+
+                        </div>
                     </div>
                 </Fade>
             </Modal>
