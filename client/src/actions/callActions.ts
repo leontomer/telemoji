@@ -14,7 +14,6 @@ export const recieveCalls = () => async (dispatch, getState) => {
   const socket = getState().socketReducer.socket;
 
   socket.on("callInit", (data) => {
-    console.log('data', data);
     dispatch({
       type: GET_CALL,
       payload: {
