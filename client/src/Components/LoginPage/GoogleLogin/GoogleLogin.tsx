@@ -4,28 +4,30 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginWithGoogle } from "../../../actions/authActions";
 import { refreshTokenSetup } from "./RefreshToken";
 import { clientId } from "../../../Common/constants";
+import { useLoader } from '../../../Contexts/LoaderContext';
 import "./GoogleLogin.scss";
 
 function GoogleLoginHooks({ goToDashboard }) {
+  const { startLoading, finishLoading } = useLoader();
   const isAuthenticated = useSelector(
     (state) => state.authReducer.isAuthenticated
   );
   useLayoutEffect(() => {
-    console.log('isAuthenticated: ', isAuthenticated)
     if (isAuthenticated) {
+      finishLoading();
       goToDashboard();
     }
   }, [isAuthenticated]);
 
   const dispatch = useDispatch();
   const onSuccess = (res) => {
-    console.log("on success has been called")
     dispatch(loginWithGoogle(res.tokenId));
     refreshTokenSetup(res);
 
   };
   const onFailure = (res) => {
     console.error("login failed: res:", res);
+    finishLoading();
   };
 
   const { signIn } = useGoogleLogin({
@@ -39,7 +41,7 @@ function GoogleLoginHooks({ goToDashboard }) {
   return (
     <button
       onClick={() => {
-        console.log("sign in has been called")
+        startLoading();
         signIn()
       }}
       type="button"

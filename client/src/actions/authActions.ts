@@ -103,14 +103,13 @@ export const thirdPartyLogin = ({
       type: LOGIN_SUCCESS_GOOGLE_FACEBOOK,
       payload: { firstName: firstName, lastName: lastName, email: email },
     });
-  } catch (error) {}
+  } catch (error) { }
 };
 
 export const loginWithGoogle = (tokenId) => async (dispatch) => {
   try {
     const body = { tokenId };
     const res = await axios.post("/api/auth/google", body);
-    console.log("login with google has been called");
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data,

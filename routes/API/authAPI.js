@@ -13,7 +13,10 @@ const googleClientId =
 
 router.get("/", auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
+    const user = await User.findById(req.user.id).populate({
+      path: "callHistory",
+      model: "call",
+    }).select("-password");
     res.json(user);
   } catch (err) {
     console.error(err.message);
@@ -121,7 +124,7 @@ router.post("/google", async (req, res) => {
       await user.save();
     }
 
-    
+
 
     const payload = {
       user: {

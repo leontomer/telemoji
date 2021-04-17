@@ -140,6 +140,7 @@ export function DetectionVideo({
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
+          overflow: 'hidden'
         }}
       >
         <video

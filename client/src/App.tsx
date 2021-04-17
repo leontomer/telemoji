@@ -8,6 +8,7 @@ import Navbar from "./Components/Navbar/Navbar";
 import { SnackItem } from "./Components/SnackbarItem/SnackItem";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import PrivateRoute from "./Components/Routes/PrivateRoute";
+import Loader from './Components/Loader/Loader';
 import { loadUser } from "./actions/authActions";
 import {
   loadFaceapi,
@@ -62,6 +63,7 @@ function App() {
       </Router>
       <SnackItem />
       <DrawerComponent />
+      <Loader />
     </TelemojiProvider>
   );
 }

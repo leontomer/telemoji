@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
 const User = require("../../models/User");
+const Call = require('../../models/Call');
 
 const updateClientFriendList = (clientIdToUpdate) => {
   if (users[clientIdToUpdate]) {
@@ -109,17 +110,14 @@ router.post("/rejectFriend", auth, async (req, res) => {
       "-password"
     );
     const user = await User.findById(req.user.id).select("-password");
-    console.log("user.friendRequests", user.friendRequests);
     const updatedFriendRequests = user.friendRequests.filter(
       (f) => f.toString() !== friend._id.toString()
     );
-    console.log("updatedFriendRequests", updatedFriendRequests);
     user.friendRequests = updatedFriendRequests;
-    console.log("user.friendRequests", user.friendRequests);
 
     await user.save();
     res.status(200).json({});
-  } catch (e) {}
+  } catch (e) { }
 });
 
 router.get("/friendList", auth, async (req, res) => {
@@ -150,22 +148,28 @@ router.post("/callHistory", auth, async (req, res) => {
   try {
     const userID = req.user.id;
     const { userToCall } = req.body;
-    const friend = await User.findById(userToCall).select("-password");
-    const user = await User.findById(userID).select("-password");
+    const friend = await User.findById(userToCall)
+    const user = await User.findById(userID)
+    const usersCall = new Call({
+      callerName: friend.firstName + " " + friend.lastName,
+      callerImage: friend.imageAddress
+    })
+    const friendsCall = new Call({
+      callerName: user.firstName + " " + user.lastName,
+      callerImage: user.imageAddress
+    })
+    await usersCall.save();
+    await friendsCall.save();
 
-    user.callHistory.push({
-      friendName: friend.firstName + " " + friend.lastName,
-    });
-    friend.callHistory.push({
-      friendName: user.firstName + " " + user.lastName,
-    });
+    user.callHistory.push(
+      usersCall._id
+    );
+    friend.callHistory.push(
+      friendsCall._id
+    );
 
     await friend.save();
     await user.save();
-
-    // console.log(friend.callHistory);
-    // console.log(user.callHistory);
-
     res.json({ callHistory: user.callHistory });
   } catch (err) {
     console.error(err);
@@ -176,7 +180,11 @@ router.post("/callHistory", auth, async (req, res) => {
 router.get("/callHistory", auth, async (req, res) => {
   try {
     const userID = req.user.id;
-    const user = await User.findById(userID).select("-password");
+    const user = await User.findById(userID).populate({
+      path: "callHistory",
+      model: "call",
+    }).select("-password");
+
     res.json({ callHistory: user.callHistory });
   } catch (err) {
     console.error(err);

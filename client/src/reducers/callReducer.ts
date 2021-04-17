@@ -1,4 +1,4 @@
-import { GET_CALL, ACCEPT_CALL, GET_CAMERA_STREAM, SET_CALLERS_STREAM, ANSWER_CALL, END_CALL } from "../actions/types";
+import { GET_CALL, ACCEPT_CALL, GET_CAMERA_STREAM, SET_CALLERS_STREAM, ANSWER_CALL, END_CALL, CALLING_USER } from "../actions/types";
 
 
 const initialState = {
@@ -10,7 +10,8 @@ const initialState = {
     userStream: null,
     callersStream: null,
     callerImage: '',
-    callerName: ''
+    callerName: '',
+    callingUser: false,
 }
 
 export default function (state = initialState, action) {
@@ -49,6 +50,11 @@ export default function (state = initialState, action) {
             }
         case END_CALL:
             return initialState;
+        case CALLING_USER:
+            return {
+                ...state,
+                callingUser: true
+            }
         default:
             return state;
     }

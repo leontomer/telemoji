@@ -49,13 +49,8 @@ const UserSchema = new mongoose.Schema({
 
   callHistory: [
     {
-      friendName: {
-        type: String,
-      },
-      date: {
-        type: Date,
-        default: Date.now,
-      },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "call",
     },
   ],
 

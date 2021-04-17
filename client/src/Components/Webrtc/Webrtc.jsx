@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
 // import Peer from "simple-peer";
 import styled from "styled-components";
 import { DetectionVideo } from "../DetectionVideo/DetectionVideo";
@@ -8,20 +8,8 @@ import { endCallForMyCaller } from '../../actions/socketActions';
 import { withRouter } from "react-router";
 import PhoneDisabledIcon from '@material-ui/icons/PhoneDisabled';
 import Button from '@material-ui/core/Button';
+import './Webrtc.scss';
 
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
-const VideoRow = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content:center;
-  align-items:center;
-  margin-top:50px;
-`;
 
 
 const WebrtcComponent = ({ history, match }) => {
@@ -37,12 +25,18 @@ const WebrtcComponent = ({ history, match }) => {
   const callersStreamReducer = useSelector((state) => state.callReducer.callersStream);
   const socket = useSelector((state) => state.socketReducer.socket);
   const dispatch = useDispatch();
-
+  const { callingUser } = useSelector((state) => state.callReducer)
   const handleEndCall = () => {
     dispatch(endCallForMyCaller(match.params.callerId));
     dispatch(endCall());
     history.push('/');
   }
+
+  // useEffect(() => {
+  //   if (!callingUser && !callAcceptedReducer) {
+  //     history.push('/');
+  //   }
+  // }, [callAcceptedReducer, callingUser])
 
   useEffect(() => {
     return () => {
@@ -95,22 +89,22 @@ const WebrtcComponent = ({ history, match }) => {
   }
 
   return (
-    <Container>
-      <VideoRow>
-        {UserVideo}
-        {PartnerVideo}
-      </VideoRow>
-      <VideoRow>
+    <div className="webrtcContainer">
+      <div className="endCall">
         <Button
           variant="contained"
           color="secondary"
           startIcon={<PhoneDisabledIcon />}
-          onClick={handleEndCall}
+          onClick={() => history.push('/')}
         >
           End Call
       </Button>
-      </VideoRow>
-    </Container>
+      </div>
+      <div className="videoRow">
+        {PartnerVideo}
+        {UserVideo}
+      </div>
+    </div >
 
   );
 }
