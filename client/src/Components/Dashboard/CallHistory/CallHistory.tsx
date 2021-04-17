@@ -24,15 +24,18 @@ const CallHistory = () => {
       <Typography variant="h3" component="h3">
         Call History
       </Typography>
-      {callHistory.map((call, index) => {
-        return (
-          <ListItem key={index}>
-            {call && index <= 3 && (
-              <ListItemText primary={call.friendName} secondary={call.date} />
-            )}
-          </ListItem>
-        );
-      })}
+      {callHistory
+        .slice(0)
+        .reverse()
+        .map((call, index) => {
+          return (
+            <ListItem key={index}>
+              {call && index <= 3 && (
+                <ListItemText primary={call.friendName} secondary={call.date} />
+              )}
+            </ListItem>
+          );
+        })}
     </div>
   );
 };
