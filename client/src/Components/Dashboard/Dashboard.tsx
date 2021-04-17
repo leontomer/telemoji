@@ -3,6 +3,7 @@ import FriendInfoCard from "./FriendInfoCard/FriendInfoCard";
 import FriendsList from "./FriendsList/FriendsList";
 import WelcomeBanner from "./WelcomeBanner/WelcomeBanner";
 import CallHistory from "./CallHistory/CallHistory";
+import Typography from "@material-ui/core/Typography";
 import "./Dashboard.scss";
 
 const Dashboard = () => {
@@ -19,6 +20,9 @@ const Dashboard = () => {
       </div>
       <div className="callHistory">
         <CallHistory />
+      </div>
+      <div className="footer">
+        <Typography style={{ marginTop: 15 }}> © Copyright 2021 Telemoji. All rights reserved.</Typography>
       </div>
     </div>
   );

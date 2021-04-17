@@ -1,6 +1,6 @@
 .root {
   width: 100%;
-  min-height: 500px;
+  height:100%;
   background-image: url("../../../svgs/cardbackground.svg");
   background-size: cover;
 }
@@ -9,4 +9,5 @@
   -webkit-box-shadow: 0px 3px 22px -5px #000000;
   box-shadow: 0px 3px 22px -5px #000000;
   border-radius: 5px;
+  height:100%;
 }

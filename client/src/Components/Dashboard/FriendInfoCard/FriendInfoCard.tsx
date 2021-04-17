@@ -215,14 +215,14 @@ export default function FriendInfoCard() {
                 />
               </div>
             )}
-        </div>
-
-        <CardContent>
-          <Typography gutterBottom variant="h4" component="h4">
+          <Typography gutterBottom variant="h4" component="h4" style={{ textAlign: 'center' }}>
             {friendInFocus
               ? `${friendInFocus.firstName} ${friendInFocus.lastName}`
               : user && `${user.firstName} ${user.lastName}`}
           </Typography>
+        </div>
+
+        <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">
             {friendInFocus ? getFriendAbout() : getUserAbout()}
           </Typography>

@@ -1,31 +1,171 @@
+
 .dashboardContainer {
-  height: 90vh;
+  width:100%;
   display: grid;
-  grid-template-rows: repeat(16, 1fr);
-  grid-template-columns: repeat(16, 1fr);
+  grid-template-rows: 0.1fr 0.3fr 2fr 0.2fr;
+  grid-template-columns: 0.6fr minmax(450px,1fr) minmax(450px,1fr) 0.1fr;
+  grid-gap:2rem;
+  grid-template-areas:
+    "nav nav nav nav"
+    "friendlist banner banner space"
+    "friendlist friendInfoCard callHistory space"
+    "footer footer footer footer";
 
   .welcomeBanner {
-    grid-row: 2/4;
-    grid-column: 5/16;
+    grid-area:banner;
     border-radius: 5px;
     -webkit-box-shadow: 0px 0px 19px 3px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 0px 19px 3px rgba(0, 0, 0, 0.5);
   }
+
   .friendList {
-    grid-row: 1/-1;
-    grid-column: 1/4;
+    grid-area:friendlist;
     border-radius: 5px;
+    min-width:230px;
   }
+
   .friendInfoCard {
-    grid-row: 5/13;
-    grid-column: 5/10;
+    padding:30px;
+    grid-area:friendInfoCard;
+    height:100%;
+   
   }
   .callHistory {
-    grid-row: 5/13;
-    grid-column: 11/16;
-    background-color: white;
-    border-radius: 5px;
-    -webkit-box-shadow: 0px 3px 22px -5px #000000;
-    box-shadow: 0px 3px 22px -5px #000000;
+    padding:30px;
+    grid-area:callHistory;
+    height:100%;
   }
+  .footer {
+    grid-area:footer;
+    background-color: #53317e;
+    width:100%;
+    height:100%;
+    color:white;
+    text-align: center;
+    -webkit-box-shadow: -1px 0px 19px -2px #000000; 
+    box-shadow: -1px 0px 19px -2px #000000;
+  }
+}
+
+@media only screen and (max-width:1312px){
+  .dashboardContainer {
+     grid-gap:20px;
+     grid-template-columns: 0.6fr minmax(450px,1fr) minmax(450px,1fr) 0.001fr;
+  }
+}
+
+
+@media only screen and (max-width:1230px){
+  .dashboardContainer {
+    grid-template-rows: 0.1fr 0.2fr 1fr 1fr 0.1fr;
+    grid-template-columns: 0.5fr 1fr 0.001fr;
+    grid-gap:2rem;
+    grid-template-areas:
+      "nav nav nav"
+      "friendlist banner banner"
+      "friendlist friendInfoCard space"
+      "friendlist callHistory space"
+      "footer footer footer";
+
+      .welcomeBanner {
+        margin-right:10px;
+      }
+  }
+
+}
+
+@media only screen and (max-width:700px){
+  .dashboardContainer {
+    grid-template-rows: 0.1fr 0.2fr 1fr 1fr 0.1fr;
+    grid-template-columns:1fr;
+    grid-gap:2rem;
+    grid-template-areas:
+      "nav "
+      "friendlist"
+      "friendInfoCard"
+      "callHistory "
+      "footer";
+
+      .welcomeBanner{
+        display: none;
+      }
+      .friendList {
+        grid-area:friendlist;
+        border-radius: 5px;
+        padding-left:60px;
+        padding-right:60px;
+        width:100%;
+      }
+      .friendInfoCard {
+        padding-left:60px;
+        padding-right:60px;
+      }
+      .callHistory {
+        padding-left:60px;
+        padding-right:60px;
+      }
+      .footer {
+          font-size:10px;
+      }
+  }
+  
+}
+
+
+@media only screen and (max-width:500px){
+  .dashboardContainer {
+  
+      .friendList {
+        padding:30px;
+      }
+      .friendInfoCard {
+        padding:30px;
+      }
+      .callHistory {
+        padding:30px;
+      }
+  }
+  
+}
+
+
+
+
+@media only screen and (max-width:400px){
+  .dashboardContainer {
+
+    .friendList {
+      padding:5px;
+    }
+
+    .friendInfoCard {
+      padding:5px;
+    }
+
+    .callHistory {
+      padding:5px;
+    }
+
+  }
+
+}
+
+@media only screen and (max-width:340px){
+  .dashboardContainer {
+    .friendList {
+     max-width:250px;
+     margin:auto;
+    }
+    
+    .friendInfoCard {
+      max-width:250px;
+      margin:auto;
+    }
+    .callHistory {
+      max-width:250px;
+      margin:auto;
+    }
+
+  }
+
 }

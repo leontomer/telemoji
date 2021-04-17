@@ -23,11 +23,11 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: "100%",
-      maxWidth: 360,
       backgroundColor: theme.palette.background.paper,
       position: "relative",
       overflow: "auto",
       height: "100%",
+      boxShadow: '0px 0px 19px 3px rgba(0, 0, 0, 0.5)',
     },
     listSection: {
       backgroundColor: "inherit",
@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 );
+
 const StyledBadge = withStyles((theme) => ({
   badge: {
     backgroundColor: '#44b700',
