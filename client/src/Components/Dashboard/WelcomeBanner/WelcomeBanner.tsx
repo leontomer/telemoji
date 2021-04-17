@@ -25,9 +25,9 @@ const WelcomeBanner = () => {
           Have a chat with your friends!
         </p>
       </div>
-      <div style={{ marginLeft: 800, marginTop: -80 }}>
+      {/* <div style={{ marginLeft: 800, marginTop: -80 }}>
         <img src={welcomeBannerSvg} height="120px" />
-      </div>
+      </div> */}
     </div>
   );
 };

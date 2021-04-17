@@ -1,7 +1,55 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
 
+.authContent{
+  width:170px;
+  display: flex;
+  justify-content: space-between;
+  margin-right: 50px;
+}
+
 .navbar-title {
   font-family: "Roboto", sans-serif;
   font-weight: 500;
   /* font-size: 100px; */
 }
+
+.avatarButton { 
+  margin-left: 15px;
+}
+
+.navAuthContent{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+.avatarSection{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 15px;
+}
+
+@media only screen and (max-width:750px){
+ .navAuthContent{
+   flex-direction: column;
+   margin-top: 20px;
+ }
+ .friendRequests{
+   margin:10px;
+ }
+ .avatarButton{
+  margin:10px;
+ }
+}
+@media only screen and (max-width:750px){
+  .navAuthContent{
+    flex-direction: column;
+    margin: auto;
+    padding-top: 20px;
+  }
+
+  .authContent{
+    margin: auto;
+  }
+
+ }

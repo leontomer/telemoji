@@ -24,6 +24,7 @@ import { TelemojiProvider } from "./Contexts/TelemojiContext";
 import { RecieveCallModal } from "./Components/Modals/RecieveCallModal";
 import { friendListListener, pendingFriendRequestsListener } from './actions/friendActions';
 import store from "./store";
+import './App.css'
 
 function App() {
   const socket = useSelector((state) => state.socketReducer.socket);

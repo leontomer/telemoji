@@ -2,7 +2,7 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { Card } from "material-ui";
+import { fade, makeStyles } from "@material-ui/core/styles";
 import { getAllUsers } from "../../../actions/usersActions";
 import { setFriendInFocus } from "../../../actions/friendActions";
 import { FriendProps } from "../../../reducers/authReducer";
@@ -13,7 +13,18 @@ function sleep(delay = 0) {
     setTimeout(resolve, delay);
   });
 }
-
+const useStyles = makeStyles((theme) => ({
+  search: {
+    position: "relative",
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    "&:hover": {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginLeft: 0,
+    width: "100%",
+  }
+}));
 export default function AsyncSearch() {
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState<FriendProps[]>([]);
@@ -73,6 +84,7 @@ export default function AsyncSearch() {
       }
     });
   }, [input]);
+  const classes = useStyles();
   return (
     <Autocomplete
       id="asynchronous-demo"
@@ -95,6 +107,7 @@ export default function AsyncSearch() {
       loading={loading}
       renderInput={(params) => (
         <TextField
+          className={classes.search}
           {...params}
           placeholder="Search..."
           variant="outlined"
