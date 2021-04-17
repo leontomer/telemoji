@@ -115,19 +115,19 @@ export const makeCall = (id: string) => async (dispatch, getState) => {
   socket.on("callAccepted", (signal) => {
     peer.signal(signal);
   });
-  let res;
   try {
-    res = await axios.post(`${baseRoute}callHistory`, {
-      userToCall: id,
+    const res = await axios.post(`${baseRoute}callHistory`, {
+      userToCall: id
+    });
+
+    dispatch({
+      type: SET_CALL_HISTORY,
+      payload: res.data.callHistory,
     });
   } catch (err) {
     console.log(err);
   }
 
-  dispatch({
-    type: SET_CALL_HISTORY,
-    payload: res.data.callHistory,
-  });
 };
 
 export const acceptCall = () => async (dispatch, getState) => {
