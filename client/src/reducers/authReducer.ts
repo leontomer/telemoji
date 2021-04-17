@@ -23,6 +23,7 @@ export interface FriendProps {
   about: string;
   imageAddress: string;
   available: boolean;
+  callHistory: Object[];
   __v: number;
   _id: string;
 }
@@ -43,6 +44,7 @@ export const initialState: InitialStateProps = {
     email: "",
     friendList: [],
     imageAddress: "",
+    callHistory: [],
   },
 };
 export default function (state: InitialStateProps = initialState, action) {

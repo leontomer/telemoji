@@ -46,10 +46,23 @@ const UserSchema = new mongoose.Schema({
       ref: "user",
     },
   ],
-  thirdPartyAuthentication : {
+
+  callHistory: [
+    {
+      friendName: {
+        type: String,
+      },
+      date: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
+
+  thirdPartyAuthentication: {
     type: Boolean,
     default: false,
-  }
+  },
 });
 
 module.exports = User = mongoose.model("user", UserSchema);

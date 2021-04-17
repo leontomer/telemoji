@@ -146,4 +146,42 @@ router.get("/allUsers", auth, async (req, res) => {
   }
 });
 
+router.post("/callHistory", auth, async (req, res) => {
+  try {
+    const userID = req.user.id;
+    const { userToCall } = req.body;
+    const friend = await User.findById(userToCall).select("-password");
+    const user = await User.findById(userID).select("-password");
+
+    user.callHistory.push({
+      friendName: friend.firstName + " " + friend.lastName,
+    });
+    friend.callHistory.push({
+      friendName: user.firstName + " " + user.lastName,
+    });
+
+    await friend.save();
+    await user.save();
+
+    // console.log(friend.callHistory);
+    // console.log(user.callHistory);
+
+    res.json({ callHistory: user.callHistory });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ errors: [{ msg: err.message }] });
+  }
+});
+
+router.get("/callHistory", auth, async (req, res) => {
+  try {
+    const userID = req.user.id;
+    const user = await User.findById(userID).select("-password");
+    res.json({ callHistory: user.callHistory });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ errors: [{ msg: err.message }] });
+  }
+});
+
 module.exports = router;
