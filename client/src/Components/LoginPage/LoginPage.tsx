@@ -15,9 +15,9 @@ import Container from "@material-ui/core/Container";
 import { DataHook } from "../../Common/DataHooks";
 import { Content } from "../../Common/content";
 import { useDispatch } from "react-redux";
-import { login, thirdPartyLogin } from "../../actions/authActions";
-import FacebookLogin from "react-facebook-login";
+import { login } from "../../actions/authActions";
 import GoogleLoginHooks from "./GoogleLogin/GoogleLogin";
+import { useLoader } from '../../Contexts/LoaderContext';
 
 function Copyright() {
   return (
@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function LoginPage({ history }) {
   const classes = useStyles();
+  const { startLoading, finishLoading } = useLoader();
 
   const [loginData, setLoginData] = useState({
     email: "",
@@ -71,7 +72,9 @@ export default function LoginPage({ history }) {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      startLoading();
       await dispatch(login(loginData));
+      finishLoading();
       history.push("/dashboard");
     } catch (error) {
       return;
@@ -82,17 +85,6 @@ export default function LoginPage({ history }) {
     history.push("/dashboard");
   };
 
-  const handleFacebookLogin = (response) => {
-    dispatch(
-      thirdPartyLogin({
-        firstName: response.name.substr(0, response.name.indexOf(" ")),
-        lastName: response.name.substr(response.name.indexOf(" ") + 1),
-        email: response.email,
-      })
-    );
-
-    history.push("/dashboard");
-  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -167,15 +159,7 @@ export default function LoginPage({ history }) {
           </Grid>
         </form>
       </div>
-      <div style={{ width: "400px", height: "100px", marginTop:'20px' }}>
-        {/* <FacebookLogin
-          appId="1090947474723893"
-          fields="name,email,picture"
-          callback={handleFacebookLogin}
-          onFailure={() => console.log("failed")}
-          icon="fa-facebook"
-          render={() => <button>facebook button</button>}
-        /> */}
+      <div style={{ width: "400px", height: "100px", marginTop: '20px' }}>
         <GoogleLoginHooks goToDashboard={() => goToDashboard()} />
       </div>
       <Box mt={8}>

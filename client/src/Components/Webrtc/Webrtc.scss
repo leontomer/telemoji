@@ -1,0 +1,25 @@
+.webrtcContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.videoRow {
+  display: flex;
+  width: 100%;
+  justify-content:center;
+  align-items:center;
+  margin-top:50px;
+}
+.endCall{
+    display: flex;
+    width: 100%;
+    justify-content:center;
+    align-items:center;
+    margin-top:50px;
+}
+
+@media only screen and (max-width:1300px){
+    .videoRow {
+       flex-direction: column;
+    }
+  }
