@@ -1,13 +1,16 @@
+import axios from "axios";
+import Peer from "simple-peer";
 import {
   GET_CALL,
   ACCEPT_CALL,
   GET_CAMERA_STREAM,
   SET_CALLERS_STREAM,
   ANSWER_CALL,
-  END_CALL
+  SET_CALL_HISTORY,
+  END_CALL,
 } from "./types";
+const baseRoute = "/api/friends/";
 
-import Peer from "simple-peer";
 let peer;
 
 export const recieveCalls = () => async (dispatch, getState) => {
@@ -27,7 +30,6 @@ export const recieveCalls = () => async (dispatch, getState) => {
   });
 };
 
-
 export const getAnswerFromCall = () => async (dispatch, getState) => {
   const socket = getState().socketReducer.socket;
 
@@ -42,10 +44,11 @@ export const getAnswerFromCall = () => async (dispatch, getState) => {
 export const getStreamFromVideoCamera = (id?: string) => (dispatch) => {
   navigator.mediaDevices
     .getUserMedia({
-      audio: true, video: {
+      audio: true,
+      video: {
         width: 640,
-        height: 480
-      }
+        height: 480,
+      },
     })
     .then((stream) => {
       dispatch({
@@ -72,6 +75,7 @@ export const makeCall = (id: string) => async (dispatch, getState) => {
   const userStream = getState().callReducer.userStream;
   const imageAddress = getState().authReducer.user.imageAddress;
   const userName = getState().authReducer.user.firstName;
+
   peer = new Peer({
     initiator: true,
     trickle: false,
@@ -93,7 +97,7 @@ export const makeCall = (id: string) => async (dispatch, getState) => {
       signalData: data,
       fromUser: socket.id,
       fromImageAddress: imageAddress,
-      callerName: userName
+      callerName: userName,
     });
   });
 
@@ -110,6 +114,19 @@ export const makeCall = (id: string) => async (dispatch, getState) => {
     });
     peer.signal(signal);
   });
+  let res;
+  try {
+    res = await axios.post(`${baseRoute}callHistory`, {
+      userToCall: id,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
+  dispatch({
+    type: SET_CALL_HISTORY,
+    payload: res.data.callHistory,
+  });
 };
 
 export const acceptCall = () => async (dispatch, getState) => {
@@ -121,6 +138,19 @@ export const acceptCall = () => async (dispatch, getState) => {
   dispatch({
     type: ANSWER_CALL,
   });
+
+  let res;
+  try {
+    res = await axios.get(`${baseRoute}callHistory`);
+  } catch (err) {
+    console.log(err);
+  }
+  //console.log(res);
+  dispatch({
+    type: SET_CALL_HISTORY,
+    payload: res.data.callHistory,
+  });
+
   peer = new Peer({
     initiator: false,
     trickle: false,
@@ -149,10 +179,10 @@ export const endCall = () => async (dispatch, getState) => {
     });
   }
   if (peer) {
-    peer.destroy()
+    peer.destroy();
   }
 
   dispatch({
     type: END_CALL,
   });
-}
+};
