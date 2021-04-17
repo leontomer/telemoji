@@ -170,7 +170,6 @@ router.post("/callHistory", auth, async (req, res) => {
 
     await friend.save();
     await user.save();
-    console.log('added call history', user);
     res.json({ callHistory: user.callHistory });
   } catch (err) {
     console.error(err);
