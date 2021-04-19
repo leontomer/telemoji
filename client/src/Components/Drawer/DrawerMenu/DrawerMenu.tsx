@@ -29,7 +29,7 @@ export const DrawerMenu = (props) => {
       onKeyDown={() => dispatch(closeDrawer())}
     >
       <List>
-        {["Under construction", "Under construction", "Under construction", "Under construction"].map((text, index) => (
+        {["Under construction1", "Under construction2", "Under construction3", "Under construction4"].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
@@ -40,7 +40,7 @@ export const DrawerMenu = (props) => {
       </List>
       <Divider />
       <List>
-        {["Under construction", "Under construction", "Under construction"].map((text, index) => (
+        {["Under construction5", "Under construction6", "Under construction7"].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}

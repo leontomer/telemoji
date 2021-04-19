@@ -77,6 +77,7 @@ export default function LoginPage({ history }) {
       finishLoading();
       history.push("/dashboard");
     } catch (error) {
+      finishLoading();
       return;
     }
   };

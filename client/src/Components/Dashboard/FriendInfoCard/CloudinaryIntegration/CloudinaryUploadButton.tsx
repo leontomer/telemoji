@@ -11,17 +11,15 @@ function CloudinaryUploadButton() {
     try {
       const imageUrl = responseObject.info.secure_url;
       if (imageUrl) {
-        console.log(`got img: ${imageUrl}`);
         dispatch(setUserImageAction({ imageAddress: imageUrl }));
-        alert(`uploaded! ${imageUrl}`);
       } else {
         console.error("something went wrong in captureImage");
       }
-    } catch (error) {}
+    } catch (error) { }
   }
   return (
     <>
-      <Button style={{ height: "25px", width: "200px", padding: 0 }}>
+      <div style={{ height: "25px", width: "200px", padding: 0 }}>
         <WidgetLoader />
         <Widget
           resourceType={"image"}
@@ -45,7 +43,7 @@ function CloudinaryUploadButton() {
           eager={"w_400,h_300,c_pad|w_260,h_200,c_crop"}
           use_filename={false}
         />
-      </Button>
+      </div>
     </>
   );
 }
