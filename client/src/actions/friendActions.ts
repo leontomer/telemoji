@@ -83,6 +83,7 @@ export const getFriendList = () => async (dispatch) => {
 };
 
 export const setFriendInFocus = (friend: FriendProps) => (dispatch) => {
+    console.log('setFriendInFocus hasbeen called')
     dispatch({
         type: SET_FRIEND_IN_FOCUS,
         payload: friend,
