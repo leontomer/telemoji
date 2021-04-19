@@ -199,33 +199,23 @@ export default function FriendInfoCard() {
   return (
     <div className="outer">
       <Card className="root">
-        <div >
-          {friendInFocus ? (
-            <Avatar
-              alt="Remy Sharp"
-              src={getFriendImage()}
-              className={classes.large}
-            />
-          ) : (
-              <div>
-                <Avatar
-                  alt="Remy Sharp"
-                  src={getUserImage()}
-                  className={classes.large}
-                />
-              </div>
-            )}
+        <>
+          <Avatar
+            alt="Remy Sharp"
+            src={friendInFocus ? getFriendImage() : getUserImage()}
+            className={classes.large}
+          />
           <Typography gutterBottom variant="h4" component="h4" style={{ textAlign: 'center' }}>
             {friendInFocus
               ? `${friendInFocus.firstName} ${friendInFocus.lastName}`
               : user && `${user.firstName} ${user.lastName}`}
           </Typography>
-        </div>
+        </>
 
         <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
+          < >
             {friendInFocus ? getFriendAbout() : getUserAbout()}
-          </Typography>
+          </>
         </CardContent>
         <CardActions className={classes.actions} style={{ marginTop: '80px' }}>
           {friendInFocus ? getFriendActions() : getUserActions()}

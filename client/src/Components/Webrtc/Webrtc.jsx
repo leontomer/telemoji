@@ -1,6 +1,4 @@
-import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
-// import Peer from "simple-peer";
-import styled from "styled-components";
+import React, { useEffect, useState, useRef } from "react";
 import { DetectionVideo } from "../DetectionVideo/DetectionVideo";
 import { useSelector, useDispatch } from "react-redux";
 import { endCall } from '../../actions/callActions';
@@ -9,6 +7,7 @@ import { withRouter } from "react-router";
 import PhoneDisabledIcon from '@material-ui/icons/PhoneDisabled';
 import Button from '@material-ui/core/Button';
 import './Webrtc.scss';
+import { useLoader } from '../../Contexts/LoaderContext';
 
 
 
@@ -25,13 +24,14 @@ const WebrtcComponent = ({ history, match }) => {
   const callersStreamReducer = useSelector((state) => state.callReducer.callersStream);
   const socket = useSelector((state) => state.socketReducer.socket);
   const dispatch = useDispatch();
-  const { callingUser } = useSelector((state) => state.callReducer)
+  // const { callingUser } = useSelector((state) => state.callReducer)
   const handleEndCall = () => {
     dispatch(endCallForMyCaller(match.params.callerId));
     dispatch(endCall());
     history.push('/');
   }
 
+  const { startLoading, finishLoading } = useLoader();
   // useEffect(() => {
   //   if (!callingUser && !callAcceptedReducer) {
   //     history.push('/');
@@ -39,6 +39,7 @@ const WebrtcComponent = ({ history, match }) => {
   // }, [callAcceptedReducer, callingUser])
 
   useEffect(() => {
+    startLoading();
     return () => {
       handleEndCall();
     }
@@ -71,6 +72,7 @@ const WebrtcComponent = ({ history, match }) => {
 
   useEffect(() => {
     if (partnerVideo.current && callerStream) {
+      finishLoading();
       partnerVideo.current.srcObject = callerStream;
     }
   }, [callerStream])
@@ -83,6 +85,7 @@ const WebrtcComponent = ({ history, match }) => {
 
   let PartnerVideo;
   if (callAccepted) {
+    finishLoading();
     PartnerVideo = (
       <DetectionVideo videoRef={partnerVideo} />
     );

@@ -67,67 +67,75 @@ export function DetectionVideo({
   };
 
   const handleVideoOnPlay = () => {
+    setUserEmotion("Trying to detect your face...");
     const videoToTensor = async () => {
-      if (unmountingVideoChat && unmountingVideoChat.current) {
-        return;
-      }
-      let canvases;
-      if (videoRef.current && canvasRef.current) {
-        canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(
-          videoRef.current
-        );
-        const displaySize = {
-          width: videoWidth,
-          height: videoHeight,
-        };
-        faceapi.matchDimensions(canvasRef.current, displaySize);
-        const detections = await faceapi.detectAllFaces(
-          videoRef.current,
-          new faceapi.TinyFaceDetectorOptions()
-        );
-        //------------faceapi settings---------------
-        const resizedDetections = faceapi.resizeResults(
-          detections,
-          displaySize
-        );
-        canvasRef.current
-          .getContext("2d")
-          .clearRect(0, 0, videoWidth, videoHeight);
-        faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
-        //------------------------------------------
-        canvases = await faceapi.extractFaces(
-          videoRef.current,
-          resizedDetections
-        );
-      }
-      let data = null;
-      if (canvases && canvases.length > 0) {
-        try {
-          data = tf.browser
-            .fromPixels(canvases[0], 3)
-            .resizeNearestNeighbor([96, 96])
-            // .mean(2)
-            // .toFloat()
-            .expandDims(0)
-          // .expandDims(3);
-        } catch (error) {
-          console.log('error is', error.message)
-          console.log("no face found");
+
+      try {
+        if (unmountingVideoChat && unmountingVideoChat.current) {
+          return;
+        }
+        let canvases;
+        if (videoRef.current && canvasRef.current) {
+          canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(
+            videoRef.current
+          );
+          const displaySize = {
+            width: videoWidth,
+            height: videoHeight,
+          };
+          faceapi.matchDimensions(canvasRef.current, displaySize);
+          const detections = await faceapi.detectAllFaces(
+            videoRef.current,
+            new faceapi.TinyFaceDetectorOptions()
+          );
+          //------------faceapi settings---------------
+          const resizedDetections = faceapi.resizeResults(
+            detections,
+            displaySize
+          );
+          canvasRef.current
+            .getContext("2d")
+            .clearRect(0, 0, videoWidth, videoHeight);
+          faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
+          //------------------------------------------
+          canvases = await faceapi.extractFaces(
+            videoRef.current,
+            resizedDetections
+          );
+        }
+        let data = null;
+        if (canvases && canvases.length > 0) {
+          try {
+            data = tf.browser
+              .fromPixels(canvases[0], 3)
+              .resizeNearestNeighbor([96, 96])
+              // .mean(2)
+              // .toFloat()
+              .expandDims(0)
+            // .expandDims(3);
+          } catch (error) {
+            console.log('error is', error.message)
+            console.log("no face found");
+          }
+        }
+
+        //tf.browser.toPixels((data.toFloat().div(tf.scalar(255.0))), canvasRef.current)
+        if (emotionRecModel && data) {
+          try {
+            predict(data);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+
+        if (!videoRef.current.paused) {
+          timeVarHolder = setTimeout(videoToTensor, 2000);
         }
       }
-
-      //tf.browser.toPixels((data.toFloat().div(tf.scalar(255.0))), canvasRef.current)
-      if (emotionRecModel && data) {
-        try {
-          predict(data);
-        } catch (error) {
-          console.log(error);
-        }
+      catch (error) {
+        console.error('error', error);
       }
-
-      if (!videoRef.current.paused) {
-        timeVarHolder = setTimeout(videoToTensor, 2000);
-      }
+      //
     };
     videoToTensor();
   };

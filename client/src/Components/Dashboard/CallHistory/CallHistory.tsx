@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import "./CallHistory.scss";
+import React, { useState, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import Pagination from '@material-ui/lab/Pagination';
 import Moment from "moment";
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
@@ -11,6 +11,9 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import CallMadeIcon from '@material-ui/icons/CallMade';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
+import { loadUser } from '../../../actions/authActions';
+import "./CallHistory.scss";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,20 +25,28 @@ const useStyles = makeStyles((theme) => ({
 
 const CallHistory = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const globalCallHistory = useSelector(
     (state) => state.authReducer.user.callHistory
   );
   const usersImage = useSelector((state) => state.authReducer.user.imageAddress)
-  const [callHistory, setCallHistory] = React.useState([
+  const [callHistory, setCallHistory] = useState([
     globalCallHistory.callHistory,
   ]);
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [])
 
   useEffect(() => {
     setCallHistory(globalCallHistory);
-    console.log(globalCallHistory);
   }, [globalCallHistory]);
 
+  const [selectedPage, setSelectedPage] = useState(1);
+  const handlePagination = (e, page) => {
+    setSelectedPage(page);
+  }
+  const pageCount = 5;
   return (
     <div className="callHistoryContainer">
       <Typography variant="h5" component="h5" style={{ textAlign: 'center' }}>
@@ -45,7 +56,8 @@ const CallHistory = () => {
         {callHistory
           .slice(0)
           .reverse()
-          .map((call, index) => call && <ListItem button>
+          .slice(pageCount * selectedPage - pageCount, pageCount * selectedPage)
+          .map((call, index) => call && <ListItem button key={index}>
             <ListItemAvatar>
               <Avatar style={{ backgroundColor: '#27AE60 ' }}>
                 <CallMadeIcon />
@@ -58,6 +70,9 @@ const CallHistory = () => {
             <ListItemText primary={call.callerName} secondary={Moment(call.date).format('MMMM Do YYYY, h:mm:ss a')} />
           </ListItem>)}
       </List>
+      <div style={{ marginTop: 10 }}>
+        {callHistory.length > 0 && <Pagination count={Math.floor(callHistory.length / 4)} color="primary" onChange={handlePagination} />}
+      </div>
     </div>
   );
 };

@@ -32,7 +32,8 @@ module.exports = () => {
         signal: data.signalData,
         from: data.fromUser,
         fromImageAddress: data.fromImageAddress,
-        callerName: data.callerName
+        callerName: data.callerName,
+        callerId: data.callerId
       });
     });
 
