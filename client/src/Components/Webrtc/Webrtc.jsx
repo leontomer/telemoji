@@ -40,6 +40,9 @@ const WebrtcComponent = ({ history, match }) => {
 
   useEffect(() => {
     startLoading();
+    setTimeout(() => {
+      finishLoading()
+    }, 5000);
     return () => {
       handleEndCall();
     }
