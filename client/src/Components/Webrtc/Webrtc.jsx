@@ -24,6 +24,8 @@ const WebrtcComponent = ({ history, match }) => {
   const callersStreamReducer = useSelector((state) => state.callReducer.callersStream);
   const socket = useSelector((state) => state.socketReducer.socket);
   const dispatch = useDispatch();
+  const videoWidth = 640;
+  const videoHeight = 480;
   // const { callingUser } = useSelector((state) => state.callReducer)
   const handleEndCall = () => {
     dispatch(endCallForMyCaller(match.params.callerId));
@@ -83,7 +85,13 @@ const WebrtcComponent = ({ history, match }) => {
 
   let UserVideo;
   if (stream) {
-    UserVideo = <DetectionVideo videoRef={userVideo} muted={true} />;
+    UserVideo = <video
+      ref={userVideo}
+      muted
+      autoPlay
+      height={videoHeight}
+      width={videoWidth}
+    />;
   }
 
   let PartnerVideo;
