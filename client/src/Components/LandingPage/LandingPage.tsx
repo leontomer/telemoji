@@ -20,9 +20,9 @@ const textContent = (
     <h3 className="landingpage-subheader">
       Chat with your friends and get a special experience
     </h3>
-    <div style={{ marginTop: "50px" }}>
+    <div style={{ marginTop: "50px" }} data-hook="landing-page-button">
       <Link to="/register">
-        <Button style={buttonStyle} variant="contained">
+        <Button style={buttonStyle} variant="contained"  >
           Get Started
       </Button>
       </Link>
