@@ -14,13 +14,20 @@ import { useDispatch } from "react-redux";
 import { register } from "../../actions/authActions";
 import { setError } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
+import { Content } from "../../Common/content";
+import { DataHooks } from "../../utilities/tests/dataHooks";
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
+    <Typography
+      variant="body2"
+      color="textSecondary"
+      align="center"
+      data-hook={DataHooks.registerPageCopyrights}
+    >
       {"Copyright © "}
       <Link color="inherit" to="/">
-        Telemoji
+        {Content.app_name}
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -89,8 +96,12 @@ export default function SignUp({ history }) {
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign up
+        <Typography
+          component="h1"
+          variant="h5"
+          data-hook={DataHooks.registerPageSignUp}
+        >
+          {Content.register_page_sign_up}
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -102,7 +113,8 @@ export default function SignUp({ history }) {
                 required
                 fullWidth
                 id="firstName"
-                label="First Name"
+                data-hook={DataHooks.registerPageFirstName}
+                label={Content.register_page_first_name}
                 autoFocus
                 onChange={onChange}
                 value={firstName}
@@ -114,7 +126,8 @@ export default function SignUp({ history }) {
                 required
                 fullWidth
                 id="lastName"
-                label="Last Name"
+                data-hook={DataHooks.registerPageLastName}
+                label={Content.register_page_last_name}
                 name="lastName"
                 autoComplete="lname"
                 onChange={onChange}
@@ -127,7 +140,8 @@ export default function SignUp({ history }) {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                data-hook={DataHooks.registerPageEmail}
+                label={Content.register_page_email_address}
                 name="email"
                 autoComplete="email"
                 type="email"
@@ -141,7 +155,8 @@ export default function SignUp({ history }) {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                data-hook={DataHooks.registerPagePassword}
+                label={Content.register_page_password}
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -155,7 +170,8 @@ export default function SignUp({ history }) {
                 required
                 fullWidth
                 name="password2"
-                label="Confirm Password"
+                data-hook={DataHooks.registerPagePasswordConfirm}
+                label={Content.register_page_confirm_password}
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -176,13 +192,14 @@ export default function SignUp({ history }) {
             variant="contained"
             color="primary"
             className={classes.submit}
+            data-hook={DataHooks.registerPageSignUpButton}
           >
-            Sign Up
+            {Content.register_page_sign_up}
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link to="/login" >
-                Already have an account? Sign in
+              <Link to="/login" data-hook={DataHooks.registerPageSignInLink}>
+                {Content.register_page_sign_in}
               </Link>
             </Grid>
           </Grid>

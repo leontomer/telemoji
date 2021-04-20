@@ -1,10 +1,12 @@
 import React, { useLayoutEffect } from "react";
 import "./LandingPage.scss";
 import Button from "@material-ui/core/Button";
-import { BottomBorder } from './BottomBorder/BottomBorder';
-import { LandingSvg } from './LandingSvg/LandingSvg';
+import { BottomBorder } from "./BottomBorder/BottomBorder";
+import { LandingSvg } from "./LandingSvg/LandingSvg";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { DataHooks } from "../../utilities/tests/dataHooks";
+import { Content } from "../../Common/content";
 
 const buttonStyle = {
   backgroundColor: "#53317e",
@@ -14,26 +16,34 @@ const buttonStyle = {
 };
 const textContent = (
   <div className="content">
-    <h1 className="landingpage-header">
-      The only video chat you will ever need
+    <h1 className="landingpage-header" data-hook={DataHooks.landingPageHeader}>
+      {Content.landing_page_header}
     </h1>
-    <h3 className="landingpage-subheader">
-      Chat with your friends and get a special experience
+    <h3
+      className="landingpage-subheader"
+      data-hook={DataHooks.landingPageDescription}
+    >
+      {Content.landing_page_description}
     </h3>
-    <div style={{ marginTop: "50px" }} data-hook="landing-page-button">
+    <div
+      style={{ marginTop: "50px" }}
+      data-hook={DataHooks.landingPageGetStartedButton}
+    >
       <Link to="/register">
-        <Button style={buttonStyle} variant="contained"  >
-          Get Started
-      </Button>
+        <Button style={buttonStyle} variant="contained">
+          {Content.landing_page_get_started}
+        </Button>
       </Link>
     </div>
   </div>
 );
 
-
 function LandingPage(props) {
   // @ts-ignore
-  const isAuthenticated = useSelector((state) => state.authReducer.isAuthenticated);
+  const isAuthenticated = useSelector(
+    // @ts-ignore
+    (state) => state.authReducer.isAuthenticated
+  );
 
   useLayoutEffect(() => {
     if (isAuthenticated) {
@@ -42,9 +52,7 @@ function LandingPage(props) {
   }, [isAuthenticated]);
   return (
     <div className="landingPageContainer">
-      <div className="textContent">
-        {textContent}
-      </div>
+      <div className="textContent">{textContent}</div>
       <div className="landingSvg">
         <LandingSvg />
       </div>
@@ -52,6 +60,6 @@ function LandingPage(props) {
         <BottomBorder />
       </div>
     </div>
-  )
+  );
 }
 export default LandingPage;
