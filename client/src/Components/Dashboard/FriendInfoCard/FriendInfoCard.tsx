@@ -37,7 +37,7 @@ export default function FriendInfoCard() {
   // @ts-ignore
   const globalFriendList = useSelector((state) => state.friendReducer.friendList);
   // @ts-ignore
-  const friendInFocus: FriendProps = useSelector((state) => state.friendReducer.friendInFocus);
+  const _friendInFocus: FriendProps = useSelector((state) => state.friendReducer.friendInFocus);
 
 
   const [userAbout, setUserAbout] = useState<string>(Content.default_about);
@@ -51,10 +51,10 @@ export default function FriendInfoCard() {
     setFriendList(globalFriendList);
   }, [globalFriendList]);
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("called")
     setFriendInFocus(_friendInFocus)
-  },[_friendInFocus])
+  }, [_friendInFocus])
 
   const getFriendAbout = () => {
     return (
