@@ -25,13 +25,9 @@ const CallHistory = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   // @ts-ignore
-  const globalCallHistory = useSelector(
-    (state) => state.authReducer.user.callHistory
-  );
+  const globalCallHistory = useSelector((state) => state.authReducer.user.callHistory);
   // @ts-ignore
-  const usersImage = useSelector(
-    (state) => state.authReducer.user.imageAddress
-  );
+  const usersImage = useSelector((state) => state.authReducer.user.imageAddress);
 
   const [callHistory, setCallHistory] = useState([
     globalCallHistory.callHistory,
