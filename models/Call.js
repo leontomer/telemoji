@@ -3,19 +3,17 @@
 
 const mongoose = require("mongoose");
 const CallSchema = new mongoose.Schema({
-
-    callerName: {
-        type: String,
-        required: true,
-    },
-    callerImage: {
-        type: String,
-        required: true,
-    },
-    date: {
-        type: Date,
-        default: Date.now,
-    },
+  callerName: {
+    type: String,
+    required: true,
+  },
+  callerImage: {
+    type: String,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 module.exports = Call = mongoose.model("call", CallSchema);

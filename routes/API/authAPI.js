@@ -13,10 +13,12 @@ const googleClientId =
 
 router.get("/", auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).populate({
-      path: "callHistory",
-      model: "call",
-    }).select("-password");
+    const user = await User.findById(req.user.id)
+      .populate({
+        path: "callHistory",
+        model: "call",
+      })
+      .select("-password");
     res.json(user);
   } catch (err) {
     console.error(err.message);
@@ -84,7 +86,6 @@ router.post("/google", async (req, res) => {
       });
       const payload = ticket.getPayload();
 
-      console.log(`User: ${payload.name} verified`);
       // tell the client that the user is verified and authenticated
 
       const { sub, email, name, picture } = payload;
@@ -123,8 +124,6 @@ router.post("/google", async (req, res) => {
       console.log("user has been created with:", user);
       await user.save();
     }
-
-
 
     const payload = {
       user: {
