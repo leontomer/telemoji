@@ -43,13 +43,18 @@ export default function FriendInfoCard() {
   const [userAbout, setUserAbout] = useState<string>(Content.default_about);
   const [userImage, setUserImage] = useState<string>(Content.default_image);
   const [friendList, setFriendList] = useState(globalFriendList);
-
+  const [friendInFocus, setFriendInFocus] = useState(_friendInFocus)
   const [saveButtonReady, setSaveButtonReady] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
     setFriendList(globalFriendList);
   }, [globalFriendList]);
+
+  useEffect(()=>{
+    console.log("called")
+    setFriendInFocus(_friendInFocus)
+  },[_friendInFocus])
 
   const getFriendAbout = () => {
     return (

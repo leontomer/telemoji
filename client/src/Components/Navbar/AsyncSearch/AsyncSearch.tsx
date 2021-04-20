@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     },
     marginLeft: 0,
     width: "100%",
-  }
+  },
 }));
 export default function AsyncSearch() {
   const [open, setOpen] = React.useState(false);
@@ -48,6 +48,7 @@ export default function AsyncSearch() {
   };
 
   const handleOptionSelected = (friend: FriendProps) => {
+    console.log(`friend chosen : ${friend.firstName} ${friend.lastName}`);
     dispatch(setFriendInFocus(friend));
   };
 
@@ -96,11 +97,18 @@ export default function AsyncSearch() {
       onClose={() => {
         setOpen(false);
       }}
-      getOptionSelected={(option, value) => {
-        if (option.email === value.email) {
-          handleOptionSelected(option);
-        }
-        return option.email === value.email;
+      getOptionSelected={(_, value) => {
+        console.log("option.email", _.email, "value.email", value.email);
+        let result: boolean = false;
+        options.forEach((friend) => {
+          if (friend.email === value.email) {
+            console.log("the if has been called");
+            dispatch(setFriendInFocus(value));
+            result = true;
+            console.log("true for", friend, value);
+          }
+        });
+        return result;
       }}
       getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
       options={options}
