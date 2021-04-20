@@ -7,12 +7,10 @@ import { getAllUsers } from "../../../actions/usersActions";
 import { setFriendInFocus } from "../../../actions/friendActions";
 import { FriendProps } from "../../../reducers/authReducer";
 import { useDispatch, useSelector } from "react-redux";
+import Avatar from '@material-ui/core/Avatar';
+import Popper from '@material-ui/core/Popper';
 
-function sleep(delay = 0) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, delay);
-  });
-}
+
 const useStyles = makeStyles((theme) => ({
   search: {
     position: "relative",
@@ -24,6 +22,14 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
     width: "100%",
   },
+  root: {
+    "& .MuiAutocomplete-listbox": {
+      border: "2px solid grey",
+      fontSize: 18,
+      "& li:nth-child(even)": { backgroundColor: "#E5E7E9" },
+      "& li:nth-child(odd)": { backgroundColor: "#FFF" }
+    }
+  }
 }));
 export default function AsyncSearch() {
   const [open, setOpen] = React.useState(false);
@@ -36,6 +42,11 @@ export default function AsyncSearch() {
     open && options && options.length === 0
   );
 
+  const CustomPopper = function (props) {
+    const classes = useStyles();
+    return <Popper {...props} className={classes.root} placement="bottom" />;
+  };
+
   const fetchUsers = async () => {
     const users = await getAllUsers();
     setUsers(users);
@@ -47,10 +58,6 @@ export default function AsyncSearch() {
     setChanged(true);
   };
 
-  const handleOptionSelected = (friend: FriendProps) => {
-    console.log(`friend chosen : ${friend.firstName} ${friend.lastName}`);
-    dispatch(setFriendInFocus(friend));
-  };
 
   React.useEffect(() => {
     (async () => {
@@ -72,47 +79,30 @@ export default function AsyncSearch() {
     })();
   }, [loading, changed, input]);
 
-  React.useEffect(() => {
-    if (!open) {
-      setOptions([]);
-    }
-  }, [open]);
 
-  React.useEffect(() => {
-    users.forEach((user) => {
-      if (input === `${user.firstName} ${user.lastName}`) {
-        console.log("we got match", { user });
-      }
-    });
-  }, [input]);
+
+  const handleSelectUserToFocus = (event, value) => {
+    if (value) {
+      dispatch(setFriendInFocus(value as FriendProps))
+    }
+  }
   const classes = useStyles();
   return (
     <Autocomplete
       id="asynchronous-demo"
       style={{ width: 300 }}
-      open={open}
-      onOpen={() => {
-        setOpen(true);
-      }}
-      onClose={() => {
-        setOpen(false);
-      }}
-      getOptionSelected={(_, value) => {
-        console.log("option.email", _.email, "value.email", value.email);
-        let result: boolean = false;
-        options.forEach((friend) => {
-          if (friend.email === value.email) {
-            console.log("the if has been called");
-            dispatch(setFriendInFocus(value));
-            result = true;
-            console.log("true for", friend, value);
-          }
-        });
-        return result;
-      }}
+      autoComplete
+      onChange={handleSelectUserToFocus}
       getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
       options={options}
       loading={loading}
+      renderOption={(option) => {
+        return (<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Avatar src={option.imageAddress} style={{ marginRight: 10 }} />
+          {`${option.firstName} ${option.lastName}`}
+        </div>)
+      }}
+      PopperComponent={CustomPopper}
       renderInput={(params) => (
         <TextField
           className={classes.search}
