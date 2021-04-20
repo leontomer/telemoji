@@ -9,9 +9,8 @@ import "./GoogleLogin.scss";
 
 function GoogleLoginHooks({ goToDashboard }) {
   const { startLoading, finishLoading } = useLoader();
-  const isAuthenticated = useSelector(
-    (state) => state.authReducer.isAuthenticated
-  );
+  // @ts-ignore
+  const isAuthenticated = useSelector((state) => state.authReducer.isAuthenticated);
   useLayoutEffect(() => {
     if (isAuthenticated) {
       finishLoading();

@@ -1,6 +1,5 @@
 import { GET_CALL, ACCEPT_CALL, GET_CAMERA_STREAM, SET_CALLERS_STREAM, ANSWER_CALL, END_CALL, CALLING_USER } from "../actions/types";
 
-
 const initialState = {
     callerSignal: null,
     acceptCallSignal: null,

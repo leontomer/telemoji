@@ -18,12 +18,17 @@ const WebrtcComponent = ({ history, match }) => {
 
   const userVideo = useRef();
   const partnerVideo = useRef();
-
+  // @ts-ignore
   const callAcceptedReducer = useSelector((state) => state.callReducer.callAccepted);
+  // @ts-ignore
   const userStream = useSelector((state) => state.callReducer.userStream);
+  // @ts-ignore
   const callersStreamReducer = useSelector((state) => state.callReducer.callersStream);
+  // @ts-ignore
   const socket = useSelector((state) => state.socketReducer.socket);
   const dispatch = useDispatch();
+  const videoWidth = 640;
+  const videoHeight = 480;
   // const { callingUser } = useSelector((state) => state.callReducer)
   const handleEndCall = () => {
     dispatch(endCallForMyCaller(match.params.callerId));
@@ -40,6 +45,9 @@ const WebrtcComponent = ({ history, match }) => {
 
   useEffect(() => {
     startLoading();
+    setTimeout(() => {
+      finishLoading()
+    }, 5000);
     return () => {
       handleEndCall();
     }
@@ -80,7 +88,13 @@ const WebrtcComponent = ({ history, match }) => {
 
   let UserVideo;
   if (stream) {
-    UserVideo = <DetectionVideo videoRef={userVideo} muted={true} />;
+    UserVideo = <video
+      ref={userVideo}
+      muted
+      autoPlay
+      height={videoHeight}
+      width={videoWidth}
+    />;
   }
 
   let PartnerVideo;

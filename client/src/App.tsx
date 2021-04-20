@@ -28,6 +28,7 @@ import store from "./store";
 import './App.css'
 
 function App() {
+  // @ts-ignore
   const socket = useSelector((state) => state.socketReducer.socket);
   useEffect(() => {
     store.dispatch(loadUser());

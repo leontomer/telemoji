@@ -4,6 +4,7 @@ import welcomeBannerSvg from "../../../svgs/welcomeBannerSvg.svg";
 import { useSelector } from "react-redux";
 
 const WelcomeBanner = () => {
+  // @ts-ignore
   const firstName = useSelector((state) => state.authReducer.user.firstName);
   var today = new Date()
   var curHr = today.getHours()

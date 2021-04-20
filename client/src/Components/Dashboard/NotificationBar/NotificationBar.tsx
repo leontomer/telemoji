@@ -28,7 +28,9 @@ import {
 function NotificationBar() {
   const [numberOfPendingFriendRequest, setNumberOfPendingFriendRequest] = useState<number>(0);
   const [friendRequestsNotifications, setFriendRequestsNotifications,] = React.useState<any>([]);
+  // @ts-ignore
   const { user } = useSelector((state) => state.authReducer);
+  // @ts-ignore
   const { friendRequests } = useSelector((state) => state.friendReducer)
   const dispatch = useDispatch();
 

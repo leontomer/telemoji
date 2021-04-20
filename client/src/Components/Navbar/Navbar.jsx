@@ -25,10 +25,11 @@ const useStyles = makeStyles((theme) => ({
 export default function SearchAppBar() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector(
-    (state) => state.authReducer.isAuthenticated
-  );
+  // @ts-ignore
+  const isAuthenticated = useSelector((state) => state.authReducer.isAuthenticated);
+  // @ts-ignore
   const firstName = useSelector((state) => state.authReducer.user.firstName);
+  // @ts-ignore
   const userImage = useSelector((state) => state.authReducer.user.imageAddress)
 
   const authenticatedContent = (

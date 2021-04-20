@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setError } from '../../actions/errorsActions'
+import { snackbarType } from "../../Common/dataTypes";
 
 export function DetectionVideo({
   videoRef,
@@ -16,6 +18,7 @@ export function DetectionVideo({
   const videoWidth = 640;
   const videoHeight = 480;
 
+  const dispatch = useDispatch();
   const faceapiReducer = useSelector((state) => state.modelReducer.faceapi);
   const emotionRecognitionReducer = useSelector((state) => state.modelReducer.emotionRecognition);
   let timeVarHolder;
@@ -104,6 +107,9 @@ export function DetectionVideo({
           );
         }
         let data = null;
+        if (!canvases || canvases.length === 0) {
+          setUserEmotion("Trying to detect your face...");
+        }
         if (canvases && canvases.length > 0) {
           try {
             data = tf.browser
@@ -133,7 +139,7 @@ export function DetectionVideo({
         }
       }
       catch (error) {
-        console.error('error', error);
+        dispatch(setError(JSON.stringify(error), snackbarType.error))
       }
       //
     };

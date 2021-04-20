@@ -76,8 +76,11 @@ const StyledBadge = withStyles((theme) => ({
 
 function FriendsList({ history }) {
   const classes = useStyles();
+  // @ts-ignore
   const { user } = useSelector((state) => state.authReducer);
+  // @ts-ignore
   const { friendList: globalFriendList } = useSelector((state) => state.friendReducer);
+  // @ts-ignore
   const allConnectedUsers = useSelector((state) => state.socketReducer.allConnectedUsers)
 
   const [userFriendList, setUserFriendList] = useState([]);
