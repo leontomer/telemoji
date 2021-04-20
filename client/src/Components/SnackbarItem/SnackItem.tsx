@@ -10,7 +10,7 @@ function MyApp() {
   const handleEnqueueSnack = (message: string, variant: snackbarType) => {
     enqueueSnackbar(message, { variant });
   };
-
+  // @ts-ignore
   const errors = useSelector((state) => state.errorsReducer);
 
   useEffect(() => {

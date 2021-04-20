@@ -7,6 +7,7 @@ import { DrawerMenu } from "./DrawerMenu/DrawerMenu";
 export function DrawerComponent() {
   const dispatch = useDispatch();
   const [openDrawerState, setOpenDrawerState] = useState(false);
+  // @ts-ignore
   const openDrawer = useSelector((state) => state.addonReducer.openDrawer);
   useEffect(() => {
     setOpenDrawerState(openDrawer);

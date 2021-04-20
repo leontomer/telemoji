@@ -32,14 +32,13 @@ const useStyles = makeStyles({
 
 export default function FriendInfoCard() {
   const classes = useStyles();
-
+  // @ts-ignore
   const user = useSelector((state) => state.authReducer.user);
-  const globalFriendList = useSelector(
-    (state) => state.friendReducer.friendList
-  );
-  const friendInFocus: FriendProps = useSelector(
-    (state) => state.friendReducer.friendInFocus
-  );
+  // @ts-ignore
+  const globalFriendList = useSelector((state) => state.friendReducer.friendList);
+  // @ts-ignore
+  const friendInFocus: FriendProps = useSelector((state) => state.friendReducer.friendInFocus);
+
 
   const [userAbout, setUserAbout] = useState<string>(Content.default_about);
   const [userImage, setUserImage] = useState<string>(Content.default_image);

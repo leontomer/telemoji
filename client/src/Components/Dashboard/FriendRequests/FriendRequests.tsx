@@ -11,6 +11,7 @@ import { updatePendingFriendRequests } from '../../../actions/friendActions';
 export default function FriendRequests() {
 
   const dispatch = useDispatch();
+  // @ts-ignore
   const friendRequestsGlobal = useSelector((state) => state.friendReducer.friendRequests)
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null

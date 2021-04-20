@@ -40,8 +40,11 @@ const RecieveCallModalComponent = ({ history }) => {
     const dispatch = useDispatch();
     const { closeModal, isOpenModal, openModal } = useModal();
     const classes = useStyles();
+    // @ts-ignore
     const caller = useSelector((state) => state.callReducer.callerName)
+    // @ts-ignore
     const receivingCall = useSelector((state) => state.callReducer.receivingCall);
+    // @ts-ignore
     const callerImage = useSelector((state) => state.callReducer.callerImage);
     const handleAccept = () => {
         dispatch(handleAcceptCall());

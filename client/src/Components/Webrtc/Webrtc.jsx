@@ -18,10 +18,13 @@ const WebrtcComponent = ({ history, match }) => {
 
   const userVideo = useRef();
   const partnerVideo = useRef();
-
+  // @ts-ignore
   const callAcceptedReducer = useSelector((state) => state.callReducer.callAccepted);
+  // @ts-ignore
   const userStream = useSelector((state) => state.callReducer.userStream);
+  // @ts-ignore
   const callersStreamReducer = useSelector((state) => state.callReducer.callersStream);
+  // @ts-ignore
   const socket = useSelector((state) => state.socketReducer.socket);
   const dispatch = useDispatch();
   const videoWidth = 640;

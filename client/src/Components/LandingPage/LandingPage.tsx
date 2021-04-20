@@ -4,6 +4,7 @@ import Button from "@material-ui/core/Button";
 import { BottomBorder } from './BottomBorder/BottomBorder';
 import { LandingSvg } from './LandingSvg/LandingSvg';
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const buttonStyle = {
   backgroundColor: "#53317e",
@@ -20,18 +21,20 @@ const textContent = (
       Chat with your friends and get a special experience
     </h3>
     <div style={{ marginTop: "50px" }}>
-      <Button style={buttonStyle} variant="contained">
-        Get Started
+      <Link to="/register">
+        <Button style={buttonStyle} variant="contained">
+          Get Started
       </Button>
+      </Link>
     </div>
   </div>
 );
 
 
 function LandingPage(props) {
-  const isAuthenticated = useSelector(
-    (state) => state.authReducer.isAuthenticated
-  );
+  // @ts-ignore
+  const isAuthenticated = useSelector((state) => state.authReducer.isAuthenticated);
+
   useLayoutEffect(() => {
     if (isAuthenticated) {
       props.history.push("/dashboard");
