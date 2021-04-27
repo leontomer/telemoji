@@ -7,8 +7,9 @@ import { getAllUsers } from "../../../actions/usersActions";
 import { setFriendInFocus } from "../../../actions/friendActions";
 import { FriendProps } from "../../../reducers/authReducer";
 import { useDispatch, useSelector } from "react-redux";
-import Avatar from "@material-ui/core/Avatar";
-import Popper from "@material-ui/core/Popper";
+import Avatar from '@material-ui/core/Avatar';
+import Popper from '@material-ui/core/Popper';
+import './AsyncSearch.scss';
 
 const useStyles = makeStyles((theme) => ({
   search: {
@@ -23,22 +24,19 @@ const useStyles = makeStyles((theme) => ({
   },
   root: {
     "& .MuiAutocomplete-listbox": {
-      border: "2px solid grey",
       fontSize: 18,
-      "& li:nth-child(even)": { backgroundColor: "#E5E7E9" },
-      "& li:nth-child(odd)": { backgroundColor: "#FFF" },
+      "& li:hover": { backgroundColor: "#E5E7E9" },
     },
-  },
+  }
 }));
 export default function AsyncSearch() {
-  const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState<FriendProps[]>([]);
   const [input, setInput] = React.useState<string>("");
   const [users, setUsers] = React.useState<FriendProps[]>([]);
   const [changed, setChanged] = React.useState<boolean>(false);
   const dispatch = useDispatch();
   const [loading, setLoading] = React.useState<boolean>(
-    open && options && options.length === 0
+    options && options.length === 0
   );
 
   const CustomPopper = function (props) {
@@ -93,18 +91,10 @@ export default function AsyncSearch() {
       options={options}
       loading={loading}
       renderOption={(option) => {
-        return (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Avatar src={option.imageAddress} style={{ marginRight: 10 }} />
-            {`${option.firstName} ${option.lastName}`}
-          </div>
-        );
+        return (<div className="searchItem">
+          <Avatar src={option.imageAddress} style={{ marginRight: 10 }} />
+          {`${option.firstName} ${option.lastName}`}
+        </div>)
       }}
       PopperComponent={CustomPopper}
       renderInput={(params) => (
