@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const auth = require("../../middleware/auth");
+const nodemailer = require("nodemailer");
 
 router.post(
   "/register",
@@ -105,5 +106,32 @@ router.post("/image", async (req, res) => {
     console.error(error);
   }
 });
+
+router.post('/forgotPassword', async (req, res) =>{
+const { userEmail,text,subject } = req.body;
+console.log(req.body)
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'telemojiemail@gmail.com',
+    pass: 'Test1234567'
+  }
+});
+
+const mailOptions = {
+  from: 'Telemoji',
+  to: userEmail,
+  subject,
+  text
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+	console.log(error);
+  } else {
+    console.log(`Email sent to:${mailOptions.to} ` + info.response);
+  }
+});
+})
 
 module.exports = router;

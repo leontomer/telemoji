@@ -65,3 +65,16 @@ export const getAllUsers = async () => {
     console.warn(err);
   }
 };
+
+export const sendResetPasswordEmail = () => async (_, getState) => {
+  try {
+    const userEmail = getState().authReducer.user.email;
+    const res = await axios.post(`${baseRoute}forgotPassword`, {
+      userEmail,
+      subject:'Reset your password',
+      text:'<b>Reset your password</b><p>dude....</p>',
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
