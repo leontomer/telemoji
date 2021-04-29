@@ -99,7 +99,7 @@ export function DetectionVideo({
           canvasRef.current
             .getContext("2d")
             .clearRect(0, 0, videoWidth, videoHeight);
-          faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
+          // faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
           //------------------------------------------
           canvases = await faceapi.extractFaces(
             videoRef.current,
@@ -135,11 +135,11 @@ export function DetectionVideo({
         }
 
         if (!videoRef.current.paused) {
-          timeVarHolder = setTimeout(videoToTensor, 2000);
+          timeVarHolder = setTimeout(videoToTensor, 300);
         }
       }
       catch (error) {
-        dispatch(setError(JSON.stringify(error), snackbarType.error))
+        dispatch(setError('Call has ended', JSON.stringify(error), snackbarType.error))
       }
       //
     };

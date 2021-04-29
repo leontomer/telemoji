@@ -33,7 +33,7 @@ const WebrtcComponent = ({ history, match }) => {
   const handleEndCall = () => {
     dispatch(endCallForMyCaller(match.params.callerId));
     dispatch(endCall());
-    history.push('/');
+    history.push('/dashboard');
   }
 
   const { startLoading, finishLoading } = useLoader();
@@ -112,7 +112,7 @@ const WebrtcComponent = ({ history, match }) => {
           variant="contained"
           color="secondary"
           startIcon={<PhoneDisabledIcon />}
-          onClick={() => history.push('/')}
+          onClick={() => history.push('/dashboard')}
         >
           End Call
       </Button>
