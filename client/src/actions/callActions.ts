@@ -46,8 +46,8 @@ export const getStreamFromVideoCamera = (id?: string) => (dispatch) => {
   navigator.mediaDevices
     .getUserMedia({
       audio: true, video: {
-        width: 640,
-        height: 480
+        width: 1040,
+        height: 880
       }
     })
     .then((stream) => {

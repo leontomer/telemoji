@@ -36,7 +36,7 @@ interface InitialStateProps {
 
 export const initialState: InitialStateProps = {
   token: localStorage.getItem("token"),
-  isAuthenticated: false,
+  isAuthenticated: null,
   loading: true,
   user: {
     firstName: "",
@@ -77,7 +77,7 @@ export default function (state: InitialStateProps = initialState, action) {
     case LOGIN_FAIL:
     case ACCOUNT_DELETED:
       localStorage.removeItem("token");
-      return initialState;
+      return { ...initialState, isAuthenticated: false };
 
     case USER_LOADED:
       return {

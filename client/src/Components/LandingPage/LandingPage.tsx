@@ -5,6 +5,7 @@ import { BottomBorder } from './BottomBorder/BottomBorder';
 import { LandingSvg } from './LandingSvg/LandingSvg';
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useLoader } from '../../Contexts/LoaderContext';
 
 const buttonStyle = {
   backgroundColor: "#53317e",
@@ -34,12 +35,25 @@ const textContent = (
 function LandingPage(props) {
   // @ts-ignore
   const isAuthenticated = useSelector((state) => state.authReducer.isAuthenticated);
+  const { startLoading, finishLoading } = useLoader();
+  useLayoutEffect(() => {
+    startLoading()
+  }, []);
 
   useLayoutEffect(() => {
     if (isAuthenticated) {
       props.history.push("/dashboard");
+      finishLoading();
+    }
+    else if (isAuthenticated !== null) {
+      finishLoading();
     }
   }, [isAuthenticated]);
+
+  if (isAuthenticated === null) {
+    return <div className="landingPageContainer"></div>;
+  }
+
   return (
     <div className="landingPageContainer">
       <div className="textContent">
