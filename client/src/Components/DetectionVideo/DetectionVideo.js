@@ -15,8 +15,8 @@ export function DetectionVideo({
     "Detection initializing, please wait..."
   );
   let canvasRef = useRef(null);
-  const videoWidth = 640;
-  const videoHeight = 480;
+  const videoWidth = 1040;
+  const videoHeight = 880;
 
   const dispatch = useDispatch();
   const faceapiReducer = useSelector((state) => state.modelReducer.faceapi);
