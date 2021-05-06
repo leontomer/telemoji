@@ -35,15 +35,18 @@ export default function FriendInfoCard() {
   // @ts-ignore
   const user = useSelector((state) => state.authReducer.user);
   // @ts-ignore
-  const globalFriendList = useSelector((state) => state.friendReducer.friendList);
+  const globalFriendList = useSelector(
+    (state) => state.friendReducer.friendList
+  );
   // @ts-ignore
-  const _friendInFocus: FriendProps = useSelector((state) => state.friendReducer.friendInFocus);
-
+  const _friendInFocus: FriendProps = useSelector(
+    (state) => state.friendReducer.friendInFocus
+  );
 
   const [userAbout, setUserAbout] = useState<string>(Content.default_about);
   const [userImage, setUserImage] = useState<string>(Content.default_image);
   const [friendList, setFriendList] = useState(globalFriendList);
-  const [friendInFocus, setFriendInFocus] = useState(_friendInFocus)
+  const [friendInFocus, setFriendInFocus] = useState(_friendInFocus);
   const [saveButtonReady, setSaveButtonReady] = useState(true);
   const dispatch = useDispatch();
 
@@ -52,9 +55,8 @@ export default function FriendInfoCard() {
   }, [globalFriendList]);
 
   useEffect(() => {
-    console.log("called")
-    setFriendInFocus(_friendInFocus)
-  }, [_friendInFocus])
+    setFriendInFocus(_friendInFocus);
+  }, [_friendInFocus]);
 
   const getFriendAbout = () => {
     return (
@@ -165,10 +167,10 @@ export default function FriendInfoCard() {
             Unfriend
           </Button>
         ) : (
-            <Button size="small" color="primary" onClick={handleAddFriend}>
-              Add Friend
-            </Button>
-          )}
+          <Button size="small" color="primary" onClick={handleAddFriend}>
+            Add Friend
+          </Button>
+        )}
       </>
     );
   };
@@ -209,7 +211,12 @@ export default function FriendInfoCard() {
             src={friendInFocus ? getFriendImage() : getUserImage()}
             className={classes.large}
           />
-          <Typography gutterBottom variant="h4" component="h4" style={{ textAlign: 'center' }}>
+          <Typography
+            gutterBottom
+            variant="h4"
+            component="h4"
+            style={{ textAlign: "center" }}
+          >
             {friendInFocus
               ? `${friendInFocus.firstName} ${friendInFocus.lastName}`
               : user && `${user.firstName} ${user.lastName}`}
@@ -217,11 +224,9 @@ export default function FriendInfoCard() {
         </>
 
         <CardContent>
-          < >
-            {friendInFocus ? getFriendAbout() : getUserAbout()}
-          </>
+          <>{friendInFocus ? getFriendAbout() : getUserAbout()}</>
         </CardContent>
-        <CardActions className={classes.actions} style={{ marginTop: '80px' }}>
+        <CardActions className={classes.actions} style={{ marginTop: "80px" }}>
           {friendInFocus ? getFriendActions() : getUserActions()}
         </CardActions>
       </Card>

@@ -88,6 +88,17 @@ export const login = ({
   }
 };
 
+export const forgotPassword = (email) => async (dispatch) => {
+  try {
+    console.log(email);
+    const body = { email };
+    const res = await axios.post("/api/auth/forgotPassword", body);
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const thirdPartyLogin = ({
   firstName,
   lastName,
@@ -103,7 +114,7 @@ export const thirdPartyLogin = ({
       type: LOGIN_SUCCESS_GOOGLE_FACEBOOK,
       payload: { firstName: firstName, lastName: lastName, email: email },
     });
-  } catch (error) { }
+  } catch (error) {}
 };
 
 export const loginWithGoogle = (tokenId) => async (dispatch) => {

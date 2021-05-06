@@ -145,4 +145,23 @@ router.post("/google", async (req, res) => {
   }
 });
 
+router.post("/forgotPassword", async (req, res) => {
+  try {
+    //console.log(req.body);
+    const email = req.body.email;
+    console.log({ email });
+
+    const timeStamp = Date.now().toString();
+    console.log({ timeStamp });
+    const hash = timeStamp + email;
+    const salt = await bcrypt.genSalt(10);
+    const tempUrl = await bcrypt.hash(hash, salt);
+
+    const url = `http://localhost:3000/forgotPassword/${tempUrl}`;
+    console.log(url);
+    res.status(200).send("ok");
+  } catch (error) {
+    res.status(500).send("Server error");
+  }
+});
 module.exports = router;

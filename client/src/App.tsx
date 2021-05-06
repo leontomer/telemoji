@@ -8,24 +8,26 @@ import Navbar from "./Components/Navbar/Navbar";
 import { SnackItem } from "./Components/SnackbarItem/SnackItem";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import PrivateRoute from "./Components/Routes/PrivateRoute";
-import Loader from './Components/Loader/Loader';
+import Loader from "./Components/Loader/Loader";
 import { loadUser } from "./actions/authActions";
 import {
   loadFaceapi,
   loadEmotionRecognitionModel,
 } from "./actions/modelActions";
-import {
-  recieveCalls,
-  getAnswerFromCall
-} from "./actions/callActions";
+import { recieveCalls, getAnswerFromCall } from "./actions/callActions";
 import setAuthToken from "./utilities/setAuthToken";
 import { DrawerComponent } from "./Components/Drawer/Drawer";
 import { useSelector } from "react-redux";
 import { TelemojiProvider } from "./Contexts/TelemojiContext";
 import { RecieveCallModal } from "./Components/Modals/RecieveCallModal";
-import { friendListListener, pendingFriendRequestsListener } from './actions/friendActions';
+import ResetPassword from "./Components/ForgotPassword/ResetPassword";
+import {
+  friendListListener,
+  pendingFriendRequestsListener,
+} from "./actions/friendActions";
+import ForgotPassword from "./Components/ForgotPassword/ForgotPassword";
 import store from "./store";
-import './App.css'
+import "./App.css";
 
 function App() {
   // @ts-ignore
@@ -55,10 +57,16 @@ function App() {
         <Switch>
           <Route exact path="/" component={LandingPage} />
           <Route exact path="/login" component={LoginPage} />
+          <Route exact path="/register" component={RegisterPage} />
+          <Route exact path="/forgotPassword" component={ForgotPassword} />
+          <Route
+            exact
+            path="/forgotPassword/:hashedToken"
+            component={ResetPassword}
+          />
           <PrivateRoute exact path="/video-chat" component={Webrtc} />
           <PrivateRoute exact path="/video-chat/:callerId" component={Webrtc} />
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
-          <Route exact path="/register" component={RegisterPage} />
         </Switch>
         <RecieveCallModal />
       </Router>
