@@ -93,9 +93,27 @@ export const forgotPassword = (email) => async (dispatch) => {
     console.log(email);
     const body = { email };
     const res = await axios.post("/api/auth/forgotPassword", body);
-    console.log(res);
+    return res.data;
   } catch (error) {
     console.error(error);
+  }
+};
+
+export const changePassword = (token, password) => async (dispatch) => {
+  try {
+    const body = { password };
+    setAuthToken(token);
+    console.log("body ", body);
+    const res = await axios.post("/api/auth/changePassword", body);
+    console.log(res);
+    return res.data;
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach((error) =>
+        dispatch(setError(error.msg, snackbarType.error))
+      );
+    }
   }
 };
 

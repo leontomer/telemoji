@@ -61,7 +61,7 @@ function App() {
           <Route exact path="/forgotPassword" component={ForgotPassword} />
           <Route
             exact
-            path="/forgotPassword/:hashedToken"
+            path="/forgotPassword/:token"
             component={ResetPassword}
           />
           <PrivateRoute exact path="/video-chat" component={Webrtc} />

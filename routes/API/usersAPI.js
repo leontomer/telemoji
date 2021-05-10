@@ -16,7 +16,7 @@ router.post(
     check(
       "password",
       "Password must be minimum 6 letters long, and no more then 20"
-    ).isLength({ min: 8, max: 20 }),
+    ).isLength({ min: 6, max: 20 }),
     check("password", "Password must contain at least one letter").matches(
       /([a-zA-Z])+([ -~])*/
     ),

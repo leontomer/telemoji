@@ -17,6 +17,9 @@ import { Content } from "../../Common/content";
 import { useDispatch } from "react-redux";
 import { useLoader } from "../../Contexts/LoaderContext";
 import { forgotPassword } from "../../actions/authActions";
+import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -53,8 +56,9 @@ const useStyles = makeStyles((theme) => ({
 export default function ForgotPassword({ history }) {
   const classes = useStyles();
   const { startLoading, finishLoading } = useLoader();
-
+  const [msg, setMsg] = React.useState("");
   const [email, setEmail] = useState("");
+  const [open, setOpen] = useState(false);
 
   const onChange = (e) => {
     setEmail(e.target.value);
@@ -64,19 +68,30 @@ export default function ForgotPassword({ history }) {
     try {
       e.preventDefault();
       startLoading();
-      await dispatch(forgotPassword(email));
-      alert(`reset password email has been sent to ${email}`);
+      const res = await dispatch(forgotPassword(email));
       finishLoading();
-      history.push("/dashboard");
+      setMsg(res.msg);
+      setOpen(true);
     } catch (error) {
       finishLoading();
       return;
     }
   };
 
-  const goToDashboard = () => {
-    history.push("/dashboard");
+  const handleClick = () => {
+    setOpen(true);
   };
+
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+  function Alert(props: AlertProps) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -113,6 +128,11 @@ export default function ForgotPassword({ history }) {
           >
             {Content.forgot_password_page_send_email_button}
           </Button>
+          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="success">
+              {msg}
+            </Alert>
+          </Snackbar>
 
           <Grid container>
             <Grid item xs>
