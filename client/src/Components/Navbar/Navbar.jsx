@@ -1,5 +1,12 @@
 import React from "react";
-import { Avatar, Typography, IconButton, Toolbar, AppBar, Button } from "@material-ui/core";
+import {
+  Avatar,
+  Typography,
+  IconButton,
+  Toolbar,
+  AppBar,
+  Button,
+} from "@material-ui/core";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import CastConnectedIcon from "@material-ui/icons/CastConnected";
 import "./Navbar.css";
@@ -7,7 +14,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { openDrawer } from "../../actions/addonActions";
 import AsyncSearch from "./AsyncSearch/AsyncSearch";
-import FriendRequests from "../Dashboard/FriendRequests"
+import FriendRequests from "../Dashboard/FriendRequests";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -26,15 +33,17 @@ export default function SearchAppBar() {
   const classes = useStyles();
   const dispatch = useDispatch();
   // @ts-ignore
-  const isAuthenticated = useSelector((state) => state.authReducer.isAuthenticated);
+  const isAuthenticated = useSelector(
+    (state) => state.authReducer.isAuthenticated
+  );
   // @ts-ignore
   const firstName = useSelector((state) => state.authReducer.user.firstName);
   // @ts-ignore
-  const userImage = useSelector((state) => state.authReducer.user.imageAddress)
+  const userImage = useSelector((state) => state.authReducer.user.imageAddress);
 
   const authenticatedContent = (
     <div className="navAuthContent">
-      <div >
+      <div>
         <AsyncSearch />
       </div>
       <div className="avatarSection">
@@ -51,17 +60,11 @@ export default function SearchAppBar() {
             style={{ marginLeft: 30 }}
           >
             {firstName &&
-              firstName.charAt(0).toUpperCase() + firstName.slice(1)
-            }
-            <Avatar
-              alt="Remy Sharp"
-              src={userImage}
-              style={{ margin: 10 }}
-            />
+              firstName.charAt(0).toUpperCase() + firstName.slice(1)}
+            <Avatar alt="Remy Sharp" src={userImage} style={{ margin: 10 }} />
           </IconButton>
         </div>
       </div>
-
     </div>
   );
 
@@ -92,7 +95,6 @@ export default function SearchAppBar() {
     </div>
   );
   return (
-
     <AppBar
       position="static"
       style={{ backgroundColor: "#53317e", color: "#fbfcfc" }}
@@ -110,17 +112,16 @@ export default function SearchAppBar() {
             <Link to="/" style={{ textDecoration: "none", color: "white" }}>
               <h2 className="navbar-title" style={{ margin: "15px" }}>
                 Telemoji
-                </h2>
+              </h2>
             </Link>
           </div>
         </Typography>
         {isAuthenticated === null
           ? null
           : isAuthenticated
-            ? authenticatedContent
-            : notAuthenticatedContent}
+          ? authenticatedContent
+          : notAuthenticatedContent}
       </Toolbar>
     </AppBar>
-
   );
 }
