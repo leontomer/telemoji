@@ -11,6 +11,8 @@ import MailIcon from "@material-ui/icons/Mail";
 import { useDispatch } from "react-redux";
 import { closeDrawer } from "../../../actions/addonActions";
 import LogoutHooks from "./LogoutHooks/LogoutHooks";
+import FaceIcon from '@material-ui/icons/Face';
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   list: {
@@ -29,7 +31,16 @@ export const DrawerMenu = (props) => {
       onKeyDown={() => dispatch(closeDrawer())}
     >
       <List>
-        {["Under construction1", "Under construction2", "Under construction3", "Under construction4"].map((text, index) => (
+        <Link to="/self-detection">
+          <ListItem button key={"Try your face detection"}>
+            <ListItemIcon>
+              <FaceIcon />
+            </ListItemIcon>
+            <ListItemText primary={"face"} />
+          </ListItem>
+        </Link>
+
+        {["Under construction1", "Under construction2", "Under construction3"].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}

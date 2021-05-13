@@ -119,8 +119,8 @@ export default function SearchAppBar() {
         {isAuthenticated === null
           ? null
           : isAuthenticated
-          ? authenticatedContent
-          : notAuthenticatedContent}
+            ? authenticatedContent
+            : notAuthenticatedContent}
       </Toolbar>
     </AppBar>
   );

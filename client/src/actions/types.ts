@@ -30,3 +30,4 @@ export const ANSWER_CALL = "ANSWER_CALL";
 export const END_CALL = "END_CALL";
 export const SET_CALL_HISTORY = "SET_CALL_HISTORY";
 export const CALLING_USER = "CALLING_USER";
+export const SET_EMOTION = "SET_EMOTION"

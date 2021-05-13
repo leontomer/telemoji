@@ -8,8 +8,8 @@ import PhoneDisabledIcon from '@material-ui/icons/PhoneDisabled';
 import Button from '@material-ui/core/Button';
 import './Webrtc.scss';
 import { useLoader } from '../../Contexts/LoaderContext';
-
-
+import Popover from "@material-ui/core/Popover";
+import Typography from "@material-ui/core/Typography";
 
 const WebrtcComponent = ({ history, match }) => {
   const [stream, setStream] = useState();
@@ -27,8 +27,8 @@ const WebrtcComponent = ({ history, match }) => {
   // @ts-ignore
   const socket = useSelector((state) => state.socketReducer.socket);
   const dispatch = useDispatch();
-  const videoWidth = 640;
-  const videoHeight = 480;
+  // @ts-ignore
+  const selectedEmotion = useSelector((state) => state.modelReducer.selectedEmotion);
   // const { callingUser } = useSelector((state) => state.callReducer)
   const handleEndCall = () => {
     dispatch(endCallForMyCaller(match.params.callerId));
@@ -88,20 +88,88 @@ const WebrtcComponent = ({ history, match }) => {
 
   let UserVideo;
   if (stream) {
-    UserVideo = <video
-      ref={userVideo}
-      muted
-      autoPlay
-      height={videoHeight}
-      width={videoWidth}
-    />;
+    UserVideo =
+      <div className={callAccepted ? "userVideo" : ""}>
+        <video
+          ref={userVideo}
+          muted
+          autoPlay
+          height={100}
+          width={130}
+        />
+      </div>
   }
 
   let PartnerVideo;
+  const popoverRef = useRef(null)
+  const handleClose = () => {
+    // popoverRef.current = null;
+    setOpenPopUp(false);
+  };
+  const [openPopUp, setOpenPopUp] = useState(false);
+  const [popUpMessage, setPopUpMessage] = useState('');
+  const popMessageAndHide = (message) => {
+    setPopUpMessage(message)
+    setOpenPopUp(true)
+    setTimeout(() => {
+      setOpenPopUp(false);
+    }, 3000)
+  }
+  useEffect(() => {
+    if (selectedEmotion === "happy") {
+      popMessageAndHide(" Good job your call friend is happy! 😄")
+    }
+    if (selectedEmotion === "sad") {
+      popMessageAndHide(" Oh oh your call friend is sad, try to tell something funny!!😕")
+    }
+
+    if (selectedEmotion === "disgust") {
+      popMessageAndHide(" Oh oh your call friend is disgusted, try to change the subject 🤢")
+    }
+
+    if (selectedEmotion === "suprise") {
+      popMessageAndHide("Cool you managed to suprise your friend 😱")
+    }
+
+    if (selectedEmotion === "angry") {
+      popMessageAndHide("Oh no your call friend is angry! try to tell something nice 😡")
+    }
+
+    if (selectedEmotion === "scared") {
+      popMessageAndHide("Your call friend is scared! how did you do that? 😰")
+    }
+
+  }, [selectedEmotion])
   if (callAccepted) {
     finishLoading();
     PartnerVideo = (
-      <DetectionVideo videoRef={partnerVideo} />
+      <>
+        <div ref={popoverRef} style={{ marginBottom: 20 }}>
+          {popoverRef.current && (
+            <Popover
+              open={openPopUp}
+              anchorEl={popoverRef.current}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+            >
+              <div style={{ padding: 20 }}>
+                <Typography>
+                  {popUpMessage}
+                </Typography>
+              </div>
+
+            </Popover>
+          )}
+        </div>
+        <DetectionVideo videoRef={partnerVideo} />
+      </>
     );
   }
 
@@ -125,4 +193,5 @@ const WebrtcComponent = ({ history, match }) => {
 
   );
 }
+
 export const Webrtc = withRouter(WebrtcComponent);
