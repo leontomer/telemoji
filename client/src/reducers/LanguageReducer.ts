@@ -1,7 +1,9 @@
 import { SET_LANGUAGE } from "../actions/types";
 
 const initialState = {
-  language: localStorage.getItem("language"),
+  language: localStorage.getItem("language")
+    ? localStorage.getItem("language")
+    : "En",
 };
 
 export default function (state = initialState, action) {
