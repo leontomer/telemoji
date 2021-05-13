@@ -24,7 +24,7 @@ function ResetPassword({ history, match }) {
   const [open, setOpen] = React.useState(false);
 
   const Token = match.params.token;
-  console.log(Token);
+
   const useStyles = makeStyles((theme) => ({
     paper: {
       marginTop: theme.spacing(8),
@@ -67,6 +67,7 @@ function ResetPassword({ history, match }) {
     } else {
       try {
         const res = await dispatch(changePassword(Token, password));
+        //@ts-ignore
         setMsg(res);
         setOpen(true);
       } catch (error) {

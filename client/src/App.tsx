@@ -26,7 +26,6 @@ import {
   pendingFriendRequestsListener,
 } from "./actions/friendActions";
 import ForgotPassword from "./Components/ForgotPassword/ForgotPassword";
-import { friendListListener, pendingFriendRequestsListener } from './actions/friendActions';
 import SelfFaceDetection from './Components/SelfFaceDetection/SelfFaceDetection';
 import store from "./store";
 import "./App.css";

@@ -70,6 +70,7 @@ export default function ForgotPassword({ history }) {
       startLoading();
       const res = await dispatch(forgotPassword(email));
       finishLoading();
+      //@ts-ignore
       setMsg(res.msg);
       setOpen(true);
     } catch (error) {
