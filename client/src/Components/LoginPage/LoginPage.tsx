@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -14,10 +14,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { DataHook } from "../../Common/DataHooks";
 import { Content } from "../../Common/content";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../actions/authActions";
 import GoogleLoginHooks from "./GoogleLogin/GoogleLogin";
-import { useLoader } from '../../Contexts/LoaderContext';
+import { useLoader } from "../../Contexts/LoaderContext";
+import lan from "../../Languages/Languages.json";
 
 function Copyright() {
   return (
@@ -60,6 +61,14 @@ export default function LoginPage({ history }) {
     email: "",
     password: "",
   });
+
+  // @ts-ignore
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
+
   const { email, password } = loginData;
 
   const onChange = (e) => {
@@ -86,7 +95,6 @@ export default function LoginPage({ history }) {
     history.push("/dashboard");
   };
 
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -102,7 +110,7 @@ export default function LoginPage({ history }) {
           variant="h5"
           data-hook={DataHook.LoginPageSignInText}
         >
-          {Content.login_page_sign_in}
+          {lan[language].sign_in_text_login_page}
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
@@ -111,7 +119,7 @@ export default function LoginPage({ history }) {
             required
             fullWidth
             id="email"
-            label={Content.login_page_username}
+            label={lan[language].register_email}
             name="email"
             data-hook={DataHook.LoginPageUsernameTextField}
             autoFocus
@@ -124,7 +132,7 @@ export default function LoginPage({ history }) {
             required
             fullWidth
             name="password"
-            label={Content.login_page_password}
+            label={lan[language].register_password}
             type="password"
             id="password"
             data-hook={DataHook.LoginPagePasswordTextField}
@@ -134,7 +142,7 @@ export default function LoginPage({ history }) {
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
+            label={lan[language].remember}
           />
           <Button
             type="submit"
@@ -143,24 +151,25 @@ export default function LoginPage({ history }) {
             color="primary"
             className={classes.submit}
           >
-            {Content.login_page_sign_in_button}
+            {lan[language].sign_in_login_page}
           </Button>
 
           <Grid container>
             <Grid item xs>
               <Link href="/" variant="body2">
-                {Content.login_page_forgot_password}
+                {lan[language].forgot_password}
               </Link>
             </Grid>
             <Grid item>
               <Link to="/register" variant="body2">
-                {Content.login_page_sign_up}
+                {lan[language].register_login_page}
               </Link>
             </Grid>
           </Grid>
         </form>
       </div>
-      <div style={{ width: "400px", height: "100px", marginTop: '20px' }}>
+
+      <div style={{ width: "400px", height: "100px", marginTop: "20px" }}>
         <GoogleLoginHooks goToDashboard={() => goToDashboard()} />
       </div>
       <Box mt={8}>

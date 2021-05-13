@@ -13,6 +13,7 @@ import CallMadeIcon from "@material-ui/icons/CallMade";
 import AvatarGroup from "@material-ui/lab/AvatarGroup";
 import { loadUser } from "../../../actions/authActions";
 import "./CallHistory.scss";
+import lan from "../../../Languages/Languages.json";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,10 +26,24 @@ const CallHistory = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   // @ts-ignore
-  const globalCallHistory = useSelector((state) => state.authReducer.user.callHistory);
-  // @ts-ignore
-  const usersImage = useSelector((state) => state.authReducer.user.imageAddress);
+  const globalCallHistory = useSelector(
+    // @ts-ignore
 
+    (state) => state.authReducer.user.callHistory
+  );
+  // @ts-ignore
+  const usersImage = useSelector(
+    // @ts-ignore
+
+    (state) => state.authReducer.user.imageAddress
+  );
+  // @ts-ignore
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
+
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
   const [callHistory, setCallHistory] = useState([
     globalCallHistory.callHistory,
   ]);
@@ -48,7 +63,7 @@ const CallHistory = () => {
   return (
     <div className="callHistoryContainer">
       <Typography variant="h5" component="h5" style={{ textAlign: "center" }}>
-        Call History
+        {lan[language].call_history}
       </Typography>
       <List className={classes.root}>
         {callHistory

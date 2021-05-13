@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { WidgetLoader, Widget } from "react-cloudinary-upload-widget";
 import { Button } from "@material-ui/core";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUserImageAction } from "../../../../actions/usersActions";
-
+import lan from "../../../../Languages/Languages.json";
 
 function CloudinaryUploadButton() {
   const dispatch = useDispatch();
+
+  // @ts-ignore
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
   async function captureImage(responseObject) {
     try {
       const imageUrl = responseObject.info.secure_url;
@@ -15,7 +22,7 @@ function CloudinaryUploadButton() {
       } else {
         console.error("something went wrong in captureImage");
       }
-    } catch (error) { }
+    } catch (error) {}
   }
   return (
     <>
@@ -25,7 +32,7 @@ function CloudinaryUploadButton() {
           resourceType={"image"}
           cloudName={"dypnevil0"}
           uploadPreset={"ibuffq8i"}
-          buttonText={"Upload Profile Picture"}
+          buttonText={lan[language].upload_profile_picture}
           style={{
             color: "white",
             border: "none",
