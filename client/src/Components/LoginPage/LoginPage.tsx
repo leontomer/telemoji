@@ -17,7 +17,7 @@ import { Content } from "../../Common/content";
 import { useDispatch } from "react-redux";
 import { login } from "../../actions/authActions";
 import GoogleLoginHooks from "./GoogleLogin/GoogleLogin";
-import { useLoader } from '../../Contexts/LoaderContext';
+import { useLoader } from "../../Contexts/LoaderContext";
 
 function Copyright() {
   return (
@@ -85,7 +85,6 @@ export default function LoginPage({ history }) {
   const goToDashboard = () => {
     history.push("/dashboard");
   };
-
 
   return (
     <Container component="main" maxWidth="xs">
@@ -160,7 +159,8 @@ export default function LoginPage({ history }) {
           </Grid>
         </form>
       </div>
-      <div style={{ width: "400px", height: "100px", marginTop: '20px' }}>
+
+      <div style={{ width: "400px", height: "100px", marginTop: "20px" }}>
         <GoogleLoginHooks goToDashboard={() => goToDashboard()} />
       </div>
       <Box mt={8}>
