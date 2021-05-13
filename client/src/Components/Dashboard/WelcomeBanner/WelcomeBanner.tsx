@@ -7,9 +7,10 @@ import lan from "../../../Languages/Languages.json";
 const WelcomeBanner = () => {
   // @ts-ignore
   const firstName = useSelector((state) => state.authReducer.user.firstName);
-  const [language, setLocalLanguage] = React.useState("En");
+
   // @ts-ignore
   const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
   useEffect(() => {
     setLocalLanguage(globalLanguage);
   }, [globalLanguage]);

@@ -11,6 +11,8 @@ export default function FriendRequests() {
   const dispatch = useDispatch();
   // @ts-ignore
   const friendRequestsGlobal = useSelector(
+    // @ts-ignore
+
     (state) => state.friendReducer.friendRequests
   );
   const [anchorEl, setAnchorEl] =

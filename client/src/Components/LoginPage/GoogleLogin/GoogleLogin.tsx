@@ -9,15 +9,16 @@ import "./GoogleLogin.scss";
 import lan from "../../../Languages/Languages.json";
 
 function GoogleLoginHooks({ goToDashboard }) {
-  const [language, setLocalLanguage] = React.useState("En");
   // @ts-ignore
   const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
   useEffect(() => {
     setLocalLanguage(globalLanguage);
   }, [globalLanguage]);
   const { startLoading, finishLoading } = useLoader();
   // @ts-ignore
   const isAuthenticated = useSelector(
+    // @ts-ignore
     (state) => state.authReducer.isAuthenticated
   );
   useLayoutEffect(() => {

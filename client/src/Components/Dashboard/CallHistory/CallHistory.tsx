@@ -27,15 +27,20 @@ const CallHistory = () => {
   const dispatch = useDispatch();
   // @ts-ignore
   const globalCallHistory = useSelector(
+    // @ts-ignore
+
     (state) => state.authReducer.user.callHistory
   );
   // @ts-ignore
   const usersImage = useSelector(
+    // @ts-ignore
+
     (state) => state.authReducer.user.imageAddress
   );
-  const [language, setLocalLanguage] = React.useState("En");
   // @ts-ignore
   const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
+
   useEffect(() => {
     setLocalLanguage(globalLanguage);
   }, [globalLanguage]);

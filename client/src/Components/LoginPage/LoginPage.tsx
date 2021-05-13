@@ -62,9 +62,9 @@ export default function LoginPage({ history }) {
     password: "",
   });
 
-  const [language, setLocalLanguage] = React.useState("En");
   // @ts-ignore
   const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
   useEffect(() => {
     setLocalLanguage(globalLanguage);
   }, [globalLanguage]);
