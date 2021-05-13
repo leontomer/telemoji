@@ -15,9 +15,10 @@ import Container from "@material-ui/core/Container";
 import { DataHook } from "../../Common/DataHooks";
 import { Content } from "../../Common/content";
 import { useDispatch } from "react-redux";
-import { login } from "../../actions/authActions";
-import GoogleLoginHooks from "./GoogleLogin/GoogleLogin";
 import { useLoader } from "../../Contexts/LoaderContext";
+import { forgotPassword } from "../../actions/authActions";
+import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
 
 function Copyright() {
   return (
@@ -52,39 +53,45 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function LoginPage({ history }) {
+export default function ForgotPassword({ history }) {
   const classes = useStyles();
   const { startLoading, finishLoading } = useLoader();
-
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
-  });
-  const { email, password } = loginData;
+  const [msg, setMsg] = React.useState("");
+  const [email, setEmail] = useState("");
+  const [open, setOpen] = useState(false);
 
   const onChange = (e) => {
-    setLoginData({
-      ...loginData,
-      [e.target.name]: e.target.value,
-    });
+    setEmail(e.target.value);
   };
   const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
       startLoading();
-      await dispatch(login(loginData));
+      const res = await dispatch(forgotPassword(email));
       finishLoading();
-      history.push("/dashboard");
+      setMsg(res.msg);
+      setOpen(true);
     } catch (error) {
       finishLoading();
       return;
     }
   };
 
-  const goToDashboard = () => {
-    history.push("/dashboard");
+  const handleClick = () => {
+    setOpen(true);
   };
+
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+  function Alert(props: AlertProps) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -96,13 +103,7 @@ export default function LoginPage({ history }) {
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography
-          component="h1"
-          variant="h5"
-          data-hook={DataHook.LoginPageSignInText}
-        >
-          {Content.login_page_sign_in}
-        </Typography>
+
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
@@ -117,24 +118,7 @@ export default function LoginPage({ history }) {
             onChange={onChange}
             value={email}
           />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label={Content.login_page_password}
-            type="password"
-            id="password"
-            data-hook={DataHook.LoginPagePasswordTextField}
-            autoComplete="current-password"
-            onChange={onChange}
-            value={password}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
+
           <Button
             type="submit"
             fullWidth
@@ -142,26 +126,29 @@ export default function LoginPage({ history }) {
             color="primary"
             className={classes.submit}
           >
-            {Content.login_page_sign_in_button}
+            {Content.forgot_password_page_send_email_button}
           </Button>
+          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="success">
+              {msg}
+            </Alert>
+          </Snackbar>
 
           <Grid container>
             <Grid item xs>
-              <Link to="/forgotPassword" variant="body2">
-                {Content.login_page_forgot_password}
+              <Link to="/login" variant="body2">
+                {Content.forgot_password_page_login}
               </Link>
             </Grid>
             <Grid item>
               <Link to="/register" variant="body2">
-                {Content.login_page_sign_up}
+                {Content.forgot_password_page_sign_up}
               </Link>
             </Grid>
           </Grid>
         </form>
       </div>
-      <div style={{ width: "400px", height: "100px", marginTop: "20px" }}>
-        <GoogleLoginHooks goToDashboard={() => goToDashboard()} />
-      </div>
+      <div style={{ width: "400px", height: "100px", marginTop: "20px" }}></div>
       <Box mt={8}>
         <Copyright />
       </Box>

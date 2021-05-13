@@ -6,6 +6,7 @@ const { check, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const bcrypt = require("bcryptjs");
+var nodemailer = require("nodemailer");
 const { OAuth2Client } = require("google-auth-library");
 const dbHelper = require("../../server/utils/dbHelper");
 const googleClientId =
@@ -144,5 +145,90 @@ router.post("/google", async (req, res) => {
     console.error(error);
   }
 });
+
+router.post("/forgotPassword", async (req, res) => {
+  try {
+    const email = req.body.email;
+
+    let user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ errors: [{ msg: "Invalid email" }] });
+    }
+
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+
+    jwt.sign(
+      payload,
+      config.get("jwtSecret"),
+      { expiresIn: "2h" },
+      (err, token) => {
+        if (err) throw err;
+        const url = `http://localhost:3000/forgotPassword/${token}`;
+
+        var transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: "telemoji.verify@gmail.com",
+            pass: "Tole1234567",
+          },
+        });
+
+        var mailOptions = {
+          from: "telemoji.verify@gmail.com",
+          to: email,
+          subject: "Reset your password",
+          text:
+            "	Reset Password\n A password reset event has been triggered. The password reset window is limited to two hours.\n If you do not reset your password within two hours, you will need to submit a new request.\n To complete the password reset process, visit the following link: " +
+            url,
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log(error);
+          } else {
+            res.status(200).json({ msg: `Email sent to ${email}` });
+          }
+        });
+      }
+    );
+  } catch (error) {
+    res.status(500).send("Server error");
+  }
+});
+
+router.post(
+  "/changePassword",
+  [
+    check(
+      "password",
+      "Password must be minimum 6 letters long, and no more then 20"
+    ).isLength({ min: 6, max: 20 }),
+    check("password", "Password must contain at least one letter").matches(
+      /([a-zA-Z])+([ -~])*/
+    ),
+  ],
+  auth,
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+      const { password } = req.body;
+      const user = await User.findById(req.user.id);
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+      await user.save();
+      res.json("password changed!");
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+    }
+  }
+);
 
 module.exports = router;

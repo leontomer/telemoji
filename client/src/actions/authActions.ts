@@ -88,6 +88,35 @@ export const login = ({
   }
 };
 
+export const forgotPassword = (email) => async (dispatch) => {
+  try {
+    console.log(email);
+    const body = { email };
+    const res = await axios.post("/api/auth/forgotPassword", body);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const changePassword = (token, password) => async (dispatch) => {
+  try {
+    const body = { password };
+    setAuthToken(token);
+    console.log("body ", body);
+    const res = await axios.post("/api/auth/changePassword", body);
+    console.log(res);
+    return res.data;
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach((error) =>
+        dispatch(setError(error.msg, snackbarType.error))
+      );
+    }
+  }
+};
+
 export const thirdPartyLogin = ({
   firstName,
   lastName,
@@ -103,7 +132,7 @@ export const thirdPartyLogin = ({
       type: LOGIN_SUCCESS_GOOGLE_FACEBOOK,
       payload: { firstName: firstName, lastName: lastName, email: email },
     });
-  } catch (error) { }
+  } catch (error) {}
 };
 
 export const loginWithGoogle = (tokenId) => async (dispatch) => {
