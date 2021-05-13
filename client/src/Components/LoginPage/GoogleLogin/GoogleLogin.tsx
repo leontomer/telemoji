@@ -1,16 +1,25 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useEffect } from "react";
 import { useGoogleLogin } from "react-google-login";
 import { useDispatch, useSelector } from "react-redux";
 import { loginWithGoogle } from "../../../actions/authActions";
 import { refreshTokenSetup } from "./RefreshToken";
 import { clientId } from "../../../Common/constants";
-import { useLoader } from '../../../Contexts/LoaderContext';
+import { useLoader } from "../../../Contexts/LoaderContext";
 import "./GoogleLogin.scss";
+import lan from "../../../Languages/Languages.json";
 
 function GoogleLoginHooks({ goToDashboard }) {
+  const [language, setLocalLanguage] = React.useState("En");
+  // @ts-ignore
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
   const { startLoading, finishLoading } = useLoader();
   // @ts-ignore
-  const isAuthenticated = useSelector((state) => state.authReducer.isAuthenticated);
+  const isAuthenticated = useSelector(
+    (state) => state.authReducer.isAuthenticated
+  );
   useLayoutEffect(() => {
     if (isAuthenticated) {
       finishLoading();
@@ -22,7 +31,6 @@ function GoogleLoginHooks({ goToDashboard }) {
   const onSuccess = (res) => {
     dispatch(loginWithGoogle(res.tokenId));
     refreshTokenSetup(res);
-
   };
   const onFailure = (res) => {
     console.error("login failed: res:", res);
@@ -41,12 +49,12 @@ function GoogleLoginHooks({ goToDashboard }) {
     <button
       onClick={() => {
         startLoading();
-        signIn()
+        signIn();
       }}
       type="button"
       className="login-with-google-btn"
     >
-      Sign in with Google
+      {lan[language].google_sign_in}
     </button>
   );
 }
