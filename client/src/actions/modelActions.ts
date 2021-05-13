@@ -1,7 +1,7 @@
 import * as faceapi from "@vladmandic/face-api/dist/face-api.esm.js";
 import * as tf from "@tensorflow/tfjs";
 
-import { SET_FACEAPI, SET_EMOTION_RECOGNITION_MODEL } from "./types";
+import { SET_FACEAPI, SET_EMOTION_RECOGNITION_MODEL, SET_EMOTION } from "./types";
 
 export const loadFaceapi = () => async (
     dispatch
@@ -24,17 +24,52 @@ export const loadFaceapi = () => async (
 
 };
 
+export const setEmotion = (emotion) => async (
+    dispatch
+) => {
+    console.log('dispatching', emotion);
+    dispatch({
+        type: SET_EMOTION,
+        payload: emotion,
+    });
+};
+
 export const loadEmotionRecognitionModel = () => async (dispatch) => {
+    class L2 {
+
+        static className = 'L2';
+
+        constructor(config) {
+            return tf.regularizers.l1l2(config)
+        }
+    }
+    //@ts-ignore
+    tf.serialization.registerClass(L2);
+
     try {
-        const model = await tf.loadLayersModel(
-            `${process.env.PUBLIC_URL}/facerecog/model.json`
+        const model80p = await tf.loadLayersModel(
+            `${process.env.PUBLIC_URL}/80p/model.json`
+        );
+        const model85p = await tf.loadLayersModel(
+            `${process.env.PUBLIC_URL}/85p/model.json`
+        );
+        const model87p = await tf.loadLayersModel(
+            `${process.env.PUBLIC_URL}/87p/model.json`
+        );
+        const model95p = await tf.loadLayersModel(
+            `${process.env.PUBLIC_URL}/95p/model.json`
         );
         dispatch({
             type: SET_EMOTION_RECOGNITION_MODEL,
-            payload: model
+            payload: {
+                model80p,
+                model85p,
+                model87p,
+                model95p
+            }
         });
     } catch (error) {
-        console.error(error)
+        console.log(error)
     }
 
 };
