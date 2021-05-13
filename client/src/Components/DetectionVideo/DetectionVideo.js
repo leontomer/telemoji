@@ -3,6 +3,7 @@ import * as tf from "@tensorflow/tfjs";
 import { useSelector, useDispatch } from "react-redux";
 import { setError } from '../../actions/errorsActions'
 import { snackbarType } from "../../Common/dataTypes";
+import { setEmotion } from '../../actions/modelActions';
 
 export function DetectionVideo({
   videoRef,
@@ -10,7 +11,7 @@ export function DetectionVideo({
 }) {
 
   const [faceapi, setFaceapi] = useState();
-  const [emotionRecModel, setEmotionRecModel] = useState();
+  // const [emotionRecModel, setEmotionRecModel] = useState({});
   const [userEmotion, setUserEmotion] = useState(
     "Detection initializing, please wait..."
   );
@@ -20,7 +21,8 @@ export function DetectionVideo({
 
   const dispatch = useDispatch();
   const faceapiReducer = useSelector((state) => state.modelReducer.faceapi);
-  const emotionRecognitionReducer = useSelector((state) => state.modelReducer.emotionRecognition);
+  const emotionRecognition85p = useSelector((state) => state.modelReducer.emotionRecognition85p);
+
   let timeVarHolder;
   let unmountingVideoChat = useRef(null);
   useEffect(() => {
@@ -28,41 +30,55 @@ export function DetectionVideo({
     if (faceapiReducer && !faceapi) {
       setFaceapi(faceapiReducer);
     }
-    if (emotionRecognitionReducer && !emotionRecModel) {
-      setEmotionRecModel(emotionRecognitionReducer);
-    }
 
     return () => {
       clearTimeout(timeVarHolder);
       canvasRef = null;
       unmountingVideoChat.current = true;
     }
-  }, [faceapiReducer, emotionRecognitionReducer])
+  }, [faceapiReducer])
 
+  const classNames = [
+    "angry",
+    "disgust",
+    "fear",
+    "happy",
+    "neutral",
+    "sad",
+    "suprise",
+  ];
 
+  const setEmotionDelay = useRef(false);
 
   const predict = (data) => {
-    if (emotionRecModel && data) {
+    if (emotionRecognition85p && data) {
       try {
-        let classNames = [
-          "angry",
-          "disgust",
-          "fear",
-          "happy",
-          "neutral",
-          "sad",
-          "suprise",
-        ];
-        let ans = emotionRecModel.predict(data);
-        ans = ans.dataSync();
+        let pred85 = emotionRecognition85p.predict(data);
+        pred85 = pred85.dataSync();
+        let ans = []
+        for (let i = 0; i < pred85.length; i++) {
+          ans[i] = pred85[i]
+        }
         let maxPrediction = { value: 0, className: "" };
+
         for (let i = 0; i < ans.length; i++) {
-          if (ans[i] * 100 > maxPrediction.value) {
-            maxPrediction.value = ans[i] * 100;
+          if (ans[i] > maxPrediction.value) {
+            maxPrediction.value = ans[i];
             maxPrediction.className = classNames[i];
           }
         }
-        if (maxPrediction) setUserEmotion(maxPrediction.className);
+        if (maxPrediction) {
+          if (userEmotion !== maxPrediction.className) {
+            setUserEmotion(maxPrediction.className);
+            if (!setEmotionDelay.current) {
+              dispatch(setEmotion(maxPrediction.className));
+              setEmotionDelay.current = true;
+              setTimeout(() => {
+                setEmotionDelay.current = false;
+              }, 1000)
+            }
+          }
+        }
       } catch (error) {
         console.log(error);
       }
@@ -72,7 +88,6 @@ export function DetectionVideo({
   const handleVideoOnPlay = () => {
     setUserEmotion("Trying to detect your face...");
     const videoToTensor = async () => {
-
       try {
         if (unmountingVideoChat && unmountingVideoChat.current) {
           return;
@@ -107,9 +122,9 @@ export function DetectionVideo({
           );
         }
         let data = null;
-        if (!canvases || canvases.length === 0) {
-          setUserEmotion("Trying to detect your face...");
-        }
+        // if (!canvases || canvases.length === 0) {
+        //   // setUserEmotion("Trying to detect your face...");
+        // }
         if (canvases && canvases.length > 0) {
           try {
             data = tf.browser
@@ -126,7 +141,7 @@ export function DetectionVideo({
         }
 
         //tf.browser.toPixels((data.toFloat().div(tf.scalar(255.0))), canvasRef.current)
-        if (emotionRecModel && data) {
+        if (data) {
           try {
             predict(data);
           } catch (error) {
@@ -145,9 +160,11 @@ export function DetectionVideo({
     };
     videoToTensor();
   };
-  const displayEmotions = faceapi && emotionRecModel
+
+
+  const displayEmotions = faceapi
   return (
-    <>
+    <div style={{ backgroundColor: '#53317e', padding: 60, borderRadius: 40 }}>
       <div
         style={{
           display: "flex",
@@ -184,6 +201,6 @@ export function DetectionVideo({
           <h3>{userEmotion}</h3>
         </div>
       </div>
-    </>
+    </div>
   );
 }

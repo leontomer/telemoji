@@ -24,6 +24,7 @@ import { useSelector } from "react-redux";
 import { TelemojiProvider } from "./Contexts/TelemojiContext";
 import { RecieveCallModal } from "./Components/Modals/RecieveCallModal";
 import { friendListListener, pendingFriendRequestsListener } from './actions/friendActions';
+import SelfFaceDetection from './Components/SelfFaceDetection/SelfFaceDetection';
 import store from "./store";
 import './App.css'
 
@@ -58,13 +59,14 @@ function App() {
           <PrivateRoute exact path="/video-chat" component={Webrtc} />
           <PrivateRoute exact path="/video-chat/:callerId" component={Webrtc} />
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
+          <PrivateRoute exact path="/self-detection" component={SelfFaceDetection} />
           <Route exact path="/register" component={RegisterPage} />
         </Switch>
         <RecieveCallModal />
+        <SnackItem />
+        <DrawerComponent />
+        <Loader />
       </Router>
-      <SnackItem />
-      <DrawerComponent />
-      <Loader />
     </TelemojiProvider>
   );
 }
