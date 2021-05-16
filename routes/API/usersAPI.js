@@ -90,19 +90,27 @@ router.post("/about", auth, async (req, res) => {
   } catch (error) {}
 });
 
-router.post("/image", async (req, res) => {
+router.post("/image", auth, async (req, res) => {
   try {
     const { id, imageAddress } = req.body;
-    console.log(id, imageAddress);
     let user = await User.findOne({ email: id });
     user.imageAddress = imageAddress;
 
     await user.save();
-    console.log(user);
 
     res.status(200).json({ msg: "done" });
   } catch (error) {
     console.error(error);
+  }
+});
+
+router.post("/editDetails", auth, async (req, res) => {
+  try {
+    //here in password to compare user current password entered and real password use the compare from login api: const isMatch = await bcrypt.compare(password, user.password);
+    //if passwords do not match return res.error else continuo
+  } catch {
+    console.error(err);
+    res.status(500).json({ errors: [{ msg: err.message }] });
   }
 });
 

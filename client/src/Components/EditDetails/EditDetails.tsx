@@ -11,16 +11,34 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { useDispatch } from "react-redux";
 import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
-import { changePassword } from "../../actions/authActions";
+import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
 import Typography from "@material-ui/core/Typography";
+export default function EditDetails() {
+  //check if the user new password entered is the same as the confirm new password like i did in reset password component
 
-function ResetPassword({ history, match }) {
+  const [originalPassword, setOriginalPassword] = React.useState("");
+  const [oldPassword, setOldPassword] = React.useState("");
+
   const [password, setPassword] = React.useState("");
   const [password2, setPassword2] = React.useState("");
-  const dispatch = useDispatch();
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
 
-  const Token = match.params.token;
-
+  const handleSubmit = () => {
+    console.log(
+      "old password: ",
+      oldPassword,
+      "current password1: ",
+      password,
+      "current password2: ",
+      password2,
+      "first name: ",
+      firstName,
+      "last name: ",
+      lastName
+    );
+  };
   const useStyles = makeStyles((theme) => ({
     paper: {
       marginTop: theme.spacing(8),
@@ -42,34 +60,12 @@ function ResetPassword({ history, match }) {
   }));
   const classes = useStyles();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (password !== password2) {
-      dispatch(setMessage("Passwords do not match", snackbarType.error));
-    } else {
-      try {
-        const res = await dispatch(changePassword(Token, password));
-        dispatch(setMessage("Reset password succeeded!", snackbarType.success));
-      } catch (error) {
-        return;
-      }
-    }
-  };
-
-  const onChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const onChange2 = (e) => {
-    setPassword2(e.target.value);
-  };
-
   return (
     <div>
       <Container component="main" maxWidth="xs">
         <CssBaseline />{" "}
         <Typography variant="h4" gutterBottom>
-          Reset your password
+          Edit Your Details
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
@@ -77,14 +73,51 @@ function ResetPassword({ history, match }) {
             margin="normal"
             required
             fullWidth
+            name="First name"
+            label="first name"
+            type="text"
+            id="firstName"
+            onChange={(e) => setFirstName(e.target.value)}
+            value={firstName}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="last name"
+            label="Last name"
+            type="text"
+            id="lastName"
+            onChange={(e) => setLastName(e.target.value)}
+            value={lastName}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="oldPassword"
+            label="Current Password"
+            type="password"
+            id="oldPassword"
+            data-hook={DataHook.LoginPagePasswordTextField}
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
             name="password"
-            label={Content.login_page_password}
+            label="New password"
             type="password"
             id="password"
             data-hook={DataHook.LoginPagePasswordTextField}
             autoComplete="current-password"
-            onChange={onChange}
             value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <TextField
             variant="outlined"
@@ -92,14 +125,15 @@ function ResetPassword({ history, match }) {
             required
             fullWidth
             name="confirm password"
-            label="Confirm Password"
+            label="Confirm new Password"
             type="password"
             id="password"
             data-hook={DataHook.LoginPagePasswordTextField}
             autoComplete="current-password"
-            onChange={onChange2}
+            onChange={(e) => setPassword2(e.target.value)}
             value={password2}
           />
+
           <Button
             type="submit"
             fullWidth
@@ -107,12 +141,10 @@ function ResetPassword({ history, match }) {
             color="primary"
             className={classes.submit}
           >
-            {Content.forgot_password_page_send_email_button}
+            Save
           </Button>
         </form>
       </Container>
     </div>
   );
 }
-
-export default withRouter(ResetPassword);

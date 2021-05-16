@@ -4,13 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginWithGoogle } from "../../../actions/authActions";
 import { refreshTokenSetup } from "./RefreshToken";
 import { clientId } from "../../../Common/constants";
-import { useLoader } from '../../../Contexts/LoaderContext';
+import { useLoader } from "../../../Contexts/LoaderContext";
 import "./GoogleLogin.scss";
+import { setMessage } from "../../../actions/errorsActions";
+import { snackbarType } from "../../../Common/dataTypes";
 
 function GoogleLoginHooks({ goToDashboard }) {
   const { startLoading, finishLoading } = useLoader();
   // @ts-ignore
-  const isAuthenticated = useSelector((state) => state.authReducer.isAuthenticated);
+  const isAuthenticated = useSelector(
+    // @ts-ignore
+
+    (state) => state.authReducer.isAuthenticated
+  );
   useLayoutEffect(() => {
     if (isAuthenticated) {
       finishLoading();
@@ -20,12 +26,16 @@ function GoogleLoginHooks({ goToDashboard }) {
 
   const dispatch = useDispatch();
   const onSuccess = (res) => {
-    dispatch(loginWithGoogle(res.tokenId));
-    refreshTokenSetup(res);
-
+    try {
+      dispatch(loginWithGoogle(res.tokenId));
+      refreshTokenSetup(res);
+    } catch (error) {
+      finishLoading();
+      dispatch(setMessage(error.msg, snackbarType.error));
+    }
   };
   const onFailure = (res) => {
-    console.error("login failed: res:", res);
+    dispatch(setMessage(res, snackbarType.error));
     finishLoading();
   };
 
@@ -41,7 +51,7 @@ function GoogleLoginHooks({ goToDashboard }) {
     <button
       onClick={() => {
         startLoading();
-        signIn()
+        signIn();
       }}
       type="button"
       className="login-with-google-btn"

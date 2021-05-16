@@ -12,7 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useDispatch } from "react-redux";
 import { register } from "../../actions/authActions";
-import { setError } from "../../actions/errorsActions";
+import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
 
 function Copyright() {
@@ -71,7 +71,7 @@ export default function SignUp({ history }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== password2) {
-      dispatch(setError("Passwords do not match", snackbarType.error));
+      dispatch(setMessage("Passwords do not match", snackbarType.error));
     } else {
       try {
         await dispatch(register(registrationData));
@@ -181,9 +181,7 @@ export default function SignUp({ history }) {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link to="/login" >
-                Already have an account? Sign in
-              </Link>
+              <Link to="/login">Already have an account? Sign in</Link>
             </Grid>
           </Grid>
         </form>

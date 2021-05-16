@@ -20,15 +20,17 @@ import { DrawerComponent } from "./Components/Drawer/Drawer";
 import { useSelector } from "react-redux";
 import { TelemojiProvider } from "./Contexts/TelemojiContext";
 import { RecieveCallModal } from "./Components/Modals/RecieveCallModal";
+import editDetails from "./Components/EditDetails/EditDetails";
 import ResetPassword from "./Components/ForgotPassword/ResetPassword";
 import {
   friendListListener,
   pendingFriendRequestsListener,
 } from "./actions/friendActions";
 import ForgotPassword from "./Components/ForgotPassword/ForgotPassword";
-import SelfFaceDetection from './Components/SelfFaceDetection/SelfFaceDetection';
+import SelfFaceDetection from "./Components/SelfFaceDetection/SelfFaceDetection";
 import store from "./store";
 import "./App.css";
+import { FromPixels } from "@tensorflow/tfjs-core";
 
 function App() {
   // @ts-ignore
@@ -68,7 +70,12 @@ function App() {
           <PrivateRoute exact path="/video-chat" component={Webrtc} />
           <PrivateRoute exact path="/video-chat/:callerId" component={Webrtc} />
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
-          <PrivateRoute exact path="/self-detection" component={SelfFaceDetection} />
+          <PrivateRoute
+            exact
+            path="/self-detection"
+            component={SelfFaceDetection}
+          />
+          <PrivateRoute exact path="/editDetails" component={editDetails} />
           <Route exact path="/register" component={RegisterPage} />
         </Switch>
         <RecieveCallModal />

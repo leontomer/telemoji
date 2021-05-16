@@ -11,9 +11,9 @@ import MailIcon from "@material-ui/icons/Mail";
 import { useDispatch } from "react-redux";
 import { closeDrawer } from "../../../actions/addonActions";
 import LogoutHooks from "./LogoutHooks/LogoutHooks";
-import FaceIcon from '@material-ui/icons/Face';
+import FaceIcon from "@material-ui/icons/Face";
 import { Link } from "react-router-dom";
-
+import EditIcon from "@material-ui/icons/Edit";
 const useStyles = makeStyles({
   list: {
     width: 250,
@@ -40,25 +40,40 @@ export const DrawerMenu = (props) => {
           </ListItem>
         </Link>
 
-        {["Under construction1", "Under construction2", "Under construction3"].map((text, index) => (
-          <ListItem button key={text}>
+        <Link to="/editDetails">
+          <ListItem button key={"editDetails"}>
             <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              <EditIcon />
             </ListItemIcon>
-            <ListItemText primary={text} />
+            <ListItemText primary={"Edit Details"} />
           </ListItem>
-        ))}
+        </Link>
+
+        {/* {[ "Under construction2", "Under construction3"].map(
+          (text, index) => (
+            <ListItem button key={text}>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          )
+        )} */}
       </List>
       <Divider />
       <List>
-        {["Under construction5", "Under construction6", "Under construction7"].map((text, index) => (
+        {/* {[
+          "Under construction5",
+          "Under construction6",
+          "Under construction7",
+        ].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
             </ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
-        ))}
+        ))} */}
         <ListItem>{LogoutHooks()}</ListItem>
       </List>
     </div>
