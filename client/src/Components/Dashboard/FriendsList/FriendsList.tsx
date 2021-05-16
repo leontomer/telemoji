@@ -18,6 +18,7 @@ import { getFriendList, setFriendInFocus } from "../../../actions/friendActions"
 import { FriendProps } from "../../../reducers/authReducer";
 import { handleCallUser } from "../../../actions/callActions";
 import { withRouter } from "react-router";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -41,6 +42,12 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     offlineBadge: {
       backgroundColor: "red",
+    },
+    title: {
+      backgroundColor: '#53317e',
+      color: 'white',
+      marginTop: '-10px',
+      marginBottom: '5px'
     }
   })
 );
@@ -144,16 +151,15 @@ function FriendsList({ history }) {
 
   return (
     <List dense className={classes.root}>
-      <ListItem key={"myFriends"}>
+      <ListItem key={"myFriends"} className={classes.title}>
         <ListItemIcon>
-          <PeopleAltIcon />
+          <PeopleAltIcon style={{ color: 'white' }} />
         </ListItemIcon>
         <ListItemText
           primary="Friends"
-          secondary="You can see all your friends here!"
+          secondary={<Typography variant="subtitle2" style={{ color: '#F5EEF8' }}>You can see all your friends here!</Typography>}
         />
       </ListItem>
-      <Divider />
       {
         userFriendList.map((friend: FriendProps, index) => {
           const labelId = `checkbox-list-secondary-label-${friend}`;
