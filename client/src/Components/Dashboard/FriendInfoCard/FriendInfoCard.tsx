@@ -15,6 +15,8 @@ import {
   sendFriendRequest,
   removeFriend,
 } from "../../../actions/friendActions";
+import { useSpring, animated, to } from "@react-spring/web";
+import { useGesture } from "react-use-gesture";
 
 import "./FriendInfoCard.scss";
 import CloudinaryUploadButton from "./CloudinaryIntegration/CloudinaryUploadButton";
@@ -202,8 +204,48 @@ export default function FriendInfoCard() {
     );
   };
 
+
+
+  const domTarget = React.useRef(null);
+  const [{ rotateX, rotateY, rotateZ, zoom, scale }, api] = useSpring(
+    () => ({
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0,
+      scale: 1,
+      zoom: 0,
+      x: 0,
+      y: 0,
+      config: { mass: 5, tension: 350, friction: 40 }
+    })
+  );
+
+
+  const [wheelApi] = useSpring(() => ({ wheelY: 0 }));
+
+  useGesture(
+    {
+      onMove: ({ xy: [px, py], dragging }) =>
+        !dragging &&
+        api.start({
+          scale: 1.05
+        }),
+      onHover: ({ hovering }) =>
+        !hovering && api.start({ rotateX: 0, rotateY: 0, scale: 1 })
+    },
+    { domTarget, eventOptions: { passive: false } }
+  );
+
+
   return (
-    <div className="outer">
+    <animated.div className="outer" ref={domTarget}
+      style={{
+        transform: "perspective(600px)",
+        scale: to([scale, zoom], (s, z) => s + z),
+        rotateX,
+        rotateY,
+        rotateZ
+      }}>
       <Card className="root">
         <>
           <Avatar
@@ -230,6 +272,6 @@ export default function FriendInfoCard() {
           {friendInFocus ? getFriendActions() : getUserActions()}
         </CardActions>
       </Card>
-    </div>
+    </animated.div>
   );
 }

@@ -7,7 +7,7 @@ module.exports = () => {
     global.socket = socket;
 
     socket.on("login", (userdata) => {
-      users[userdata.id] = { socketId: socket.id, name: userdata.firstName };
+      users[userdata.id] = { socketId: socket.id, name: userdata.firstName, inCall: false };
       clientIdToSocketId[socket.id] = userdata.id
       io.sockets.emit("allUsers", users);
     });
@@ -28,6 +28,9 @@ module.exports = () => {
 
     socket.on("callUser", (data) => {
       const callToUser = users[data.userToCall];
+      if (users[data.callerId]) {
+        users[data.callerId].inCall = true;
+      }
       io.to(callToUser.socketId).emit("callInit", {
         signal: data.signalData,
         from: data.fromUser,
@@ -35,10 +38,13 @@ module.exports = () => {
         callerName: data.callerName,
         callerId: data.callerId
       });
+      io.sockets.emit("allUsers", users);
     });
 
     socket.on("acceptCall", (data) => {
+      users[clientIdToSocketId[socket.id]].inCall = true;
       io.to(data.to).emit("callAccepted", data.signal);
+      io.sockets.emit("allUsers", users);
     });
 
     socket.on('endCallForUser', (data) => {
