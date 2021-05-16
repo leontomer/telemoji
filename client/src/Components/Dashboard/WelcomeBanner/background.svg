@@ -1,1 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" width="1440" height="220" preserveAspectRatio="none" viewBox="0 0 1440 220"><g mask="url(&quot;#SvgjsMask1097&quot;)" fill="none"><rect width="1440" height="220" x="0" y="0" fill="url(#SvgjsLinearGradient1098)"></rect><path d="M 0,210 C 57.6,189.8 172.8,125.8 288,109 C 403.2,92.2 460.8,132.4 576,126 C 691.2,119.6 748.8,62.2 864,77 C 979.2,91.8 1036.8,214.4 1152,200 C 1267.2,185.6 1382.4,44 1440,5L1440 220L0 220z" fill="#184a7e"></path><path d="M 0,124 C 96,105 288,12 480,29 C 672,46 768,212.4 960,209 C 1152,205.6 1344,51.4 1440,12L1440 220L0 220z" fill="#2264ab"></path></g><defs><mask id="SvgjsMask1097"><rect width="1440" height="220" fill="#ffffff"></rect></mask><linearGradient x1="21.18%" y1="-138.64%" x2="78.82%" y2="238.64%" gradientUnits="userSpaceOnUse" id="SvgjsLinearGradient1098"><stop stop-color="#0e2a47" offset="0"></stop><stop stop-color="rgba(1, 73, 165, 1)" offset="1"></stop></linearGradient></defs></svg>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" width="1440" height="230" preserveAspectRatio="none" viewBox="0 0 1440 230">
+    <g mask="url(&quot;#SvgjsMask1012&quot;)" fill="none">
+        <rect width="1440" height="230" x="0" y="0" fill="rgba(83, 49, 126, 1)"></rect>
+        <path d="M 0,30 C 57.6,67.8 172.8,208.4 288,219 C 403.2,229.6 460.8,88.8 576,83 C 691.2,77.2 748.8,201 864,190 C 979.2,179 1036.8,21.6 1152,28 C 1267.2,34.4 1382.4,183.2 1440,222L1440 230L0 230z" fill="rgba(82, 53, 119, 1)"></path>
+        <path d="M 0,203 C 96,173.6 288,71.2 480,56 C 672,40.8 768,128.2 960,127 C 1152,125.8 1344,65.4 1440,50L1440 230L0 230z" fill="rgba(80, 42, 127, 1)"></path>
+    </g>
+    <defs>
+        <mask id="SvgjsMask1012">
+            <rect width="1440" height="230" fill="#ffffff"></rect>
+        </mask>
+    </defs>
+</svg>

@@ -10,6 +10,7 @@ import { FriendProps } from "../../../reducers/authReducer";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import { Content } from "../../../Common/content";
+import CardMedia from '@material-ui/core/CardMedia';
 import { setAbout, setUserImageAction } from "../../../actions/usersActions";
 import {
   sendFriendRequest,
@@ -17,18 +18,24 @@ import {
 } from "../../../actions/friendActions";
 import { useSpring, animated, to } from "@react-spring/web";
 import { useGesture } from "react-use-gesture";
+import buImage from '../../../svgs/headerbackground.svg'
 
 import "./FriendInfoCard.scss";
 import CloudinaryUploadButton from "./CloudinaryIntegration/CloudinaryUploadButton";
 const useStyles = makeStyles({
   large: {
-    marginTop: 50,
+    marginTop: -260,
     margin: "auto",
     width: 160,
     height: 160,
+    border: '5px solid  #53317e',
   },
   actions: {
     padding: 30,
+  },
+  media: {
+    height: 350,
+    zIndex: 100,
   },
 });
 
@@ -247,6 +254,11 @@ export default function FriendInfoCard() {
         rotateZ
       }}>
       <Card className="root">
+        <CardMedia
+          className={classes.media}
+          image={buImage}
+          title="Contemplative Reptile"
+        />
         <>
           <Avatar
             alt="Remy Sharp"
