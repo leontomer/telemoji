@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./WelcomeBanner.scss";
 import welcomeBannerSvg from "../../../svgs/welcomeBannerSvg.svg";
 import { useSelector } from "react-redux";
+import { useSpring, animated } from 'react-spring'
 
 const WelcomeBanner = () => {
   // @ts-ignore
@@ -9,6 +10,12 @@ const WelcomeBanner = () => {
   var today = new Date()
   var curHr = today.getHours()
   const [welcomeMessage, setWelcomeMessage] = useState('');
+  const styles = useSpring({
+    loop: true,
+    from: { rotateZ: 0 },
+    to: { rotateZ: 360 },
+    delay: 2000
+  })
 
   useEffect(() => {
     if (curHr < 12) {
@@ -43,9 +50,11 @@ const WelcomeBanner = () => {
         </div>
       </div>
 
-      <div >
+      <animated.div style={{
+        ...styles,
+      }}>
         <img src={welcomeBannerSvg} height="120px" />
-      </div>
+      </animated.div>
     </div>
   );
 };

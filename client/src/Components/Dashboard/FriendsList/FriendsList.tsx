@@ -74,6 +74,35 @@ const StyledBadge = withStyles((theme) => ({
   },
 }))(Badge);
 
+const StyledInCallBadge = withStyles((theme) => ({
+  badge: {
+    backgroundColor: '#E67E22',
+    color: '#E67E22',
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    '&::after': {
+      position: 'absolute',
+      top: -1,
+      left: -1,
+      width: '100%',
+      height: '100%',
+      borderRadius: '50%',
+      animation: '$ripple 1.2s infinite ease-in-out',
+      border: '1px solid currentColor',
+      content: '""',
+    },
+  },
+  '@keyframes ripple': {
+    '0%': {
+      transform: 'scale(.8)',
+      opacity: 1,
+    },
+    '100%': {
+      transform: 'scale(2.4)',
+      opacity: 0,
+    },
+  },
+}))(Badge);
+
 function FriendsList({ history }) {
   const classes = useStyles();
   // @ts-ignore
@@ -137,18 +166,31 @@ function FriendsList({ history }) {
 
               <ListItemAvatar>
                 {
-                  connectedUsers[friend._id] ? (
-                    <StyledBadge
-                      overlap="circle"
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'right',
-                      }}
-                      variant="dot"
-                    >
-                      <Avatar alt={`${friend.firstName}`} src={friend.imageAddress} />
-                    </StyledBadge>
-                  ) :
+                  connectedUsers[friend._id] ?
+                    connectedUsers[friend._id].inCall ? (
+                      <StyledInCallBadge
+                        overlap="circle"
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'right',
+                        }}
+                        variant="dot"
+                      >
+                        <Avatar alt={`${friend.firstName}`} src={friend.imageAddress} />
+                      </StyledInCallBadge>
+                    ) :
+                      (
+                        <StyledBadge
+                          overlap="circle"
+                          anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'right',
+                          }}
+                          variant="dot"
+                        >
+                          <Avatar alt={`${friend.firstName}`} src={friend.imageAddress} />
+                        </StyledBadge>
+                      ) :
                     (<Badge invisible={false} variant="dot" anchorOrigin={{
                       vertical: 'bottom',
                       horizontal: 'right',
@@ -162,7 +204,7 @@ function FriendsList({ history }) {
               <ListItemText id={labelId} primary={friend.firstName} />
               <ListItemSecondaryAction>
                 <IconButton
-                  disabled={!connectedUsers[friend._id]}
+                  disabled={!connectedUsers[friend._id] || connectedUsers[friend._id].inCall}
                   onClick={() => handleCall(friend._id)}
                 >
                   <PhoneIcon

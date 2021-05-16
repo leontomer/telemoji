@@ -6,6 +6,7 @@ import { LandingSvg } from './LandingSvg/LandingSvg';
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useLoader } from '../../Contexts/LoaderContext';
+import { useSpring, animated } from 'react-spring'
 
 const buttonStyle = {
   backgroundColor: "#53317e",
@@ -13,23 +14,7 @@ const buttonStyle = {
   fontSize: "20px",
   letterSpacing: "-0.5px",
 };
-const textContent = (
-  <div className="content">
-    <h1 className="landingpage-header">
-      The only video chat you will ever need
-    </h1>
-    <h3 className="landingpage-subheader">
-      Chat with your friends and get a special experience
-    </h3>
-    <div style={{ marginTop: "50px" }} data-hook="landing-page-button">
-      <Link to="/register">
-        <Button style={buttonStyle} variant="contained"  >
-          Get Started
-      </Button>
-      </Link>
-    </div>
-  </div>
-);
+
 
 
 function LandingPage(props) {
@@ -39,6 +24,38 @@ function LandingPage(props) {
   useLayoutEffect(() => {
     startLoading()
   }, []);
+
+
+  const styles = useSpring({
+    loop: true,
+    to: [
+      { opacity: 0, color: '#53317e' },
+      { opacity: 1, color: 'white' },
+    ],
+    from: { opacity: 1, color: 'white' },
+    delay: 1000,
+  })
+
+  const textContent = (
+    <div className="content">
+      <animated.div style={{ ...styles }}>
+        <h1 className="landingpage-header">
+          The only video chat you will ever need
+      </h1>
+        <h3 className="landingpage-subheader">
+          Chat with your friends and get a special experience
+      </h3>
+      </animated.div>
+
+      <div style={{ marginTop: "50px" }} data-hook="landing-page-button">
+        <Link to="/register">
+          <Button style={buttonStyle} variant="contained"  >
+            Get Started
+        </Button>
+        </Link>
+      </div>
+    </div>
+  );
 
   useLayoutEffect(() => {
     if (isAuthenticated) {

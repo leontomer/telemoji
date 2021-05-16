@@ -24,7 +24,9 @@ router.post("/addfriend", auth, async (req, res) => {
     const { friendReuqestID } = req.body;
     const friend = await User.findById(friendReuqestID).select("-password");
     const user = await User.findById(userID).select("-password");
-
+    if (friend.friendRequests.includes(user._id)) {
+      return res.json({ friend });
+    }
     friend.friendRequests.push(user._id);
     await friend.save();
     updateClientFriendRequestList(friend._id);
