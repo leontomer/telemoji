@@ -63,48 +63,29 @@ export const getAllUsers = async () => {
 };
 
 export const editDetails =
-  ({ firstName, lastName }: { firstName: string; lastName: string }) =>
-  async (dispatch) => {
-    try {
-      const res = await axios.post(`${baseRoute}editDetails`, {
-        firstName,
-        lastName,
-      });
-      dispatch({ type: SET_DETAILS, payload: { firstName, lastName } });
-
-      if (res.data == "details edited successfully")
-        dispatch(
-          setMessage("password updated successfully", snackbarType.success)
-        );
-    } catch (err) {
-      const errors = err.response.data.errors;
-      if (errors) {
-        errors.forEach((error) =>
-          dispatch(setMessage(error.msg, snackbarType.error))
-        );
-      }
-    }
-  };
-
-//
-export const editPassword =
   ({
+    firstName,
+    lastName,
     currentPassword,
     password,
   }: {
+    firstName: string;
+    lastName: string;
     currentPassword: string;
     password: string;
   }) =>
   async (dispatch) => {
     try {
-      const res = await axios.post(`${baseRoute}editPassword`, {
+      const res = await axios.post(`${baseRoute}editDetails`, {
+        firstName,
+        lastName,
         currentPassword,
         password,
       });
-
-      if (res.data == "password edited successfully")
+      dispatch({ type: SET_DETAILS, payload: { firstName, lastName } });
+      if (res.data == "user edited successfully")
         dispatch(
-          setMessage("password updated successfully", snackbarType.success)
+          setMessage("details updated successfully", snackbarType.success)
         );
     } catch (err) {
       const errors = err.response.data.errors;

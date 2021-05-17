@@ -107,42 +107,7 @@ router.post("/image", auth, async (req, res) => {
 router.post(
   "/editDetails",
   auth,
-  [
-    check("firstName", "First name is required").not().isEmpty(),
-    check("lastName", "Last name is required").not().isEmpty(),
-  ],
-  async (req, res) => {
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-      }
-      const { firstName, lastName } = req.body;
 
-      const user = await User.findById(req.user.id);
-      user.firstName = firstName;
-      user.lastName = lastName;
-      await user.save();
-      res.json("details edited successfully");
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ errors: [{ msg: err.message }] });
-    }
-  }
-);
-
-router.post(
-  "/editPassword",
-  auth,
-  [
-    check(
-      "password",
-      "Password must be minimum 6 letters long, and no more then 20"
-    ).isLength({ min: 6, max: 20 }),
-    check("password", "Password must contain at least one letter").matches(
-      /([a-zA-Z])+([ -~])*/
-    ),
-  ],
   async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -150,24 +115,41 @@ router.post(
         return res.status(400).json({ errors: errors.array() });
       }
       //here in password to compare user current password entered and real password use the compare from login api: const isMatch = await bcrypt.compare(password, user.password);
-      const { currentPassword, password } = req.body;
-
+      const { firstName, lastName, currentPassword, password } = req.body;
       const user = await User.findById(req.user.id);
 
-      if (currentPassword) {
-        const isMatch = await bcrypt.compare(currentPassword, user.password);
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
 
-        if (!isMatch) {
-          return res
-            .status(400)
-            .json({ errors: [{ msg: "entered wrong password" }] });
+      if (!isMatch) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "entered wrong password" }] });
+      }
+
+      if (firstName) user.firstName = firstName;
+      if (lastName) user.lastName = lastName;
+
+      if (password) {
+        if (password.length < 6 || password.length > 20) {
+          return res.status(400).json({
+            errors: [
+              {
+                msg: "Password must be minimum 6 letters long, and no more then 20",
+              },
+            ],
+          });
         }
+        const regex = /([a-zA-Z])+([ -~])*/;
+        if (!regex.test(password))
+          return res.status(400).json({
+            errors: [{ msg: "Password must contain at least one letter" }],
+          });
 
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
       }
       await user.save();
-      res.json("password edited successfully");
+      res.json("user edited successfully");
       //if passwords do not match return res.error else continuo
     } catch (err) {
       console.error(err);

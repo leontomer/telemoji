@@ -10,7 +10,7 @@ import { FriendProps } from "../../../reducers/authReducer";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import { Content } from "../../../Common/content";
-import CardMedia from '@material-ui/core/CardMedia';
+import CardMedia from "@material-ui/core/CardMedia";
 import { setAbout, setUserImageAction } from "../../../actions/usersActions";
 import {
   sendFriendRequest,
@@ -18,7 +18,7 @@ import {
 } from "../../../actions/friendActions";
 import { useSpring, animated, to } from "@react-spring/web";
 import { useGesture } from "react-use-gesture";
-import buImage from '../../../svgs/headerbackground.svg'
+import buImage from "../../../svgs/headerbackground.svg";
 
 import "./FriendInfoCard.scss";
 import CloudinaryUploadButton from "./CloudinaryIntegration/CloudinaryUploadButton";
@@ -28,7 +28,7 @@ const useStyles = makeStyles({
     margin: "auto",
     width: 160,
     height: 160,
-    border: '5px solid  #53317e',
+    border: "5px solid  #53317e",
   },
   actions: {
     padding: 30,
@@ -44,13 +44,14 @@ export default function FriendInfoCard() {
   // @ts-ignore
   const user = useSelector((state) => state.authReducer.user);
   // @ts-ignore
-  const globalFriendList = useSelector((state) => state.friendReducer.friendList);
-
+  const globalFriendList = useSelector(
+    (state) => state.friendReducer.friendList
+  );
 
   // @ts-ignore
-  const _friendInFocus: FriendProps = useSelector((state) => state.friendReducer.friendInFocus);
-
-
+  const _friendInFocus: FriendProps = useSelector(
+    (state) => state.friendReducer.friendInFocus
+  );
 
   const [userAbout, setUserAbout] = useState<string>(Content.default_about);
   const [userImage, setUserImage] = useState<string>(Content.default_image);
@@ -168,18 +169,15 @@ export default function FriendInfoCard() {
   const getFriendActions = () => {
     return (
       <>
-        <Button size="small" color="primary">
-          Call
-        </Button>
         {usersAreFriends() ? (
           <Button size="small" color="primary" onClick={handleUnfriend}>
             Unfriend
           </Button>
         ) : (
-            <Button size="small" color="primary" onClick={handleAddFriend}>
-              Add Friend
-            </Button>
-          )}
+          <Button size="small" color="primary" onClick={handleAddFriend}>
+            Add Friend
+          </Button>
+        )}
       </>
     );
   };
@@ -211,22 +209,17 @@ export default function FriendInfoCard() {
     );
   };
 
-
-
   const domTarget = React.useRef(null);
-  const [{ rotateX, rotateY, rotateZ, zoom, scale }, api] = useSpring(
-    () => ({
-      rotateX: 0,
-      rotateY: 0,
-      rotateZ: 0,
-      scale: 1,
-      zoom: 0,
-      x: 0,
-      y: 0,
-      config: { mass: 5, tension: 350, friction: 40 }
-    })
-  );
-
+  const [{ rotateX, rotateY, rotateZ, zoom, scale }, api] = useSpring(() => ({
+    rotateX: 0,
+    rotateY: 0,
+    rotateZ: 0,
+    scale: 1,
+    zoom: 0,
+    x: 0,
+    y: 0,
+    config: { mass: 5, tension: 350, friction: 40 },
+  }));
 
   const [wheelApi] = useSpring(() => ({ wheelY: 0 }));
 
@@ -235,24 +228,26 @@ export default function FriendInfoCard() {
       onMove: ({ xy: [px, py], dragging }) =>
         !dragging &&
         api.start({
-          scale: 1.05
+          scale: 1.05,
         }),
       onHover: ({ hovering }) =>
-        !hovering && api.start({ rotateX: 0, rotateY: 0, scale: 1 })
+        !hovering && api.start({ rotateX: 0, rotateY: 0, scale: 1 }),
     },
     { domTarget, eventOptions: { passive: false } }
   );
 
-
   return (
-    <animated.div className="outer" ref={domTarget}
+    <animated.div
+      className="outer"
+      ref={domTarget}
       style={{
         transform: "perspective(600px)",
         scale: to([scale, zoom], (s, z) => s + z),
         rotateX,
         rotateY,
-        rotateZ
-      }}>
+        rotateZ,
+      }}
+    >
       <Card className="root">
         <CardMedia
           className={classes.media}

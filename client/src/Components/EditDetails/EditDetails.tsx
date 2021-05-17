@@ -12,10 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
 import Typography from "@material-ui/core/Typography";
-import { editPassword } from "../../actions/usersActions";
-
 import { editDetails } from "../../actions/usersActions";
-
 export default function EditDetails() {
   const dispatch = useDispatch();
   //check if the user new password entered is the same as the confirm new password like i did in reset password component
@@ -35,28 +32,15 @@ export default function EditDetails() {
       dispatch(setMessage("Passwords do not match", snackbarType.error));
     } else {
       dispatch(
-        editPassword({
+        editDetails({
+          firstName: firstName,
+          lastName: lastName,
           currentPassword: oldPassword,
           password: password,
         })
       );
     }
   };
-
-  const handleSubmit2 = (e) => {
-    e.preventDefault();
-    if (password !== password2) {
-      dispatch(setMessage("Passwords do not match", snackbarType.error));
-    } else {
-      dispatch(
-        editDetails({
-          firstName: firstName,
-          lastName: lastName,
-        })
-      );
-    }
-  };
-
   const useStyles = makeStyles((theme) => ({
     paper: {
       marginTop: theme.spacing(8),
@@ -85,7 +69,7 @@ export default function EditDetails() {
         <Typography variant="h4" gutterBottom>
           Edit Your Details
         </Typography>
-        <form className={classes.form} noValidate onSubmit={handleSubmit2}>
+        <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -110,18 +94,6 @@ export default function EditDetails() {
             onChange={(e) => setLastName(e.target.value)}
             value={lastName}
           />
-
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Save
-          </Button>
-        </form>
-        <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
