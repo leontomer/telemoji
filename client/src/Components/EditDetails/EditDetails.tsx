@@ -8,37 +8,55 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
-import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
-import Snackbar from "@material-ui/core/Snackbar";
 import Typography from "@material-ui/core/Typography";
+import { editPassword } from "../../actions/usersActions";
+
+import { editDetails } from "../../actions/usersActions";
+
 export default function EditDetails() {
+  const dispatch = useDispatch();
   //check if the user new password entered is the same as the confirm new password like i did in reset password component
+  // get from server the current user first name+last name or check if the fields are empty then dont change them in the database
 
-  const [originalPassword, setOriginalPassword] = React.useState("");
-  const [oldPassword, setOldPassword] = React.useState("");
+  // @ts-ignore
+  const user = useSelector((state) => state.authReducer.user);
+  const [password, setPassword] = React.useState<string>("");
+  const [password2, setPassword2] = React.useState<string>("");
+  const [firstName, setFirstName] = React.useState<string>(user.firstName);
+  const [lastName, setLastName] = React.useState<string>(user.lastName);
+  const [oldPassword, setOldPassword] = React.useState<string>("");
 
-  const [password, setPassword] = React.useState("");
-  const [password2, setPassword2] = React.useState("");
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-
-  const handleSubmit = () => {
-    console.log(
-      "old password: ",
-      oldPassword,
-      "current password1: ",
-      password,
-      "current password2: ",
-      password2,
-      "first name: ",
-      firstName,
-      "last name: ",
-      lastName
-    );
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (password !== password2) {
+      dispatch(setMessage("Passwords do not match", snackbarType.error));
+    } else {
+      dispatch(
+        editPassword({
+          currentPassword: oldPassword,
+          password: password,
+        })
+      );
+    }
   };
+
+  const handleSubmit2 = (e) => {
+    e.preventDefault();
+    if (password !== password2) {
+      dispatch(setMessage("Passwords do not match", snackbarType.error));
+    } else {
+      dispatch(
+        editDetails({
+          firstName: firstName,
+          lastName: lastName,
+        })
+      );
+    }
+  };
+
   const useStyles = makeStyles((theme) => ({
     paper: {
       marginTop: theme.spacing(8),
@@ -67,14 +85,14 @@ export default function EditDetails() {
         <Typography variant="h4" gutterBottom>
           Edit Your Details
         </Typography>
-        <form className={classes.form} noValidate onSubmit={handleSubmit}>
+        <form className={classes.form} noValidate onSubmit={handleSubmit2}>
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
             name="First name"
-            label="first name"
+            label="First name"
             type="text"
             id="firstName"
             onChange={(e) => setFirstName(e.target.value)}
@@ -92,6 +110,18 @@ export default function EditDetails() {
             onChange={(e) => setLastName(e.target.value)}
             value={lastName}
           />
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Save
+          </Button>
+        </form>
+        <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
