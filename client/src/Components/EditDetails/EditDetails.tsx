@@ -13,6 +13,8 @@ import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
 import Typography from "@material-ui/core/Typography";
 import { editDetails } from "../../actions/usersActions";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 export default function EditDetails() {
   const dispatch = useDispatch();
   //check if the user new password entered is the same as the confirm new password like i did in reset password component
@@ -25,7 +27,7 @@ export default function EditDetails() {
   const [firstName, setFirstName] = React.useState<string>(user.firstName);
   const [lastName, setLastName] = React.useState<string>(user.lastName);
   const [oldPassword, setOldPassword] = React.useState<string>("");
-
+  const [checked, setChecked] = React.useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password !== password2) {
@@ -61,6 +63,9 @@ export default function EditDetails() {
     },
   }));
   const classes = useStyles();
+  const handleChange = (event) => {
+    setChecked(event.target.checked);
+  };
 
   return (
     <div>
@@ -107,34 +112,50 @@ export default function EditDetails() {
             value={oldPassword}
             onChange={(e) => setOldPassword(e.target.value)}
           />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="New password"
-            type="password"
-            id="password"
-            data-hook={DataHook.LoginPagePasswordTextField}
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+
+          <FormControlLabel
+            control={
+              <Switch
+                checked={checked}
+                onChange={handleChange}
+                name="checkedA"
+              />
+            }
+            label="Change Password"
           />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="confirm password"
-            label="Confirm new Password"
-            type="password"
-            id="password"
-            data-hook={DataHook.LoginPagePasswordTextField}
-            autoComplete="current-password"
-            onChange={(e) => setPassword2(e.target.value)}
-            value={password2}
-          />
+
+          {checked && (
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="New password"
+              type="password"
+              id="password"
+              data-hook={DataHook.LoginPagePasswordTextField}
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          )}
+          {checked && (
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="confirm password"
+              label="Confirm new Password"
+              type="password"
+              id="password"
+              data-hook={DataHook.LoginPagePasswordTextField}
+              autoComplete="current-password"
+              onChange={(e) => setPassword2(e.target.value)}
+              value={password2}
+            />
+          )}
 
           <Button
             type="submit"
