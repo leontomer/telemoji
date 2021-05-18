@@ -14,6 +14,8 @@ import LogoutHooks from "./LogoutHooks/LogoutHooks";
 import FaceIcon from "@material-ui/icons/Face";
 import { Link } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
+import InfoIcon from "@material-ui/icons/Info";
+import ContactSupportIcon from "@material-ui/icons/ContactSupport";
 const useStyles = makeStyles({
   list: {
     width: 250,
@@ -46,6 +48,24 @@ export const DrawerMenu = (props) => {
               <EditIcon />
             </ListItemIcon>
             <ListItemText primary={"Edit Details"} />
+          </ListItem>
+        </Link>
+
+        <Link to="/contactUs">
+          <ListItem button key={"editDetails"}>
+            <ListItemIcon>
+              <ContactSupportIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Contact Us"} />
+          </ListItem>
+        </Link>
+
+        <Link to="/aboutUs">
+          <ListItem button key={"editDetails"}>
+            <ListItemIcon>
+              <InfoIcon />
+            </ListItemIcon>
+            <ListItemText primary={"About Telemoji"} />
           </ListItem>
         </Link>
 

@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const auth = require("../../middleware/auth");
+var nodemailer = require("nodemailer");
 
 router.post(
   "/register",
@@ -89,6 +90,40 @@ router.post("/about", auth, async (req, res) => {
     res.json("ok");
   } catch (error) {}
 });
+
+//
+router.post("/contact", auth, async (req, res) => {
+  try {
+    const { message } = req.body;
+    const user = await User.findById(req.user.id);
+
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "telemoji.verify@gmail.com",
+        pass: "Tole1234567",
+      },
+    });
+
+    var mailOptions = {
+      from: "telemoji.verify@gmail.com",
+      to: "telemoji.verify@gmail.com",
+      subject: "user contact",
+      text: `user ${user.email} has contact us. his message:\n ${message}`,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        res.status(200).json({ msg: `Email sent to ${email}` });
+      }
+    });
+  } catch (error) {
+    res.status(500).send("Server error");
+  }
+});
+//
 
 router.post("/image", auth, async (req, res) => {
   try {
