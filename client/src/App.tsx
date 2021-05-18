@@ -22,6 +22,8 @@ import { TelemojiProvider } from "./Contexts/TelemojiContext";
 import { RecieveCallModal } from "./Components/Modals/RecieveCallModal";
 import editDetails from "./Components/EditDetails/EditDetails";
 import ResetPassword from "./Components/ForgotPassword/ResetPassword";
+import ContactUs from "./Components/ContactUs/ContactUs";
+import AboutUs from "./Components/AboutUs/AboutUs";
 import {
   friendListListener,
   pendingFriendRequestsListener,
@@ -76,6 +78,9 @@ function App() {
             component={SelfFaceDetection}
           />
           <PrivateRoute exact path="/editDetails" component={editDetails} />
+          <PrivateRoute exact path="/contactUs" component={ContactUs} />
+          <PrivateRoute exact path="/aboutUs" component={AboutUs} />
+
           <Route exact path="/register" component={RegisterPage} />
         </Switch>
         <RecieveCallModal />

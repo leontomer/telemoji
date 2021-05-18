@@ -101,9 +101,8 @@ export const changePassword = (token, password) => async (dispatch) => {
   try {
     const body = { password };
     setAuthToken(token);
-    console.log("body ", body);
     const res = await axios.post("/api/auth/changePassword", body);
-    console.log(res);
+
     return res.data;
   } catch (err) {
     const errors = err.response.data.errors;
