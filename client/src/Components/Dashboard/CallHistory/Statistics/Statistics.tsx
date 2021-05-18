@@ -23,6 +23,18 @@ const Statistics = ({ goback, callId, callerStatsName }) => {
     const [maxEmotionEmoji, setMaxEmotionEmoji] = useState('')
     const [callDuration, setCallDuration] = useState('')
 
+    const appear = useSpring({
+        delay: 1100,
+        from: { opacity: 0 },
+        to: { opacity: 1 },
+    })
+
+    const appearLater = useSpring({
+        delay: 1300,
+        from: { opacity: 0 },
+        to: { opacity: 1 },
+    })
+
     const moveFromLeft = useSpring({
         delay: 1100,
         from: { x: -100, opacity: 0 },
@@ -112,14 +124,18 @@ const Statistics = ({ goback, callId, callerStatsName }) => {
         )
     }
     return (
-        <div>
-            <Typography variant="h5" component="h5" style={{ textAlign: "center" }}>
-                Call Statistics
-            </Typography>
+        <div >
+            <animated.div style={{ ...appear }}>
+                <Typography variant="h5" component="h5" style={{ textAlign: "center" }}>
+                    Call Statistics
+               </Typography>
+            </animated.div>
+            <animated.div style={{ ...appearLater }}>
+                <Typography variant="subtitle1" component="h6" style={{ textAlign: "center", color: '#566573 ' }}>
+                    Your call with {callerStatsName}
+                </Typography>
+            </animated.div>
 
-            <Typography variant="subtitle1" component="h6" style={{ textAlign: "center", color: '#566573 ' }}>
-                Your call with {callerStatsName}
-            </Typography>
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <div>
                     <PieChart width={400} height={400}>
