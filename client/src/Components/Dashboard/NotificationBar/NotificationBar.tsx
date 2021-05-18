@@ -34,9 +34,9 @@ function NotificationBar() {
   const { friendRequests } = useSelector((state) => state.friendReducer);
   const dispatch = useDispatch();
 
-  const [language, setLocalLanguage] = React.useState("En");
   // @ts-ignore
   const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
   useEffect(() => {
     setLocalLanguage(globalLanguage);
   }, [globalLanguage]);
@@ -97,7 +97,7 @@ function NotificationBar() {
               primary={lan[language].friend_requests_text}
               secondary={
                 numberOfPendingFriendRequest > 0
-                  ? `${lan[language].no_friend_requests}${numberOfPendingFriendRequest}`
+                  ? `${lan[language].friend_requests}${numberOfPendingFriendRequest}`
                   : lan[language].no_friend_requests
               }
             />

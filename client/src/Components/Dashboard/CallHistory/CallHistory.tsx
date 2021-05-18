@@ -38,9 +38,9 @@ const CallHistory = () => {
   // @ts-ignore
   const usersImage = useSelector(
     // @ts-ignore
+
     (state) => state.authReducer.user.imageAddress
   );
-
   // @ts-ignore
   const globalLanguage = useSelector((state) => state.LanguageReducer.language);
   const [language, setLocalLanguage] = React.useState(globalLanguage);

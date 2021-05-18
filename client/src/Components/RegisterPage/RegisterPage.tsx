@@ -51,9 +51,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp({ history }) {
   const classes = useStyles();
-  const [language, setLocalLanguage] = React.useState("En");
   // @ts-ignore
   const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
+
   const [registrationData, setRegistrationData] = useState({
     email: "",
     password: "",
@@ -97,7 +98,7 @@ export default function SignUp({ history }) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          {lan[language].sign_up}
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -184,11 +185,11 @@ export default function SignUp({ history }) {
             color="primary"
             className={classes.submit}
           >
-            Sign Up
+            {lan[language].sign_up}
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link to="/login">Already have an account? Sign in</Link>
+              <Link to="/login">{lan[language].RegisterToLoginPage}</Link>
             </Grid>
           </Grid>
         </form>
