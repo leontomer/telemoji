@@ -1,15 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import { useSelector, useDispatch } from "react-redux";
-import { setError } from '../../actions/errorsActions'
+import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
-import { setEmotion } from '../../actions/modelActions';
+import { setEmotion } from "../../actions/modelActions";
 
-export function DetectionVideo({
-  videoRef,
-  muted = false,
-}) {
-
+export function DetectionVideo({ videoRef, muted = false }) {
   const [faceapi, setFaceapi] = useState();
   // const [emotionRecModel, setEmotionRecModel] = useState({});
   const [userEmotion, setUserEmotion] = useState(
@@ -21,12 +17,14 @@ export function DetectionVideo({
 
   const dispatch = useDispatch();
   const faceapiReducer = useSelector((state) => state.modelReducer.faceapi);
-  const emotionRecognition85p = useSelector((state) => state.modelReducer.emotionRecognition85p);
+  const emotionRecognition85p = useSelector(
+    (state) => state.modelReducer.emotionRecognition85p
+  );
 
   let timeVarHolder;
   let unmountingVideoChat = useRef(null);
   useEffect(() => {
-    console.log('mounting faceapi')
+    console.log("mounting faceapi");
     if (faceapiReducer && !faceapi) {
       setFaceapi(faceapiReducer);
     }
@@ -35,8 +33,8 @@ export function DetectionVideo({
       clearTimeout(timeVarHolder);
       canvasRef = null;
       unmountingVideoChat.current = true;
-    }
-  }, [faceapiReducer])
+    };
+  }, [faceapiReducer]);
 
   const classNames = [
     "angry",
@@ -55,9 +53,9 @@ export function DetectionVideo({
       try {
         let pred85 = emotionRecognition85p.predict(data);
         pred85 = pred85.dataSync();
-        let ans = []
+        let ans = [];
         for (let i = 0; i < pred85.length; i++) {
-          ans[i] = pred85[i]
+          ans[i] = pred85[i];
         }
         let maxPrediction = { value: 0, className: "" };
 
@@ -75,7 +73,7 @@ export function DetectionVideo({
               setEmotionDelay.current = true;
               setTimeout(() => {
                 setEmotionDelay.current = false;
-              }, 1000)
+              }, 1000);
             }
           }
         }
@@ -132,10 +130,10 @@ export function DetectionVideo({
               .resizeNearestNeighbor([96, 96])
               // .mean(2)
               // .toFloat()
-              .expandDims(0)
+              .expandDims(0);
             // .expandDims(3);
           } catch (error) {
-            console.log('error is', error.message)
+            console.log("error is", error.message);
             console.log("no face found");
           }
         }
@@ -152,26 +150,30 @@ export function DetectionVideo({
         if (!videoRef.current.paused) {
           timeVarHolder = setTimeout(videoToTensor, 300);
         }
-      }
-      catch (error) {
-        dispatch(setError('Call has ended', JSON.stringify(error), snackbarType.error))
+      } catch (error) {
+        dispatch(
+          setMessage(
+            "Call has ended",
+            JSON.stringify(error),
+            snackbarType.error
+          )
+        );
       }
       //
     };
     videoToTensor();
   };
 
-
-  const displayEmotions = faceapi
+  const displayEmotions = faceapi;
   return (
-    <div style={{ backgroundColor: '#53317e', padding: 60, borderRadius: 40 }}>
+    <div style={{ backgroundColor: "#53317e", padding: 60, borderRadius: 40 }}>
       <div
         style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
-          overflow: 'hidden'
+          overflow: "hidden",
         }}
       >
         <video

@@ -90,20 +90,72 @@ router.post("/about", auth, async (req, res) => {
   } catch (error) {}
 });
 
-router.post("/image", async (req, res) => {
+router.post("/image", auth, async (req, res) => {
   try {
     const { id, imageAddress } = req.body;
-    console.log(id, imageAddress);
     let user = await User.findOne({ email: id });
     user.imageAddress = imageAddress;
 
     await user.save();
-    console.log(user);
 
     res.status(200).json({ msg: "done" });
   } catch (error) {
     console.error(error);
   }
 });
+
+router.post(
+  "/editDetails",
+  auth,
+
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+      //here in password to compare user current password entered and real password use the compare from login api: const isMatch = await bcrypt.compare(password, user.password);
+      const { firstName, lastName, currentPassword, password } = req.body;
+      const user = await User.findById(req.user.id);
+
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+
+      if (!isMatch) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "entered wrong password" }] });
+      }
+
+      if (firstName) user.firstName = firstName;
+      if (lastName) user.lastName = lastName;
+
+      if (password) {
+        if (password.length < 6 || password.length > 20) {
+          return res.status(400).json({
+            errors: [
+              {
+                msg: "Password must be minimum 6 letters long, and no more then 20",
+              },
+            ],
+          });
+        }
+        const regex = /([a-zA-Z])+([ -~])*/;
+        if (!regex.test(password))
+          return res.status(400).json({
+            errors: [{ msg: "Password must contain at least one letter" }],
+          });
+
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(password, salt);
+      }
+      await user.save();
+      res.json("user edited successfully");
+      //if passwords do not match return res.error else continuo
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ errors: [{ msg: err.message }] });
+    }
+  }
+);
 
 module.exports = router;

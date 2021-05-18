@@ -3,8 +3,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -17,8 +15,8 @@ import { Content } from "../../Common/content";
 import { useDispatch } from "react-redux";
 import { useLoader } from "../../Contexts/LoaderContext";
 import { forgotPassword } from "../../actions/authActions";
-import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
-import Snackbar from "@material-ui/core/Snackbar";
+import { setMessage } from "../../actions/errorsActions";
+import { snackbarType } from "../../Common/dataTypes";
 
 function Copyright() {
   return (
@@ -56,9 +54,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ForgotPassword({ history }) {
   const classes = useStyles();
   const { startLoading, finishLoading } = useLoader();
-  const [msg, setMsg] = React.useState("");
   const [email, setEmail] = useState("");
-  const [open, setOpen] = useState(false);
 
   const onChange = (e) => {
     setEmail(e.target.value);
@@ -70,29 +66,13 @@ export default function ForgotPassword({ history }) {
       startLoading();
       const res = await dispatch(forgotPassword(email));
       finishLoading();
-      //@ts-ignore
-      setMsg(res.msg);
-      setOpen(true);
+
+      dispatch(setMessage("email sent", snackbarType.success));
     } catch (error) {
       finishLoading();
       return;
     }
   };
-
-  const handleClick = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
-  function Alert(props: AlertProps) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -129,11 +109,6 @@ export default function ForgotPassword({ history }) {
           >
             {Content.forgot_password_page_send_email_button}
           </Button>
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity="success">
-              {msg}
-            </Alert>
-          </Snackbar>
 
           <Grid container>
             <Grid item xs>

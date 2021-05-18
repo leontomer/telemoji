@@ -10,6 +10,7 @@ import {
   LOGIN_SUCCESS_GOOGLE_FACEBOOK,
   SET_ABOUT,
   SET_IMAGE,
+  SET_DETAILS,
 } from "../actions/types";
 
 export interface FriendProps {
@@ -66,6 +67,15 @@ export default function (state: InitialStateProps = initialState, action) {
         user: { ...state.user, about: payload },
       };
 
+    case SET_DETAILS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          firstName: payload.firstName,
+          lastName: payload.lastName,
+        },
+      };
     case SET_IMAGE:
       return {
         ...state,

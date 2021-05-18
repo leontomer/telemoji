@@ -9,19 +9,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { useDispatch } from "react-redux";
-import { setError } from "../../actions/errorsActions";
+import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
 import { changePassword } from "../../actions/authActions";
-import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
-import Snackbar from "@material-ui/core/Snackbar";
 import Typography from "@material-ui/core/Typography";
 
 function ResetPassword({ history, match }) {
   const [password, setPassword] = React.useState("");
   const [password2, setPassword2] = React.useState("");
   const dispatch = useDispatch();
-  const [msg, setMsg] = React.useState("");
-  const [open, setOpen] = React.useState(false);
 
   const Token = match.params.token;
 
@@ -45,31 +41,15 @@ function ResetPassword({ history, match }) {
     },
   }));
   const classes = useStyles();
-  const handleClick = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
-  function Alert(props: AlertProps) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== password2) {
-      dispatch(setError("Passwords do not match", snackbarType.error));
+      dispatch(setMessage("Passwords do not match", snackbarType.error));
     } else {
       try {
         const res = await dispatch(changePassword(Token, password));
-        //@ts-ignore
-        setMsg(res);
-        setOpen(true);
+        dispatch(setMessage("Reset password succeeded!", snackbarType.success));
       } catch (error) {
         return;
       }
@@ -129,12 +109,6 @@ function ResetPassword({ history, match }) {
           >
             {Content.forgot_password_page_send_email_button}
           </Button>
-
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity="success">
-              {msg}
-            </Alert>
-          </Snackbar>
         </form>
       </Container>
     </div>
