@@ -4,6 +4,8 @@ import {
   SET_FRIEND_IN_FOCUS,
   REMOVE_FRIEND,
   SET_CALL_HISTORY,
+  SET_SELECTED_CALL_HISTORY_STATS,
+  CLEAR_SELECTED_CALL_HISTORY_STATS
 } from "../actions/types";
 
 export interface FriendProps {
@@ -25,6 +27,7 @@ interface InitialStateProps {
   friendList: FriendProps[];
   friendInFocus: FriendProps | null;
   callHistory: Object[];
+  selectedCallHistoryStats: Object | null;
 }
 
 export const initialState: InitialStateProps = {
@@ -32,6 +35,7 @@ export const initialState: InitialStateProps = {
   friendList: [],
   friendInFocus: null,
   callHistory: [],
+  selectedCallHistoryStats: null
 };
 export default function (state: InitialStateProps = initialState, action) {
   const { type, payload } = action;
@@ -55,6 +59,16 @@ export default function (state: InitialStateProps = initialState, action) {
         ...state,
         callHistory: payload,
       };
+    case SET_SELECTED_CALL_HISTORY_STATS:
+      return {
+        ...state,
+        selectedCallHistoryStats: payload,
+      }
+    case CLEAR_SELECTED_CALL_HISTORY_STATS:
+      return {
+        ...state,
+        selectedCallHistoryStats: null
+      }
 
     default:
       return state;

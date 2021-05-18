@@ -1,4 +1,4 @@
-import { SET_FACEAPI, SET_EMOTION_RECOGNITION_MODEL, SET_EMOTION } from "../actions/types";
+import { SET_FACEAPI, SET_EMOTION_RECOGNITION_MODEL, SET_EMOTION, UPDATE_EMOT_STATS, CLEAR_EMOTIONS_STATS } from "../actions/types";
 
 const initialState = {
     faceapi: null,
@@ -6,7 +6,8 @@ const initialState = {
     emotionRecognition85p: null,
     emotionRecognition87p: null,
     emotionRecognition95p: null,
-    selectedEmotion: ''
+    selectedEmotion: '',
+    emotionStats: null
 };
 
 export default function (state = initialState, action) {
@@ -28,6 +29,16 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 selectedEmotion: payload
+            }
+        case UPDATE_EMOT_STATS:
+            return {
+                ...state,
+                emotionStats: payload
+            }
+        case CLEAR_EMOTIONS_STATS:
+            return {
+                ...state,
+                emotionStats: null
             }
         default:
             return state;

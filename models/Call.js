@@ -1,5 +1,3 @@
-//changes we need to do :
-// add : friend requests the user sent
 
 const mongoose = require("mongoose");
 const CallSchema = new mongoose.Schema({
@@ -14,6 +12,10 @@ const CallSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  callStats: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "callStats",
+  }
 });
 
 module.exports = Call = mongoose.model("call", CallSchema);
