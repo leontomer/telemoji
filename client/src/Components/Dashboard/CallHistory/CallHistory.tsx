@@ -14,10 +14,11 @@ import AvatarGroup from "@material-ui/lab/AvatarGroup";
 import { loadUser } from "../../../actions/authActions";
 import { useSpring, animated, to } from "@react-spring/web";
 import { useGesture } from "react-use-gesture";
-import SwipeableViews from 'react-swipeable-views';
-import Statistics from './Statistics/Statistics';
+import SwipeableViews from "react-swipeable-views";
+import Statistics from "./Statistics/Statistics";
 
 import "./CallHistory.scss";
+import lan from "../../../Languages/Languages.json";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,10 +31,21 @@ const CallHistory = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   // @ts-ignore
-  const globalCallHistory = useSelector((state) => state.authReducer.user.callHistory);
+  const globalCallHistory = useSelector(
+    (state) => state.authReducer.user.callHistory
+  );
   // @ts-ignore
-  const usersImage = useSelector((state) => state.authReducer.user.imageAddress);
+  const usersImage = useSelector(
+    (state) => state.authReducer.user.imageAddress
+  );
 
+  // @ts-ignore
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
+
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
   const [callHistory, setCallHistory] = useState([
     globalCallHistory.callHistory,
   ]);
@@ -52,76 +64,89 @@ const CallHistory = () => {
   const pageCount = 5;
   const theme = useTheme();
   const domTarget = useRef(null);
-  const [{ rotateX, rotateY, rotateZ, zoom, scale }, api] = useSpring(
-    () => ({
-      rotateX: 0,
-      rotateY: 0,
-      rotateZ: 0,
-      scale: 1,
-      zoom: 0,
-      x: 0,
-      y: 0,
-      config: { mass: 5, tension: 350, friction: 40 }
-    })
-  );
-
+  const [{ rotateX, rotateY, rotateZ, zoom, scale }, api] = useSpring(() => ({
+    rotateX: 0,
+    rotateY: 0,
+    rotateZ: 0,
+    scale: 1,
+    zoom: 0,
+    x: 0,
+    y: 0,
+    config: { mass: 5, tension: 350, friction: 40 },
+  }));
 
   useGesture(
     {
       onMove: ({ dragging }) =>
         !dragging &&
         api.start({
-          scale: 1.05
+          scale: 1.05,
         }),
       onHover: ({ hovering }) =>
-        !hovering && api.start({ rotateX: 0, rotateY: 0, scale: 1 })
+        !hovering && api.start({ rotateX: 0, rotateY: 0, scale: 1 }),
     },
     { domTarget, eventOptions: { passive: false } }
   );
 
-
-
   const [value, setValue] = React.useState(0);
-  const [callId, setCallId] = React.useState('');
-  const [callerStatsName, setCallerStatsName] = React.useState('')
+  const [callId, setCallId] = React.useState("");
+  const [callerStatsName, setCallerStatsName] = React.useState("");
   useEffect(() => {
     setValue(1);
-  }, [])
+  }, []);
 
   const handleHistorySelect = ({ callId, callerName }) => {
-    setValue(2)
-    setCallId(callId)
-    setCallerStatsName(callerName)
-  }
+    setValue(2);
+    setCallId(callId);
+    setCallerStatsName(callerName);
+  };
 
   return (
-    <animated.div className="callHistoryContainer" ref={domTarget}
+    <animated.div
+      className="callHistoryContainer"
+      ref={domTarget}
       style={{
         transform: "perspective(600px)",
         scale: to([scale, zoom], (s, z) => s + z),
         rotateX,
         rotateY,
-        rotateZ
-      }}>
+        rotateZ,
+      }}
+    >
       <SwipeableViews
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        axis={theme.direction === "rtl" ? "x-reverse" : "x"}
         index={value}
       >
-        <SwipePanel value={value} index={0}>
-        </SwipePanel>
+        <SwipePanel value={value} index={0}></SwipePanel>
         <SwipePanel value={value} index={1}>
-          <Typography variant="h5" component="h5" style={{ textAlign: "center" }}>
-            Call History
+          <Typography
+            variant="h5"
+            component="h5"
+            style={{ textAlign: "center" }}
+          >
+            {lan[language].call_history}
           </Typography>
           <List className={classes.root}>
             {callHistory
               .slice(0)
               .reverse()
-              .slice(pageCount * selectedPage - pageCount, pageCount * selectedPage)
+              .slice(
+                pageCount * selectedPage - pageCount,
+                pageCount * selectedPage
+              )
               .map(
                 (call, index) =>
                   call && (
-                    <ListItem button key={index} onClick={() => handleHistorySelect({ callId: call._id, callerName: call.callerName })}>
+                    <ListItem
+                      button
+                      key={index}
+                      onClick={() =>
+                        handleHistorySelect({
+                          callId: call._id,
+                          callerName: call.callerName,
+                        })
+                      }
+                    >
                       <ListItemAvatar>
                         <Avatar style={{ backgroundColor: "#27AE60 " }}>
                           <CallMadeIcon />
@@ -152,7 +177,11 @@ const CallHistory = () => {
           </div>
         </SwipePanel>
         <SwipePanel value={value} index={2}>
-          <Statistics goback={() => setValue(1)} callId={callId} callerStatsName={callerStatsName} />
+          <Statistics
+            goback={() => setValue(1)}
+            callId={callId}
+            callerStatsName={callerStatsName}
+          />
         </SwipePanel>
       </SwipeableViews>
     </animated.div>
@@ -170,11 +199,7 @@ function SwipePanel(props) {
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <>
-          {children}
-        </>
-      )}
+      {value === index && <>{children}</>}
     </div>
   );
 }

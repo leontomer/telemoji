@@ -14,11 +14,15 @@ import { ListItemIcon, withStyles } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import { useDispatch, useSelector } from "react-redux";
-import { getFriendList, setFriendInFocus } from "../../../actions/friendActions";
+import {
+  getFriendList,
+  setFriendInFocus,
+} from "../../../actions/friendActions";
 import { FriendProps } from "../../../reducers/authReducer";
 import { handleCallUser } from "../../../actions/callActions";
 import { withRouter } from "react-router";
 import Typography from "@material-ui/core/Typography";
+import lan from "../../../Languages/Languages.json";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: "relative",
       overflow: "auto",
       height: "100%",
-      boxShadow: '0px 0px 19px 3px rgba(0, 0, 0, 0.5)',
+      boxShadow: "0px 0px 19px 3px rgba(0, 0, 0, 0.5)",
     },
     listSection: {
       backgroundColor: "inherit",
@@ -44,38 +48,38 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: "red",
     },
     title: {
-      backgroundColor: '#53317e',
-      color: 'white',
-      marginTop: '-10px',
-      marginBottom: '5px'
-    }
+      backgroundColor: "#53317e",
+      color: "white",
+      marginTop: "-10px",
+      marginBottom: "5px",
+    },
   })
 );
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
-    backgroundColor: '#44b700',
-    color: '#44b700',
+    backgroundColor: "#44b700",
+    color: "#44b700",
     boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-    '&::after': {
-      position: 'absolute',
+    "&::after": {
+      position: "absolute",
       top: -1,
       left: -1,
-      width: '100%',
-      height: '100%',
-      borderRadius: '50%',
-      animation: '$ripple 1.2s infinite ease-in-out',
-      border: '1px solid currentColor',
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      animation: "$ripple 1.2s infinite ease-in-out",
+      border: "1px solid currentColor",
       content: '""',
     },
   },
-  '@keyframes ripple': {
-    '0%': {
-      transform: 'scale(.8)',
+  "@keyframes ripple": {
+    "0%": {
+      transform: "scale(.8)",
       opacity: 1,
     },
-    '100%': {
-      transform: 'scale(2.4)',
+    "100%": {
+      transform: "scale(2.4)",
       opacity: 0,
     },
   },
@@ -83,28 +87,28 @@ const StyledBadge = withStyles((theme) => ({
 
 const StyledInCallBadge = withStyles((theme) => ({
   badge: {
-    backgroundColor: '#E67E22',
-    color: '#E67E22',
+    backgroundColor: "#E67E22",
+    color: "#E67E22",
     boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-    '&::after': {
-      position: 'absolute',
+    "&::after": {
+      position: "absolute",
       top: -1,
       left: -1,
-      width: '100%',
-      height: '100%',
-      borderRadius: '50%',
-      animation: '$ripple 1.2s infinite ease-in-out',
-      border: '1px solid currentColor',
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      animation: "$ripple 1.2s infinite ease-in-out",
+      border: "1px solid currentColor",
       content: '""',
     },
   },
-  '@keyframes ripple': {
-    '0%': {
-      transform: 'scale(.8)',
+  "@keyframes ripple": {
+    "0%": {
+      transform: "scale(.8)",
       opacity: 1,
     },
-    '100%': {
-      transform: 'scale(2.4)',
+    "100%": {
+      transform: "scale(2.4)",
       opacity: 0,
     },
   },
@@ -115,16 +119,27 @@ function FriendsList({ history }) {
   // @ts-ignore
   const { user } = useSelector((state) => state.authReducer);
   // @ts-ignore
-  const { friendList: globalFriendList } = useSelector((state) => state.friendReducer);
+  const { friendList: globalFriendList } = useSelector(
+    (state) => state.friendReducer
+  );
   // @ts-ignore
-  const allConnectedUsers = useSelector((state) => state.socketReducer.allConnectedUsers)
+  const allConnectedUsers = useSelector(
+    (state) => state.socketReducer.allConnectedUsers
+  );
 
   const [userFriendList, setUserFriendList] = useState([]);
-  const [connectedUsers, setConnectedUsers] = useState(allConnectedUsers)
+  const [connectedUsers, setConnectedUsers] = useState(allConnectedUsers);
+
+  // @ts-ignore
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
 
   useEffect(() => {
-    setConnectedUsers(allConnectedUsers)
-  }, [allConnectedUsers])
+    setConnectedUsers(allConnectedUsers);
+  }, [allConnectedUsers]);
 
   const handleFriendClick = (friend: FriendProps) => {
     dispatch(setFriendInFocus(friend));
@@ -141,8 +156,8 @@ function FriendsList({ history }) {
   }, [user]);
 
   useEffect(() => {
-    setUserFriendList(globalFriendList)
-  }, [globalFriendList])
+    setUserFriendList(globalFriendList);
+  }, [globalFriendList]);
 
   const handleCall = (id) => {
     dispatch(handleCallUser(id));
@@ -153,79 +168,96 @@ function FriendsList({ history }) {
     <List dense className={classes.root}>
       <ListItem key={"myFriends"} className={classes.title}>
         <ListItemIcon>
-          <PeopleAltIcon style={{ color: 'white' }} />
+          <PeopleAltIcon style={{ color: "white" }} />
         </ListItemIcon>
         <ListItemText
-          primary="Friends"
-          secondary={<Typography variant="subtitle2" style={{ color: '#F5EEF8' }}>You can see all your friends here!</Typography>}
+          primary={lan[language].friends}
+          secondary={
+            <Typography variant="subtitle2" style={{ color: "#F5EEF8" }}>
+              {lan[language].friends_secondary_message}
+            </Typography>
+          }
         />
       </ListItem>
-      {
-        userFriendList.map((friend: FriendProps, index) => {
-          const labelId = `checkbox-list-secondary-label-${friend}`;
-          return (
-            <ListItem
-              key={index}
-              button
-              onClick={() => handleFriendClick(friend)}
-            >
-
-              <ListItemAvatar>
-                {
-                  connectedUsers[friend._id] ?
-                    connectedUsers[friend._id].inCall ? (
-                      <StyledInCallBadge
-                        overlap="circle"
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'right',
-                        }}
-                        variant="dot"
-                      >
-                        <Avatar alt={`${friend.firstName}`} src={friend.imageAddress} />
-                      </StyledInCallBadge>
-                    ) :
-                      (
-                        <StyledBadge
-                          overlap="circle"
-                          anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'right',
-                          }}
-                          variant="dot"
-                        >
-                          <Avatar alt={`${friend.firstName}`} src={friend.imageAddress} />
-                        </StyledBadge>
-                      ) :
-                    (<Badge invisible={false} variant="dot" anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'right',
-                    }} classes={{ badge: classes.offlineBadge }} overlap="circle" >
-                      <Avatar alt={`${friend.firstName}`} src={friend.imageAddress} />
-                    </Badge>)
-                }
-              </ListItemAvatar>
-
-
-              <ListItemText id={labelId} primary={friend.firstName} />
-              <ListItemSecondaryAction>
-                <IconButton
-                  disabled={!connectedUsers[friend._id] || connectedUsers[friend._id].inCall}
-                  onClick={() => handleCall(friend._id)}
+      {userFriendList.map((friend: FriendProps, index) => {
+        const labelId = `checkbox-list-secondary-label-${friend}`;
+        return (
+          <ListItem
+            key={index}
+            button
+            onClick={() => handleFriendClick(friend)}
+          >
+            <ListItemAvatar>
+              {connectedUsers[friend._id] ? (
+                connectedUsers[friend._id].inCall ? (
+                  <StyledInCallBadge
+                    overlap="circle"
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
+                    variant="dot"
+                  >
+                    <Avatar
+                      alt={`${friend.firstName}`}
+                      src={friend.imageAddress}
+                    />
+                  </StyledInCallBadge>
+                ) : (
+                  <StyledBadge
+                    overlap="circle"
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
+                    variant="dot"
+                  >
+                    <Avatar
+                      alt={`${friend.firstName}`}
+                      src={friend.imageAddress}
+                    />
+                  </StyledBadge>
+                )
+              ) : (
+                <Badge
+                  invisible={false}
+                  variant="dot"
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                  classes={{ badge: classes.offlineBadge }}
+                  overlap="circle"
                 >
-                  <PhoneIcon
-                    style={
-                      connectedUsers[friend._id]
-                        ? { color: green[500] }
-                        : { color: grey[500] }
-                    }
+                  <Avatar
+                    alt={`${friend.firstName}`}
+                    src={friend.imageAddress}
                   />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          );
-        })
-      }
+                </Badge>
+              )}
+            </ListItemAvatar>
+
+            <ListItemText id={labelId} primary={friend.firstName} />
+            <ListItemSecondaryAction>
+              <IconButton
+                disabled={
+                  !connectedUsers[friend._id] ||
+                  connectedUsers[friend._id].inCall
+                }
+                onClick={() => handleCall(friend._id)}
+              >
+                <PhoneIcon
+                  style={
+                    connectedUsers[friend._id]
+                      ? { color: green[500] }
+                      : { color: grey[500] }
+                  }
+                />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        );
+      })}
     </List>
   );
 }
