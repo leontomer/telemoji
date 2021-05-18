@@ -156,13 +156,8 @@ export default function LoginPage({ history }) {
 
           <Grid container>
             <Grid item xs>
-<<<<<<< HEAD
               <Link to="/forgotPassword" variant="body2">
-                {Content.login_page_forgot_password}
-=======
-              <Link href="/" variant="body2">
-                {lan[language].forgot_password}
->>>>>>> [telemoji] | fixed language issue
+                {lan[language].forgot_password}{" "}
               </Link>
             </Grid>
             <Grid item>
