@@ -12,7 +12,7 @@ export function DetectionVideo({ videoRef, muted = false }) {
     "Detection initializing, please wait..."
   );
   let canvasRef = useRef(null);
-  const videoWidth = 640;
+  const videoWidth = window.innerWidth < 640 ? window.innerWidth : 640;
   const videoHeight = 480;
 
   const dispatch = useDispatch();

@@ -1,11 +1,20 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "@material-ui/core/Button";
 import { logout } from "../../../../actions/authActions";
 import { useGoogleLogout } from "react-google-login";
 import { clientId } from "../../../../Common/constants";
+import lan from "../../../../Languages/Languages.json";
 
 export default function LogoutHooks() {
+  // @ts-ignore
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
+
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
+
   const dispatch = useDispatch();
   const onLogoutSuccess = () => {};
   const onFailure = () => {
@@ -32,7 +41,7 @@ export default function LogoutHooks() {
         dispatch(logout());
       }}
     >
-      Logout
+      {lan[language].logout}
     </Button>
   );
 }

@@ -1,13 +1,13 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useEffect } from "react";
 import "./LandingPage.scss";
 import Button from "@material-ui/core/Button";
-import { BottomBorder } from './BottomBorder/BottomBorder';
-import { LandingSvg } from './LandingSvg/LandingSvg';
+import { BottomBorder } from "./BottomBorder/BottomBorder";
+import { LandingSvg } from "./LandingSvg/LandingSvg";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useLoader } from '../../Contexts/LoaderContext';
-import { useSpring, animated } from 'react-spring'
-
+import { useLoader } from "../../Contexts/LoaderContext";
+import { useSpring, animated } from "react-spring";
+import lan from "../../Languages/Languages.json";
 const buttonStyle = {
   backgroundColor: "#53317e",
   color: "#fbfcfc",
@@ -15,43 +15,51 @@ const buttonStyle = {
   letterSpacing: "-0.5px",
 };
 
-
-
 function LandingPage(props) {
   // @ts-ignore
-  const isAuthenticated = useSelector((state) => state.authReducer.isAuthenticated);
+  const isAuthenticated = useSelector(
+    // @ts-ignore
+    (state) => state.authReducer.isAuthenticated
+  );
+  const [language, setLocalLanguage] = React.useState("En");
+  // @ts-ignore
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+
   const { startLoading, finishLoading } = useLoader();
   useLayoutEffect(() => {
-    startLoading()
+    startLoading();
   }, []);
 
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
 
   const styles = useSpring({
     loop: true,
     to: [
-      { opacity: 0, color: '#53317e' },
-      { opacity: 1, color: 'white' },
+      { opacity: 0, color: "#53317e" },
+      { opacity: 1, color: "white" },
     ],
-    from: { opacity: 1, color: 'white' },
+    from: { opacity: 1, color: "white" },
     delay: 1000,
-  })
+  });
 
   const textContent = (
     <div className="content">
       <animated.div style={{ ...styles }}>
         <h1 className="landingpage-header">
-          The only video chat you will ever need
-      </h1>
+          {lan[language].landing_page_text1}
+        </h1>
         <h3 className="landingpage-subheader">
-          Chat with your friends and get a special experience
-      </h3>
+          {lan[language].landing_page_text2}
+        </h3>
       </animated.div>
 
       <div style={{ marginTop: "50px" }} data-hook="landing-page-button">
         <Link to="/register">
-          <Button style={buttonStyle} variant="contained"  >
-            Get Started
-        </Button>
+          <Button style={buttonStyle} variant="contained">
+            {lan[language].landing_page_button}{" "}
+          </Button>
         </Link>
       </div>
     </div>
@@ -61,8 +69,7 @@ function LandingPage(props) {
     if (isAuthenticated) {
       props.history.push("/dashboard");
       finishLoading();
-    }
-    else if (isAuthenticated !== null) {
+    } else if (isAuthenticated !== null) {
       finishLoading();
     }
   }, [isAuthenticated]);
@@ -73,9 +80,7 @@ function LandingPage(props) {
 
   return (
     <div className="landingPageContainer">
-      <div className="textContent">
-        {textContent}
-      </div>
+      <div className="textContent">{textContent}</div>
       <div className="landingSvg">
         <LandingSvg />
       </div>
@@ -83,6 +88,6 @@ function LandingPage(props) {
         <BottomBorder />
       </div>
     </div>
-  )
+  );
 }
 export default LandingPage;

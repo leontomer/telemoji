@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useEffect } from "react";
 import { useGoogleLogin } from "react-google-login";
 import { useDispatch, useSelector } from "react-redux";
 import { loginWithGoogle } from "../../../actions/authActions";
@@ -8,13 +8,19 @@ import { useLoader } from "../../../Contexts/LoaderContext";
 import "./GoogleLogin.scss";
 import { setMessage } from "../../../actions/errorsActions";
 import { snackbarType } from "../../../Common/dataTypes";
+import lan from "../../../Languages/Languages.json";
 
 function GoogleLoginHooks({ goToDashboard }) {
+  // @ts-ignore
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
   const { startLoading, finishLoading } = useLoader();
   // @ts-ignore
   const isAuthenticated = useSelector(
     // @ts-ignore
-
     (state) => state.authReducer.isAuthenticated
   );
   useLayoutEffect(() => {
@@ -56,7 +62,7 @@ function GoogleLoginHooks({ goToDashboard }) {
       type="button"
       className="login-with-google-btn"
     >
-      Sign in with Google
+      {lan[language].google_sign_in}
     </button>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -10,10 +10,11 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { register } from "../../actions/authActions";
 import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
+import lan from "../../Languages/Languages.json";
 
 function Copyright() {
   return (
@@ -50,6 +51,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp({ history }) {
   const classes = useStyles();
+  // @ts-ignore
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
 
   const [registrationData, setRegistrationData] = useState({
     email: "",
@@ -67,6 +71,10 @@ export default function SignUp({ history }) {
     });
   };
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -90,7 +98,7 @@ export default function SignUp({ history }) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          {lan[language].sign_up}
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -102,7 +110,7 @@ export default function SignUp({ history }) {
                 required
                 fullWidth
                 id="firstName"
-                label="First Name"
+                label={lan[language].register_first_name}
                 autoFocus
                 onChange={onChange}
                 value={firstName}
@@ -114,7 +122,7 @@ export default function SignUp({ history }) {
                 required
                 fullWidth
                 id="lastName"
-                label="Last Name"
+                label={lan[language].register_last_name}
                 name="lastName"
                 autoComplete="lname"
                 onChange={onChange}
@@ -127,7 +135,7 @@ export default function SignUp({ history }) {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label={lan[language].register_email}
                 name="email"
                 autoComplete="email"
                 type="email"
@@ -141,7 +149,7 @@ export default function SignUp({ history }) {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label={lan[language].register_password}
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -155,7 +163,7 @@ export default function SignUp({ history }) {
                 required
                 fullWidth
                 name="password2"
-                label="Confirm Password"
+                label={lan[language].register_password_confirm}
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -177,11 +185,11 @@ export default function SignUp({ history }) {
             color="primary"
             className={classes.submit}
           >
-            Sign Up
+            {lan[language].sign_up}
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link to="/login">Already have an account? Sign in</Link>
+              <Link to="/login">{lan[language].RegisterToLoginPage}</Link>
             </Grid>
           </Grid>
         </form>

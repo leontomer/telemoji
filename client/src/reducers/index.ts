@@ -2,10 +2,11 @@ import { combineReducers } from "redux";
 import authReducer from "./authReducer";
 import errorsReducer from "./errorsReducer";
 import addonReducer from "./addonReducer";
-import modelReducer from './modelReducer';
-import socketReducer from './socketReducer';
-import callReducer from './callReducer';
-import friendReducer from './friendReducer';
+import modelReducer from "./modelReducer";
+import socketReducer from "./socketReducer";
+import callReducer from "./callReducer";
+import friendReducer from "./friendReducer";
+import LanguageReducer from "./LanguageReducer";
 
 export default combineReducers({
   authReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
   modelReducer,
   socketReducer,
   callReducer,
-  friendReducer
+  friendReducer,
+  LanguageReducer,
 });

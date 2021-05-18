@@ -12,6 +12,8 @@ import TextField from "@material-ui/core/TextField";
 import { Content } from "../../../Common/content";
 import CardMedia from "@material-ui/core/CardMedia";
 import { setAbout, setUserImageAction } from "../../../actions/usersActions";
+import lan from "../../../Languages/Languages.json";
+
 import {
   sendFriendRequest,
   removeFriend,
@@ -40,17 +42,25 @@ const useStyles = makeStyles({
 });
 
 export default function FriendInfoCard() {
+  // @ts-ignore
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
   const classes = useStyles();
   // @ts-ignore
   const user = useSelector((state) => state.authReducer.user);
   // @ts-ignore
-  const globalFriendList = useSelector((state) => state.friendReducer.friendList);
-
-
-
+  const globalFriendList = useSelector(
+    // @ts-ignore
+    (state) => state.friendReducer.friendList
+  );
   // @ts-ignore
-  const _friendInFocus: FriendProps = useSelector((state) => state.friendReducer.friendInFocus);
-
+  const _friendInFocus: FriendProps = useSelector(
+    // @ts-ignore
+    (state) => state.friendReducer.friendInFocus
+  );
   const [userAbout, setUserAbout] = useState<string>(Content.default_about);
   const [userImage, setUserImage] = useState<string>(Content.default_image);
   const [friendList, setFriendList] = useState(globalFriendList);
@@ -78,7 +88,7 @@ export default function FriendInfoCard() {
         multiline
         variant="outlined"
         id="outlined-multiline-static"
-        label="About"
+        label={lan[language].about}
         rows={4}
         disabled
       />
@@ -101,7 +111,7 @@ export default function FriendInfoCard() {
         variant="outlined"
         onChange={handleAboutChange}
         id="outlined-multiline-static"
-        label="About"
+        label={lan[language].about}
         rows={8}
       />
     );
@@ -161,13 +171,13 @@ export default function FriendInfoCard() {
       <>
         {usersAreFriends() ? (
           <Button size="small" color="primary" onClick={handleUnfriend}>
-            Unfriend
+            {lan[language].unfriend}
           </Button>
         ) : (
-            <Button size="small" color="primary" onClick={handleAddFriend}>
-              Add Friend
-            </Button>
-          )}
+          <Button size="small" color="primary" onClick={handleAddFriend}>
+            {lan[language].add_friend}
+          </Button>
+        )}
       </>
     );
   };
@@ -192,7 +202,7 @@ export default function FriendInfoCard() {
           onClick={handleSaveUserDetails}
           style={{ height: "25px" }}
         >
-          Save
+          {lan[language].profile_save}
         </Button>
         <CloudinaryUploadButton />
       </>
