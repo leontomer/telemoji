@@ -1,9 +1,7 @@
 import { SET_LANGUAGE } from "../actions/types";
 
-import language from "../../Languages/Languages.json";
-
 const initialState = {
-  language: "En",
+  language: localStorage.getItem("language"),
 };
 
 export default function (state = initialState, action) {
@@ -11,6 +9,7 @@ export default function (state = initialState, action) {
 
   switch (type) {
     case SET_LANGUAGE:
+      localStorage.setItem("language", payload);
       return { language: payload };
     default:
       return state;
