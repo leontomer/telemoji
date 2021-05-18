@@ -1,6 +1,3 @@
-//changes we need to do :
-// add : friend requests the user sent
-
 const mongoose = require("mongoose");
 const UserSchema = new mongoose.Schema({
   firstName: {

@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require("../../middleware/auth");
 const User = require("../../models/User");
 const Call = require('../../models/Call');
+const CallStats = require('../../models/CallStats');
 
 const updateClientFriendList = (clientIdToUpdate) => {
   if (users[clientIdToUpdate]) {
@@ -152,6 +153,7 @@ router.post("/callHistory", auth, async (req, res) => {
     const { userToCall } = req.body;
     const friend = await User.findById(userToCall)
     const user = await User.findById(userID)
+
     const usersCall = new Call({
       callerName: friend.firstName + " " + friend.lastName,
       callerImage: friend.imageAddress
@@ -160,6 +162,7 @@ router.post("/callHistory", auth, async (req, res) => {
       callerName: user.firstName + " " + user.lastName,
       callerImage: user.imageAddress
     })
+
     await usersCall.save();
     await friendsCall.save();
 
@@ -193,5 +196,41 @@ router.get("/callHistory", auth, async (req, res) => {
     res.status(500).json({ errors: [{ msg: err.message }] });
   }
 });
+
+router.post("/call-stats", auth, async (req, res) => {
+  try {
+    const userID = req.user.id;
+    const user = await User.findById(userID)
+    const recentCallId = user.callHistory[user.callHistory.length - 1]
+    const recentCall = await Call.findById(recentCallId);
+    const { happy, sad, disgust, neutral, suprise, angry, fear } = req.body.emotionStats
+    const newCallStats = new CallStats({
+      happy, sad, disgust, neutral, suprise, angry, fear, startCall: recentCall.date
+    })
+    console.log('newCallStats', newCallStats);
+    await newCallStats.save();
+    recentCall.callStats = newCallStats._id;
+    console.log(recentCall)
+    await recentCall.save();
+  } catch (error) {
+    console.error(err);
+    res.status(500).json({ errors: [{ msg: err.message }] });
+  }
+})
+
+router.get("/call-stats/:callId", auth, async (req, res) => {
+  try {
+    const { callId } = req.params
+    const callHistory = await Call.findById(callId);
+    if (!callHistory.callStats) {
+      return res.status(200).json({});
+    }
+    const callHistoryStats = await CallStats.findById(callHistory.callStats)
+    res.status(200).json(callHistoryStats);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ errors: [{ msg: err.message }] });
+  }
+})
 
 module.exports = router;

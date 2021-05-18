@@ -44,14 +44,12 @@ export default function FriendInfoCard() {
   // @ts-ignore
   const user = useSelector((state) => state.authReducer.user);
   // @ts-ignore
-  const globalFriendList = useSelector(
-    (state) => state.friendReducer.friendList
-  );
+  const globalFriendList = useSelector((state) => state.friendReducer.friendList);
+
+
 
   // @ts-ignore
-  const _friendInFocus: FriendProps = useSelector(
-    (state) => state.friendReducer.friendInFocus
-  );
+  const _friendInFocus: FriendProps = useSelector((state) => state.friendReducer.friendInFocus);
 
   const [userAbout, setUserAbout] = useState<string>(Content.default_about);
   const [userImage, setUserImage] = useState<string>(Content.default_image);
@@ -92,14 +90,6 @@ export default function FriendInfoCard() {
     target: { value: string };
   }) => {
     setUserAbout(value);
-  };
-
-  const handleImageChange = ({
-    target: { value },
-  }: {
-    target: { value: string };
-  }) => {
-    setUserImage(value);
   };
 
   const getUserAbout = () => {
@@ -174,10 +164,10 @@ export default function FriendInfoCard() {
             Unfriend
           </Button>
         ) : (
-          <Button size="small" color="primary" onClick={handleAddFriend}>
-            Add Friend
-          </Button>
-        )}
+            <Button size="small" color="primary" onClick={handleAddFriend}>
+              Add Friend
+            </Button>
+          )}
       </>
     );
   };

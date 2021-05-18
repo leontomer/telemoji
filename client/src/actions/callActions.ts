@@ -4,7 +4,8 @@ import {
   GET_CAMERA_STREAM,
   SET_CALLERS_STREAM,
   ANSWER_CALL,
-  END_CALL
+  END_CALL,
+  CLEAR_EMOTIONS_STATS
 } from "./types";
 
 import Peer from "simple-peer";
@@ -152,6 +153,7 @@ export const acceptCall = () => async (dispatch, getState) => {
 
 export const endCall = () => async (dispatch, getState) => {
   const userStream = getState().callReducer.userStream;
+  const emotionStats = getState().modelReducer.emotionStats;
   if (userStream) {
     const tracks = userStream.getTracks();
     tracks.forEach(function (track) {
@@ -165,4 +167,11 @@ export const endCall = () => async (dispatch, getState) => {
   dispatch({
     type: END_CALL,
   });
+  if (emotionStats) {
+    axios.post(`${baseRoute}call-stats`, { emotionStats });
+    dispatch({
+      type: CLEAR_EMOTIONS_STATS
+    })
+  }
+
 }
