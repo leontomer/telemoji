@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import {
   Avatar,
   Typography,
@@ -17,7 +17,7 @@ import AsyncSearch from "./AsyncSearch/AsyncSearch";
 import FriendRequests from "../Dashboard/FriendRequests";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import {setLanguage} from "../../actions/languageAction";
+import { setLanguage } from "../../actions/languageAction";
 import lan from "../../Languages/Languages.json"
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -30,10 +30,21 @@ const useStyles = makeStyles((theme) => ({
       display: "block",
     },
   },
+  select: {
+    '&:before': {
+      borderColor: '#53317e',
+    },
+    '&:after': {
+      borderColor: '#53317e',
+    }
+  },
+  icon: {
+    fill: '#53317e',
+  }
 }));
 
 export default function SearchAppBar() {
-  
+
   const classes = useStyles();
   const dispatch = useDispatch();
   // @ts-ignore
@@ -44,7 +55,7 @@ export default function SearchAppBar() {
   const firstName = useSelector((state) => state.authReducer.user.firstName);
   // @ts-ignore
   const userImage = useSelector((state) => state.authReducer.user.imageAddress);
-const globalLanguage=useSelector((state) => state.LanguageReducer.language);
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
   const [language, setLocalLanguage] = React.useState(globalLanguage);
 
   const handleChange = (event) => {
@@ -102,7 +113,7 @@ const globalLanguage=useSelector((state) => state.LanguageReducer.language);
             fontWeight: "bold",
           }}
         >
-           {lan[language].register_navbar}
+          {lan[language].register_navbar}
         </Button>
       </Link>
     </div>
@@ -113,7 +124,7 @@ const globalLanguage=useSelector((state) => state.LanguageReducer.language);
       style={{ backgroundColor: "#53317e", color: "#fbfcfc" }}
     >
       <Toolbar>
-        
+
         <Typography className={classes.title} variant="h6" noWrap>
           <div
             style={{
@@ -128,24 +139,30 @@ const globalLanguage=useSelector((state) => state.LanguageReducer.language);
                 Telemoji
               </h2>
             </Link>
-            <Select
-        labelId="demo-simple-select-outlined-label"
-        id="demo-simple-select-outlined"
-        value={language}
-        onChange={handleChange}
-        label="Language"
-      >
-        {" "}
+            <div style={{ marginLeft: '10px' }}>
+              <Select
+                value={language}
+                onChange={handleChange}
+                label="Language"
+                style={{ color: 'white' }}
+                className={classes.select}
+                inputProps={{
+                  classes: {
+                    icon: classes.icon,
+                  },
+                }}
+              >
+                <MenuItem value={"En"}>English 🇺🇸 </MenuItem>
+                <MenuItem value={"He"}>עברית 🇮🇱</MenuItem>
+              </Select>
+            </div>
 
-        <MenuItem value={"En"}>English</MenuItem>
-        <MenuItem value={"He"}>עברית</MenuItem>
-      </Select>
 
           </div>
         </Typography>
 
- 
-        
+
+
         {isAuthenticated === null
           ? null
           : isAuthenticated
