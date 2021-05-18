@@ -53,10 +53,12 @@ export default function FriendInfoCard() {
   const user = useSelector((state) => state.authReducer.user);
   // @ts-ignore
   const globalFriendList = useSelector(
+    // @ts-ignore
     (state) => state.friendReducer.friendList
   );
   // @ts-ignore
   const _friendInFocus: FriendProps = useSelector(
+    // @ts-ignore
     (state) => state.friendReducer.friendInFocus
   );
   const [userAbout, setUserAbout] = useState<string>(Content.default_about);

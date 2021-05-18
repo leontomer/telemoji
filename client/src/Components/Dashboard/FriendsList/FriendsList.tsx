@@ -120,10 +120,12 @@ function FriendsList({ history }) {
   const { user } = useSelector((state) => state.authReducer);
   // @ts-ignore
   const { friendList: globalFriendList } = useSelector(
+    // @ts-ignore
     (state) => state.friendReducer
   );
   // @ts-ignore
   const allConnectedUsers = useSelector(
+    // @ts-ignore
     (state) => state.socketReducer.allConnectedUsers
   );
 
