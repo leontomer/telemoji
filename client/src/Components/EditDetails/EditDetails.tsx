@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { withRouter } from "react-router";
 import TextField from "@material-ui/core/TextField";
@@ -28,6 +28,15 @@ export default function EditDetails() {
   const [lastName, setLastName] = React.useState<string>(user.lastName);
   const [oldPassword, setOldPassword] = React.useState<string>("");
   const [checked, setChecked] = React.useState(false);
+
+  useEffect(() => {
+    setFirstName(user.firstName);
+  }, [user]);
+
+  useEffect(() => {
+    setLastName(user.lastName);
+  }, [user]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password !== password2) {
