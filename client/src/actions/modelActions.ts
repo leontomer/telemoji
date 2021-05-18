@@ -1,7 +1,7 @@
 import * as faceapi from "@vladmandic/face-api/dist/face-api.esm.js";
 import * as tf from "@tensorflow/tfjs";
 
-import { SET_FACEAPI, SET_EMOTION_RECOGNITION_MODEL, SET_EMOTION } from "./types";
+import { SET_FACEAPI, SET_EMOTION_RECOGNITION_MODEL, SET_EMOTION, UPDATE_EMOT_STATS } from "./types";
 
 export const loadFaceapi = () => async (
     dispatch
@@ -27,12 +27,19 @@ export const loadFaceapi = () => async (
 export const setEmotion = (emotion) => async (
     dispatch
 ) => {
-    console.log('dispatching', emotion);
     dispatch({
         type: SET_EMOTION,
         payload: emotion,
     });
 };
+
+export const setCallEmotionStats = (stats) => async (dispatch) => {
+    dispatch({
+        type: UPDATE_EMOT_STATS,
+        payload: stats
+    })
+}
+
 
 export const loadEmotionRecognitionModel = () => async (dispatch) => {
     class L2 {

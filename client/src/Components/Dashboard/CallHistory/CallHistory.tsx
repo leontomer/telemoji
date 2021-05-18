@@ -5,7 +5,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Pagination from "@material-ui/lab/Pagination";
 import Moment from "moment";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
@@ -14,6 +14,9 @@ import AvatarGroup from "@material-ui/lab/AvatarGroup";
 import { loadUser } from "../../../actions/authActions";
 import { useSpring, animated, to } from "@react-spring/web";
 import { useGesture } from "react-use-gesture";
+import SwipeableViews from 'react-swipeable-views';
+import Statistics from './Statistics/Statistics';
+
 import "./CallHistory.scss";
 
 const useStyles = makeStyles((theme) => ({
@@ -47,7 +50,7 @@ const CallHistory = () => {
     setSelectedPage(page);
   };
   const pageCount = 5;
-
+  const theme = useTheme();
   const domTarget = useRef(null);
   const [{ rotateX, rotateY, rotateZ, zoom, scale }, api] = useSpring(
     () => ({
@@ -63,11 +66,9 @@ const CallHistory = () => {
   );
 
 
-  const [wheelApi] = useSpring(() => ({ wheelY: 0 }));
-
   useGesture(
     {
-      onMove: ({ xy: [px, py], dragging }) =>
+      onMove: ({ dragging }) =>
         !dragging &&
         api.start({
           scale: 1.05
@@ -80,6 +81,19 @@ const CallHistory = () => {
 
 
 
+  const [value, setValue] = React.useState(0);
+  const [callId, setCallId] = React.useState('');
+  const [callerStatsName, setCallerStatsName] = React.useState('')
+  useEffect(() => {
+    setValue(1);
+  }, [])
+
+  const handleHistorySelect = ({ callId, callerName }) => {
+    setValue(2)
+    setCallId(callId)
+    setCallerStatsName(callerName)
+  }
+
   return (
     <animated.div className="callHistoryContainer" ref={domTarget}
       style={{
@@ -89,48 +103,80 @@ const CallHistory = () => {
         rotateY,
         rotateZ
       }}>
-      <Typography variant="h5" component="h5" style={{ textAlign: "center" }}>
-        Call History
-      </Typography>
-      <List className={classes.root}>
-        {callHistory
-          .slice(0)
-          .reverse()
-          .slice(pageCount * selectedPage - pageCount, pageCount * selectedPage)
-          .map(
-            (call, index) =>
-              call && (
-                <ListItem button key={index}>
-                  <ListItemAvatar>
-                    <Avatar style={{ backgroundColor: "#27AE60 " }}>
-                      <CallMadeIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <AvatarGroup style={{ marginRight: 5 }}>
-                    <Avatar src={usersImage} />
-                    <Avatar src={call.callerImage} />
-                  </AvatarGroup>
-                  <ListItemText
-                    primary={call.callerName}
-                    secondary={Moment(call.date).format(
-                      "MMMM Do YYYY, h:mm:ss a"
-                    )}
-                  />
-                </ListItem>
-              )
-          )}
-      </List>
-      <div style={{ marginTop: 10 }}>
-        {callHistory.length > 0 && (
-          <Pagination
-            count={Math.ceil(callHistory.length / 5)}
-            color="primary"
-            onChange={handlePagination}
-          />
-        )}
-      </div>
+      <SwipeableViews
+        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        index={value}
+      >
+        <SwipePanel value={value} index={0}>
+        </SwipePanel>
+        <SwipePanel value={value} index={1}>
+          <Typography variant="h5" component="h5" style={{ textAlign: "center" }}>
+            Call History
+          </Typography>
+          <List className={classes.root}>
+            {callHistory
+              .slice(0)
+              .reverse()
+              .slice(pageCount * selectedPage - pageCount, pageCount * selectedPage)
+              .map(
+                (call, index) =>
+                  call && (
+                    <ListItem button key={index} onClick={() => handleHistorySelect({ callId: call._id, callerName: call.callerName })}>
+                      <ListItemAvatar>
+                        <Avatar style={{ backgroundColor: "#27AE60 " }}>
+                          <CallMadeIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <AvatarGroup style={{ marginRight: 5 }}>
+                        <Avatar src={usersImage} />
+                        <Avatar src={call.callerImage} />
+                      </AvatarGroup>
+                      <ListItemText
+                        primary={call.callerName}
+                        secondary={Moment(call.date).format(
+                          "MMMM Do YYYY, h:mm:ss a"
+                        )}
+                      />
+                    </ListItem>
+                  )
+              )}
+          </List>
+          <div style={{ marginTop: 10 }}>
+            {callHistory.length > 0 && (
+              <Pagination
+                count={Math.ceil(callHistory.length / 5)}
+                color="primary"
+                onChange={handlePagination}
+              />
+            )}
+          </div>
+        </SwipePanel>
+        <SwipePanel value={value} index={2}>
+          <Statistics goback={() => setValue(1)} callId={callId} callerStatsName={callerStatsName} />
+        </SwipePanel>
+      </SwipeableViews>
     </animated.div>
   );
 };
+
+function SwipePanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <>
+          {children}
+        </>
+      )}
+    </div>
+  );
+}
 
 export default CallHistory;

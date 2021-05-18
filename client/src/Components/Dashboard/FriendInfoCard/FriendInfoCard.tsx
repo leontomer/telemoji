@@ -93,14 +93,6 @@ export default function FriendInfoCard() {
     setUserAbout(value);
   };
 
-  const handleImageChange = ({
-    target: { value },
-  }: {
-    target: { value: string };
-  }) => {
-    setUserImage(value);
-  };
-
   const getUserAbout = () => {
     return (
       <TextField

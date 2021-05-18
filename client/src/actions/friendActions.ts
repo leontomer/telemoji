@@ -2,7 +2,9 @@ import axios from "axios";
 import {
     GET_FRIEND_LIST,
     SET_FRIEND_REQUESTS,
-    SET_FRIEND_IN_FOCUS
+    SET_FRIEND_IN_FOCUS,
+    SET_SELECTED_CALL_HISTORY_STATS,
+    CLEAR_SELECTED_CALL_HISTORY_STATS
 } from "./types";
 import { FriendProps } from "../reducers/authReducer";
 
@@ -105,3 +107,29 @@ export const pendingFriendRequestsListener = () => async (dispatch, getState) =>
         dispatch(updatePendingFriendRequests());
     });
 }
+
+
+
+export const getCallStats = (callId: string) => async (dispatch) => {
+    try {
+        console.log('entered!');
+        const res = await axios.get(`${baseRoute}call-stats/${callId}`);
+        console.log('resdata is', res.data);
+        if (res.data) {
+            dispatch({
+                type: SET_SELECTED_CALL_HISTORY_STATS,
+                payload: res.data
+            })
+        }
+
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const clearSelectedCallStats = () => (dispatch) => {
+    dispatch({
+        type: CLEAR_SELECTED_CALL_HISTORY_STATS
+    })
+}
+
