@@ -175,7 +175,7 @@ export default function FriendInfoCard() {
           </Button>
         ) : (
           <Button size="small" color="primary" onClick={handleAddFriend}>
-            Add Friend
+            {lan[language].add_friend}
           </Button>
         )}
       </>

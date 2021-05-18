@@ -19,6 +19,7 @@
     "call_history": "Call History",
     "about": "about",
     "call": "call",
+    "add_friend": "Add friend",
     "unfriend": "unfriend",
     "profile_save": "save",
     "upload_profile_picture": "Upload Profile Picture",
@@ -42,6 +43,8 @@
     "sign_in_login_page": "התחבר",
     "forgot_password": "?שכחת סיסמה",
     "remember": "זכור אותי",
+    "add_friend": "הוסף חבר",
+
     "register_login_page": "אין לך חשבון עדיין? הירשם עכשיו",
     "RegisterToLoginPage": "כבר יש לך חשבון? התחבר כעת",
     "google_sign_in": "התחבר עם גוגל",

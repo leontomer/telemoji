@@ -3,11 +3,11 @@ import "./LandingPage.scss";
 import Button from "@material-ui/core/Button";
 import { BottomBorder } from "./BottomBorder/BottomBorder";
 import { LandingSvg } from "./LandingSvg/LandingSvg";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useLoader } from "../../Contexts/LoaderContext";
 import { useSpring, animated } from "react-spring";
-
+import lan from "../../Languages/Languages.json";
 const buttonStyle = {
   backgroundColor: "#53317e",
   color: "#fbfcfc",
@@ -15,35 +15,24 @@ const buttonStyle = {
   letterSpacing: "-0.5px",
 };
 
-import lan from "../../Languages/Languages.json";
-
 function LandingPage(props) {
   // @ts-ignore
-  const buttonStyle = {
-    backgroundColor: "#53317e",
-    color: "#fbfcfc",
-    fontSize: "20px",
-    letterSpacing: "-0.5px",
-  };
-
-  const dispatch = useDispatch();
+  const isAuthenticated = useSelector(
+    // @ts-ignore
+    (state) => state.authReducer.isAuthenticated
+  );
   const [language, setLocalLanguage] = React.useState("En");
   // @ts-ignore
   const globalLanguage = useSelector((state) => state.LanguageReducer.language);
-
-  const isAuthenticated = useSelector(
-    // @ts-ignore
-    (state) => state.authReducer.isAuthenticate
-  );
-
-  useEffect(() => {
-    setLocalLanguage(globalLanguage);
-  }, [globalLanguage]);
 
   const { startLoading, finishLoading } = useLoader();
   useLayoutEffect(() => {
     startLoading();
   }, []);
+
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
 
   const styles = useSpring({
     loop: true,
@@ -69,7 +58,7 @@ function LandingPage(props) {
       <div style={{ marginTop: "50px" }} data-hook="landing-page-button">
         <Link to="/register">
           <Button style={buttonStyle} variant="contained">
-            {lan[language].landing_page_button}
+            {lan[language].landing_page_button}{" "}
           </Button>
         </Link>
       </div>
