@@ -3,7 +3,7 @@ import * as tf from "@tensorflow/tfjs";
 import { useSelector, useDispatch } from "react-redux";
 import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
-import { setEmotion, setCallEmotionStats } from '../../actions/modelActions';
+import { setEmotion, setCallEmotionStats } from "../../actions/modelActions";
 
 export function DetectionVideo({ videoRef, muted = false }) {
   const [faceapi, setFaceapi] = useState();
@@ -31,7 +31,7 @@ export function DetectionVideo({ videoRef, muted = false }) {
 
     return () => {
       clearTimeout(timeVarHolder);
-      dispatch(setCallEmotionStats(emotionStats.current))
+      dispatch(setCallEmotionStats(emotionStats.current));
       canvasRef = null;
       unmountingVideoChat.current = true;
     };
@@ -44,17 +44,17 @@ export function DetectionVideo({ videoRef, muted = false }) {
     "happy",
     "neutral",
     "sad",
-    "suprise",
+    "surprise",
   ];
   const emotionStats = React.useRef({
-    'happy': 0,
-    'sad': 0,
-    'disgust': 0,
-    'neutral': 0,
-    'suprise': 0,
-    'angry': 0,
-    'fear': 0
-  })
+    happy: 0,
+    sad: 0,
+    disgust: 0,
+    neutral: 0,
+    surprise: 0,
+    angry: 0,
+    fear: 0,
+  });
   const setEmotionDelay = useRef(false);
 
   const predict = (data) => {

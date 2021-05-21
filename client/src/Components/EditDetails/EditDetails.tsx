@@ -15,6 +15,7 @@ import Typography from "@material-ui/core/Typography";
 import { editDetails } from "../../actions/usersActions";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import lan from "../../Languages/Languages.json";
 export default function EditDetails() {
   const dispatch = useDispatch();
   //check if the user new password entered is the same as the confirm new password like i did in reset password component
@@ -76,12 +77,19 @@ export default function EditDetails() {
     setChecked(event.target.checked);
   };
 
+  // @ts-ignore
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
+
   return (
-    <div>
+    <div style={{ marginTop: 20 }}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />{" "}
         <Typography variant="h4" gutterBottom>
-          Edit Your Details
+          {lan[language].edit_details}
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
@@ -90,7 +98,7 @@ export default function EditDetails() {
             required
             fullWidth
             name="First name"
-            label="First name"
+            label={lan[language].register_first_name}
             type="text"
             id="firstName"
             onChange={(e) => setFirstName(e.target.value)}
@@ -102,7 +110,7 @@ export default function EditDetails() {
             required
             fullWidth
             name="last name"
-            label="Last name"
+            label={lan[language].register_last_name}
             type="text"
             id="lastName"
             onChange={(e) => setLastName(e.target.value)}
@@ -114,7 +122,7 @@ export default function EditDetails() {
             required
             fullWidth
             name="oldPassword"
-            label="Current Password"
+            label={lan[language].current_pass}
             type="password"
             id="oldPassword"
             data-hook={DataHook.LoginPagePasswordTextField}
@@ -130,7 +138,7 @@ export default function EditDetails() {
                 name="checkedA"
               />
             }
-            label="Change Password"
+            label={lan[language].change_password}
           />
 
           {checked && (
@@ -140,7 +148,7 @@ export default function EditDetails() {
               required
               fullWidth
               name="password"
-              label="New password"
+              label={lan[language].new_password}
               type="password"
               id="password"
               data-hook={DataHook.LoginPagePasswordTextField}
@@ -156,7 +164,7 @@ export default function EditDetails() {
               required
               fullWidth
               name="confirm password"
-              label="Confirm new Password"
+              label={lan[language].confirm_new_password}
               type="password"
               id="password"
               data-hook={DataHook.LoginPagePasswordTextField}
@@ -173,7 +181,7 @@ export default function EditDetails() {
             color="primary"
             className={classes.submit}
           >
-            Save
+            {lan[language].profile_save}
           </Button>
         </form>
       </Container>

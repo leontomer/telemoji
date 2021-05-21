@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -6,9 +6,10 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { contactUs } from "../../actions/usersActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
+import lan from "../../Languages/Languages.json";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,7 +26,12 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 export default function ContactUs() {
   const dispatch = useDispatch();
-
+  // @ts-ignore
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
   const classes = useStyles();
   const [value, setValue] = React.useState("");
 
@@ -46,11 +52,11 @@ export default function ContactUs() {
   };
 
   return (
-    <div>
+    <div style={{ marginTop: 10 }}>
       <Container fixed>
         <CssBaseline />{" "}
         <Typography variant="h4" gutterBottom>
-          Contact Us
+          {lan[language].contact_us}
         </Typography>
         <form
           className={classes.root}
@@ -66,7 +72,7 @@ export default function ContactUs() {
                 style: { textAlign: "center" },
               }}
               id="standard-multiline-flexible"
-              label="Contact Us"
+              label={lan[language].contact_us}
               multiline
               rows={13}
               value={value}
@@ -78,7 +84,7 @@ export default function ContactUs() {
               color="primary"
               className={classes.submit}
             >
-              Send
+              {lan[language].send}
             </Button>{" "}
           </div>{" "}
         </form>
