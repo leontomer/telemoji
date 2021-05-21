@@ -54,25 +54,13 @@ export const loadEmotionRecognitionModel = () => async (dispatch) => {
     tf.serialization.registerClass(L2);
 
     try {
-        const model80p = await tf.loadLayersModel(
-            `${process.env.PUBLIC_URL}/80p/model.json`
-        );
         const model85p = await tf.loadLayersModel(
             `${process.env.PUBLIC_URL}/85p/model.json`
-        );
-        const model87p = await tf.loadLayersModel(
-            `${process.env.PUBLIC_URL}/87p/model.json`
-        );
-        const model95p = await tf.loadLayersModel(
-            `${process.env.PUBLIC_URL}/95p/model.json`
         );
         dispatch({
             type: SET_EMOTION_RECOGNITION_MODEL,
             payload: {
-                model80p,
                 model85p,
-                model87p,
-                model95p
             }
         });
     } catch (error) {

@@ -207,7 +207,6 @@ router.post("/call-stats", auth, async (req, res) => {
     const newCallStats = new CallStats({
       happy, sad, disgust, neutral, suprise, angry, fear, startCall: recentCall.date
     })
-    console.log('newCallStats', newCallStats);
     await newCallStats.save();
     recentCall.callStats = newCallStats._id;
     console.log(recentCall)
