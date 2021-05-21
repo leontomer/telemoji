@@ -1,11 +1,9 @@
-
 .dashboardContainer {
-  width:100%;
-  height:95vh;
+  width: 100%;
   display: grid;
   grid-template-rows: 0.1fr 0.3fr 2fr 0.2fr;
-  grid-template-columns: 0.6fr minmax(450px,1fr) minmax(450px,1fr) 0.1fr;
-  grid-gap:2rem;
+  grid-template-columns: 0.6fr minmax(450px, 1fr) minmax(450px, 1fr) 0.1fr;
+  grid-gap: 2rem;
   grid-template-areas:
     "nav nav nav nav"
     "friendlist banner banner space"
@@ -13,54 +11,56 @@
     "footer footer footer footer";
 
   .welcomeBanner {
-    grid-area:banner;
+    grid-area: banner;
     border-radius: 5px;
     -webkit-box-shadow: 0px 0px 19px 3px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 0px 19px 3px rgba(0, 0, 0, 0.5);
   }
 
   .friendList {
-    grid-area:friendlist;
+    grid-area: friendlist;
     border-radius: 5px;
-    min-width:230px;
+    min-width: 230px;
   }
 
   .friendInfoCard {
-    padding:30px;
-    grid-area:friendInfoCard;
-    height:100%;
-   
+    padding: 30px;
+    grid-area: friendInfoCard;
+    height: 100%;
   }
   .callHistory {
-    padding:30px;
-    grid-area:callHistory;
-    height:100%;
+    padding: 30px;
+    grid-area: callHistory;
+    height: 100%;
   }
   .footer {
-    grid-area:footer;
     background-color: #53317e;
-    width:100%;
-    height:100%;
-    color:white;
+    width: 100%;
+
+    color: white;
     text-align: center;
-    -webkit-box-shadow: -1px 0px 19px -2px #000000; 
+    -webkit-box-shadow: -1px 0px 19px -2px #000000;
     box-shadow: -1px 0px 19px -2px #000000;
+
+    position: fixed;
+    padding: 10px 10px 0px 10px;
+    bottom: 0;
+    /* Height of the footer*/
   }
 }
 
-@media only screen and (max-width:1312px){
+@media only screen and (max-width: 1312px) {
   .dashboardContainer {
-     grid-gap:20px;
-     grid-template-columns: 0.6fr minmax(450px,1fr) minmax(450px,1fr) 0.001fr;
+    grid-gap: 20px;
+    grid-template-columns: 0.6fr minmax(450px, 1fr) minmax(450px, 1fr) 0.001fr;
   }
 }
 
-
-@media only screen and (max-width:1230px){
+@media only screen and (max-width: 1230px) {
   .dashboardContainer {
     grid-template-rows: 0.1fr 0.2fr 1fr 1fr 0.1fr;
     grid-template-columns: 0.5fr 1fr 0.001fr;
-    grid-gap:2rem;
+    grid-gap: 2rem;
     grid-template-areas:
       "nav nav nav"
       "friendlist banner banner"
@@ -68,18 +68,17 @@
       "friendlist callHistory space"
       "footer footer footer";
 
-      .welcomeBanner {
-        margin-right:10px;
-      }
+    .welcomeBanner {
+      margin-right: 10px;
+    }
   }
-
 }
 
-@media only screen and (max-width:700px){
+@media only screen and (max-width: 700px) {
   .dashboardContainer {
     grid-template-rows: 0.1fr 0.2fr 1fr 1fr 0.1fr;
-    grid-template-columns:1fr;
-    grid-gap:2rem;
+    grid-template-columns: 1fr;
+    grid-gap: 2rem;
     grid-template-areas:
       "nav "
       "friendlist"
@@ -87,86 +86,74 @@
       "callHistory "
       "footer";
 
-      .welcomeBanner{
-        display: none;
-      }
-      .friendList {
-        grid-area:friendlist;
-        border-radius: 5px;
-        padding-left:60px;
-        padding-right:60px;
-        width:100%;
-      }
-      .friendInfoCard {
-        padding-left:60px;
-        padding-right:60px;
-      }
-      .callHistory {
-        padding-left:60px;
-        padding-right:60px;
-      }
-      .footer {
-          font-size:10px;
-      }
-  }
-  
-}
-
-
-@media only screen and (max-width:500px){
-  .dashboardContainer {
-  
-      .friendList {
-        padding:30px;
-      }
-      .friendInfoCard {
-        padding:30px;
-      }
-      .callHistory {
-        padding:30px;
-      }
-  }
-  
-}
-
-
-
-
-@media only screen and (max-width:400px){
-  .dashboardContainer {
-
+    .welcomeBanner {
+      display: none;
+    }
     .friendList {
-      padding:5px;
+      grid-area: friendlist;
+      border-radius: 5px;
+      padding-left: 60px;
+      padding-right: 60px;
+      width: 100%;
+    }
+    .friendInfoCard {
+      padding-left: 60px;
+      padding-right: 60px;
+    }
+    .callHistory {
+      padding-left: 60px;
+      padding-right: 60px;
+    }
+    .footer {
+      font-size: 10px;
+    }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .dashboardContainer {
+    .friendList {
+      padding: 30px;
+    }
+    .friendInfoCard {
+      padding: 30px;
+    }
+    .callHistory {
+      padding: 30px;
+    }
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .dashboardContainer {
+    .friendList {
+      padding: 5px;
     }
 
     .friendInfoCard {
-      padding:5px;
+      padding: 5px;
     }
 
     .callHistory {
-      padding:5px;
+      padding: 5px;
     }
-
   }
-
 }
 
-@media only screen and (max-width:340px){
+@media only screen and (max-width: 340px) {
   .dashboardContainer {
     .friendList {
-     max-width:250px;
-     margin:auto;
+      max-width: 250px;
+      margin: auto;
     }
-    
+
     .friendInfoCard {
-      max-width:250px;
-      margin:auto;
+      max-width: 250px;
+      margin: auto;
     }
     .callHistory {
-      max-width:250px;
-      margin:auto;
+      max-width: 250px;
+      margin: auto;
     }
-
   }
-
 }
