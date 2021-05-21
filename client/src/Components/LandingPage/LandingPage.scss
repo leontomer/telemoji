@@ -1,33 +1,33 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
 
-
 .landingPageContainer {
-  height:93.3vh;
-  width:100%;
+  width: 100%;
   display: grid;
-  grid-template-rows:1fr 3fr 1fr;
-  grid-template-columns:1.5fr 0.1fr 1fr;
+  grid-template-rows: 1fr 3fr 1fr;
+  grid-template-columns: 1.5fr 0.1fr 1fr;
   grid-template-areas:
     "nav nav nav"
     "textContent space landingSvg "
     "footer footer footer";
-    overflow-y: hidden;
-  .textContent{
-    margin-top: 100px;
-    grid-area:textContent;
-    width:100%;
+  overflow-y: hidden;
+  .textContent {
+    grid-area: textContent;
+    width: 100%;
     margin-left: 100px;
-  }  
-  .landingSvg{
-    margin-top: 100px;
-    grid-area:landingSvg;
-    width:100%;
-    margin-right:100px;
+    z-index: 1000;
   }
-  .footer{
-    grid-area:footer;
-    width:100%;
+  .landingSvg {
+    grid-area: landingSvg;
+    width: 100%;
+    margin-right: 100px;
+  }
+  .footer {
+    grid-area: footer;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    /* Height of the footer*/
   }
 }
 
@@ -50,24 +50,24 @@
 
 @media only screen and (max-width: 1300px) {
   .landingPageContainer {
-    grid-template-columns:1.5fr  1fr;
+    grid-template-columns: 1.5fr 1fr;
     grid-template-areas:
       "nav  nav"
       "textContent  landingSvg "
       "footer  footer";
-    .textContent{
+    .textContent {
       margin-left: 30px;
-    }  
-    .landingSvg{
-      margin-right:30px;
+    }
+    .landingSvg {
+      margin-right: 30px;
     }
   }
 }
 
 @media only screen and (max-width: 1111px) {
   .landingPageContainer {
-    .landingpage-svg{
-     width:400px;
+    .landingpage-svg {
+      width: 400px;
     }
   }
   .landingpage-header {
@@ -85,8 +85,8 @@
 
 @media only screen and (max-width: 867px) {
   .landingPageContainer {
-    .landingpage-svg{
-     width:400px;
+    .landingpage-svg {
+      width: 400px;
     }
   }
   .landingpage-header {
@@ -104,8 +104,8 @@
 
 @media only screen and (max-width: 760px) {
   .landingPageContainer {
-    .landingpage-svg{
-     width:300px;
+    .landingpage-svg {
+      width: 300px;
     }
   }
   .landingpage-header {
@@ -123,31 +123,30 @@
 
 @media only screen and (max-width: 608px) {
   .landingPageContainer {
-    width:100vw;
-    grid-template-columns:1fr;
-    grid-template-rows:1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
     grid-template-areas:
       "nav "
       "landingSvg"
       "textContent"
       "footer";
-    .textContent{
+    .textContent {
       margin: auto;
-      display:flex;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+      margin-bottom: 80px;
+      z-index: 1000;
+    }
+
+    .landingSvg {
+      margin: auto;
+      margin: auto;
+      display: flex;
       justify-content: center;
       align-items: center;
       margin-top: 50px;
-      margin-bottom:80px;
-    }  
-
-    .landingSvg{
-      margin:auto;
-      margin: auto;
-      display:flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 100px;
     }
   }
-
 }

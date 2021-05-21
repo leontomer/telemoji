@@ -18,7 +18,7 @@ import FriendRequests from "../Dashboard/FriendRequests";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { setLanguage } from "../../actions/languageAction";
-import lan from "../../Languages/Languages.json"
+import lan from "../../Languages/Languages.json";
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
@@ -31,20 +31,19 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   select: {
-    '&:before': {
-      borderColor: '#53317e',
+    "&:before": {
+      borderColor: "#53317e",
     },
-    '&:after': {
-      borderColor: '#53317e',
-    }
+    "&:after": {
+      borderColor: "#53317e",
+    },
   },
   icon: {
-    fill: '#53317e',
-  }
+    fill: "#53317e",
+  },
 }));
 
 export default function SearchAppBar() {
-
   const classes = useStyles();
   const dispatch = useDispatch();
   // @ts-ignore
@@ -121,10 +120,14 @@ export default function SearchAppBar() {
   return (
     <AppBar
       position="static"
-      style={{ backgroundColor: "#53317e", color: "#fbfcfc" }}
+      style={{
+        backgroundColor: "#53317e",
+        color: "#fbfcfc",
+        minHeight: "7vh",
+        justifyContent: "center",
+      }}
     >
       <Toolbar>
-
         <Typography className={classes.title} variant="h6" noWrap>
           <div
             style={{
@@ -139,12 +142,12 @@ export default function SearchAppBar() {
                 Telemoji
               </h2>
             </Link>
-            <div style={{ marginLeft: '10px' }}>
+            <div style={{ marginLeft: "10px" }}>
               <Select
                 value={language}
                 onChange={handleChange}
                 label="Language"
-                style={{ color: 'white' }}
+                style={{ color: "white" }}
                 className={classes.select}
                 inputProps={{
                   classes: {
@@ -156,18 +159,14 @@ export default function SearchAppBar() {
                 <MenuItem value={"He"}>עברית 🇮🇱</MenuItem>
               </Select>
             </div>
-
-
           </div>
         </Typography>
-
-
 
         {isAuthenticated === null
           ? null
           : isAuthenticated
-            ? authenticatedContent
-            : notAuthenticatedContent}
+          ? authenticatedContent
+          : notAuthenticatedContent}
       </Toolbar>
     </AppBar>
   );
