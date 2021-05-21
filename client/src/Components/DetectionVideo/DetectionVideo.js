@@ -55,7 +55,6 @@ export function DetectionVideo({ videoRef, muted = false }) {
     'angry': 0,
     'fear': 0
   })
-  console.log('emotionStats', emotionStats)
   const setEmotionDelay = useRef(false);
 
   const predict = (data) => {
