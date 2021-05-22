@@ -10,12 +10,17 @@ import './Webrtc.scss';
 import { useLoader } from '../../Contexts/LoaderContext';
 import Popover from "@material-ui/core/Popover";
 import Typography from "@material-ui/core/Typography";
-
+import lan from "../../Languages/Languages.json";
 const WebrtcComponent = ({ history, match }) => {
   const [stream, setStream] = useState();
   const [callerStream, setCallerStream] = useState(null);
   const [callAccepted, setCallAccepted] = useState(false);
-
+ // @ts-ignore
+ const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+ const [language, setLocalLanguage] = React.useState(globalLanguage);
+ useEffect(() => {
+   setLocalLanguage(globalLanguage);
+ }, [globalLanguage]);
   const userVideo = useRef();
   const partnerVideo = useRef();
   // @ts-ignore
@@ -42,6 +47,9 @@ const WebrtcComponent = ({ history, match }) => {
   //     history.push('/');
   //   }
   // }, [callAcceptedReducer, callingUser])
+
+
+
 
   useEffect(() => {
     startLoading();
@@ -117,26 +125,26 @@ const WebrtcComponent = ({ history, match }) => {
   }
   useEffect(() => {
     if (selectedEmotion === "happy") {
-      popMessageAndHide(" Good job your call friend is happy! 😄")
+      popMessageAndHide(lan[language].happy)
     }
     if (selectedEmotion === "sad") {
-      popMessageAndHide(" Oh oh your call friend is sad, try to tell something funny!!😕")
+      popMessageAndHide(lan[language].sad)
     }
 
     if (selectedEmotion === "disgust") {
-      popMessageAndHide(" Oh oh your call friend is disgusted, try to change the subject 🤢")
+      popMessageAndHide(lan[language].disgust)
     }
 
-    if (selectedEmotion === "suprise") {
-      popMessageAndHide("Cool you managed to suprise your friend 😱")
+    if (selectedEmotion === "surprise") {
+      popMessageAndHide(lan[language].surprise)
     }
 
     if (selectedEmotion === "angry") {
-      popMessageAndHide("Oh no your call friend is angry! try to tell something nice 😡")
+      popMessageAndHide(lan[language].angry)
     }
 
     if (selectedEmotion === "scared") {
-      popMessageAndHide("Your call friend is scared! how did you do that? 😰")
+      popMessageAndHide(lan[language].fear)
     }
 
   }, [selectedEmotion])
