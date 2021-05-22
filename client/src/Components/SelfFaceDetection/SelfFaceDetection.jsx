@@ -32,7 +32,7 @@ const SelfFaceDetection = () => {
     return (
         <div>
             <DetectionVideo
-                ref={userVideo}
+                videoRef={userVideo}
             />;
         </div>
     )
