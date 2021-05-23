@@ -167,7 +167,7 @@ router.post("/forgotPassword", async (req, res) => {
       { expiresIn: "2h" },
       (err, token) => {
         if (err) throw err;
-        const url = `http://localhost:3000/forgotPassword/${token}`;
+        const url = `https://telemoji.herokuapp.com/forgotPassword/${token}`;
 
         var transporter = nodemailer.createTransport({
           service: "gmail",
