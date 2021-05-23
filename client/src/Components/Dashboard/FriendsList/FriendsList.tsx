@@ -190,7 +190,7 @@ function FriendsList({ history }) {
             onClick={() => handleFriendClick(friend)}
           >
             <ListItemAvatar>
-              {connectedUsers[friend._id] ? (
+              {connectedUsers && connectedUsers[friend._id] ? (
                 connectedUsers[friend._id].inCall ? (
                   <StyledInCallBadge
                     overlap="circle"
@@ -243,14 +243,15 @@ function FriendsList({ history }) {
             <ListItemSecondaryAction>
               <IconButton
                 disabled={
-                  !connectedUsers[friend._id] ||
-                  connectedUsers[friend._id].inCall
+                  connectedUsers &&
+                  (!connectedUsers[friend._id] ||
+                    connectedUsers[friend._id].inCall)
                 }
                 onClick={() => handleCall(friend._id)}
               >
                 <PhoneIcon
                   style={
-                    connectedUsers[friend._id]
+                    connectedUsers && connectedUsers[friend._id]
                       ? { color: green[500] }
                       : { color: grey[500] }
                   }
