@@ -122,7 +122,7 @@ router.post("/google", async (req, res) => {
       });
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(user.password, salt);
-      console.log("user has been created with:", user);
+
       await user.save();
     }
 
@@ -142,7 +142,7 @@ router.post("/google", async (req, res) => {
       }
     );
   } catch (error) {
-    console.error(error);
+    res.status(500).send("Server error");
   }
 });
 

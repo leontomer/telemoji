@@ -138,6 +138,7 @@ export const loginWithGoogle = (tokenId) => async (dispatch) => {
   try {
     const body = { tokenId };
     const res = await axios.post("/api/auth/google", body);
+    console.log("the res is", res.data);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data,
