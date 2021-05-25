@@ -6,8 +6,7 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import HomeIcon from "@material-ui/icons/Home";
 import { closeDrawer } from "../../../actions/addonActions";
 import LogoutHooks from "./LogoutHooks/LogoutHooks";
 import FaceIcon from "@material-ui/icons/Face";
@@ -41,6 +40,15 @@ export const DrawerMenu = (props) => {
       onKeyDown={() => dispatch(closeDrawer())}
     >
       <List>
+        <Link to="/dashboard">
+          <ListItem button key={"homeScreen"}>
+            <ListItemIcon>
+              <HomeIcon color={"primary"} />
+            </ListItemIcon>
+            <ListItemText primary={lan[language].home_screen} />
+          </ListItem>
+        </Link>
+
         <Link to="/self-detection">
           <ListItem button key={"Try your face detection"}>
             <ListItemIcon>

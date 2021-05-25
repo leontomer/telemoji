@@ -57,7 +57,8 @@
     "disgust": " Oh oh your call friend is disgusted, try to change the subject 🤢",
     "angry": "Oh no your call friend is angry! try to tell something nice 😡",
     "send": "send",
-    "about_content": "Telemoji is a video chat web application with facial expression recognition, created by Tomer Leon, Alex Kreinis And Tom Damri in 2021. the main purpose of telemoji is to help people suffering from ASD communicate by Improving their expression detection skills while they chat with their friends. telemoji is the best, and also the only solution for you if you want to talk with your friends in a live video chat and see their facial expression detection. also, in telemoji you can see your call history with every call emotion statistics."
+    "about_content": "Telemoji is a video chat web application with facial expression recognition, created by Tomer Leon, Alex Kreinis And Tom Damri in 2021. the main purpose of telemoji is to help people suffering from ASD communicate by Improving their expression detection skills while they chat with their friends. telemoji is the best, and also the only solution for you if you want to talk with your friends in a live video chat and see their facial expression detection. also, in telemoji you can see your call history with every call emotion statistics.",
+    "home_screen": "Home Screen"
   },
   "He": {
     "login_navbar": "התחברות",
@@ -111,7 +112,7 @@
     "call_stat": "סטטיסטיקת שיחה",
     "your_call": "שיחתך עם",
     "send": "שלח",
-
+    "home_screen": "מסך בית",
     "happy": "  😄 עבודה טובה, חברך שמח!",
     "sad": "😕אוי לא, חברך עצוב נסה לומר משהו מצחיק",
     "surprise": "כל הכבוד, הצלחת להפתיע את חברך!😱",
