@@ -209,7 +209,6 @@ router.post("/call-stats", auth, async (req, res) => {
     })
     await newCallStats.save();
     recentCall.callStats = newCallStats._id;
-    console.log(recentCall)
     await recentCall.save();
   } catch (error) {
     console.error(err);

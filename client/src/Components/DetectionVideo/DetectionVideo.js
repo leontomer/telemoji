@@ -176,7 +176,7 @@ export function DetectionVideo({ videoRef, muted = false }) {
 
   const displayEmotions = faceapi;
   return (
-    <div style={{ backgroundColor: "#53317e", padding: 60, borderRadius: 40 }}>
+    <div>
       <div
         style={{
           display: "flex",
@@ -184,6 +184,8 @@ export function DetectionVideo({ videoRef, muted = false }) {
           alignItems: "center",
           flexDirection: "column",
           overflow: "hidden",
+          backgroundColor: 'black',
+          borderRadius: '50px'
         }}
       >
         <video

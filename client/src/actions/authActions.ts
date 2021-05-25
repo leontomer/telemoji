@@ -44,51 +44,50 @@ export const register =
     password2: string;
     lastName: string;
   }) =>
-  async (dispatch) => {
-    const body = { firstName, email, password, lastName };
-    try {
-      const res = await axios.post("/api/users/register", body);
-      dispatch({
-        type: REGISTER_SUCCESS,
-        payload: res.data,
-      });
-      dispatch(loadUser());
-    } catch (err) {
-      const errors = err.response.data.errors;
-      if (errors) {
-        errors.forEach((error) =>
-          dispatch(setMessage(error.msg, snackbarType.error))
-        );
+    async (dispatch) => {
+      const body = { firstName, email, password, lastName };
+      try {
+        const res = await axios.post("/api/users/register", body);
+        dispatch({
+          type: REGISTER_SUCCESS,
+          payload: res.data,
+        });
+        dispatch(loadUser());
+      } catch (err) {
+        const errors = err.response.data.errors;
+        if (errors) {
+          errors.forEach((error) =>
+            dispatch(setMessage(error.msg, snackbarType.error))
+          );
+        }
+        dispatch({ type: REGISTER_FAIL });
+        throw err;
       }
-      dispatch({ type: REGISTER_FAIL });
-      throw err;
-    }
-  };
+    };
 
 export const login =
   ({ email, password }: { email: string; password: string }) =>
-  async (dispatch) => {
-    const body = { email, password };
-    try {
-      const res = await axios.post("/api/auth/login", body);
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: res.data,
-      });
-      dispatch(loadUser());
-    } catch (err) {
-      const errors = err.response.data.errors;
-      errors.forEach((error) =>
-        dispatch(setMessage(error.msg, snackbarType.error))
-      );
-      dispatch({ type: LOGIN_FAIL });
-      throw err;
-    }
-  };
+    async (dispatch) => {
+      const body = { email, password };
+      try {
+        const res = await axios.post("/api/auth/login", body);
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: res.data,
+        });
+        dispatch(loadUser());
+      } catch (err) {
+        const errors = err.response.data.errors;
+        errors.forEach((error) =>
+          dispatch(setMessage(error.msg, snackbarType.error))
+        );
+        dispatch({ type: LOGIN_FAIL });
+        throw err;
+      }
+    };
 
 export const forgotPassword = (email) => async (dispatch) => {
   try {
-    console.log(email);
     const body = { email };
     const res = await axios.post("/api/auth/forgotPassword", body);
     return res.data;
@@ -124,15 +123,15 @@ export const thirdPartyLogin =
     lastName: string;
     email: string;
   }) =>
-  async (dispatch) => {
-    try {
-      const res = await axios.post("/api/auth/thirdPartyLogin");
-      dispatch({
-        type: LOGIN_SUCCESS_GOOGLE_FACEBOOK,
-        payload: { firstName: firstName, lastName: lastName, email: email },
-      });
-    } catch (error) {}
-  };
+    async (dispatch) => {
+      try {
+        const res = await axios.post("/api/auth/thirdPartyLogin");
+        dispatch({
+          type: LOGIN_SUCCESS_GOOGLE_FACEBOOK,
+          payload: { firstName: firstName, lastName: lastName, email: email },
+        });
+      } catch (error) { }
+    };
 
 export const loginWithGoogle = (tokenId) => async (dispatch) => {
   try {
