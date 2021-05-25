@@ -17,6 +17,7 @@ import InfoIcon from "@material-ui/icons/Info";
 import { useDispatch, useSelector } from "react-redux";
 import lan from "../../../Languages/Languages.json";
 import ContactSupportIcon from "@material-ui/icons/ContactSupport";
+import { purple } from "@material-ui/core/colors";
 const useStyles = makeStyles({
   list: {
     width: 250,
@@ -43,7 +44,7 @@ export const DrawerMenu = (props) => {
         <Link to="/self-detection">
           <ListItem button key={"Try your face detection"}>
             <ListItemIcon>
-              <FaceIcon />
+              <FaceIcon color={"primary"} />
             </ListItemIcon>
             <ListItemText primary={lan[language].nav_face} />
           </ListItem>
@@ -52,7 +53,7 @@ export const DrawerMenu = (props) => {
         <Link to="/editDetails">
           <ListItem button key={"editDetails"}>
             <ListItemIcon>
-              <EditIcon />
+              <EditIcon color={"primary"} />
             </ListItemIcon>
             <ListItemText primary={lan[language].nav_edit} />
           </ListItem>
@@ -61,7 +62,7 @@ export const DrawerMenu = (props) => {
         <Link to="/contactUs">
           <ListItem button key={"editDetails"}>
             <ListItemIcon>
-              <ContactSupportIcon />
+              <ContactSupportIcon color={"primary"} />
             </ListItemIcon>
             <ListItemText primary={lan[language].nav_contact} />
           </ListItem>
@@ -70,7 +71,7 @@ export const DrawerMenu = (props) => {
         <Link to="/aboutUs">
           <ListItem button key={"editDetails"}>
             <ListItemIcon>
-              <InfoIcon />
+              <InfoIcon color={"primary"} />
             </ListItemIcon>
             <ListItemText primary={lan[language].nav_about} />
           </ListItem>

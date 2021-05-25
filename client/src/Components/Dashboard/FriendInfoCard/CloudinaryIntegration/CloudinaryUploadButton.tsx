@@ -3,6 +3,7 @@ import { WidgetLoader, Widget } from "react-cloudinary-upload-widget";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserImageAction } from "../../../../actions/usersActions";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
+import { purple } from "@material-ui/core/colors";
 
 function CloudinaryUploadButton() {
   const dispatch = useDispatch();
@@ -43,7 +44,7 @@ function CloudinaryUploadButton() {
             color: "white",
             border: "none",
             width: "100%",
-            backgroundColor: "#3f51b5",
+            backgroundColor: purple[800],
             borderRadius: "30px",
             height: "30px",
           }}
