@@ -204,7 +204,6 @@ export default function FriendInfoCard() {
         >
           {lan[language].profile_save}
         </Button>
-        <CloudinaryUploadButton />
       </>
     );
   };
