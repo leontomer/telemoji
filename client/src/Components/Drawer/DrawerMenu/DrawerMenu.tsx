@@ -16,7 +16,7 @@ import InfoIcon from "@material-ui/icons/Info";
 import { useDispatch, useSelector } from "react-redux";
 import lan from "../../../Languages/Languages.json";
 import ContactSupportIcon from "@material-ui/icons/ContactSupport";
-import { purple } from "@material-ui/core/colors";
+
 const useStyles = makeStyles({
   list: {
     width: 250,

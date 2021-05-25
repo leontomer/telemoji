@@ -143,7 +143,7 @@ function FriendsList({ history }) {
     setConnectedUsers(allConnectedUsers);
   }, [allConnectedUsers]);
 
-  const handleFriendClick = (friend: FriendProps) => {
+  const handleFriendClick = (friend: FriendProps | null) => {
     dispatch(setFriendInFocus(friend));
   };
 
@@ -180,6 +180,13 @@ function FriendsList({ history }) {
             </Typography>
           }
         />
+      </ListItem>
+      <ListItem button onClick={() => handleFriendClick(null)}>
+        <ListItemAvatar>
+          <Avatar alt={`${user.firstName}`} src={user.imageAddress} />
+        </ListItemAvatar>
+
+        <ListItemText id={"thisUser"} primary={user.firstName} />
       </ListItem>
       {userFriendList.map((friend: FriendProps, index) => {
         const labelId = `checkbox-list-secondary-label-${friend}`;

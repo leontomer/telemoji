@@ -110,7 +110,8 @@ export default function FriendInfoCard() {
         multiline
         variant="outlined"
         onChange={handleAboutChange}
-        id="outlined-multiline-static"
+        id="outlined-multiline"
+        focused
         label={lan[language].about}
         rows={8}
       />
