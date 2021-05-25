@@ -15,12 +15,12 @@ const WebrtcComponent = ({ history, match }) => {
   const [stream, setStream] = useState();
   const [callerStream, setCallerStream] = useState(null);
   const [callAccepted, setCallAccepted] = useState(false);
- // @ts-ignore
- const globalLanguage = useSelector((state) => state.LanguageReducer.language);
- const [language, setLocalLanguage] = React.useState(globalLanguage);
- useEffect(() => {
-   setLocalLanguage(globalLanguage);
- }, [globalLanguage]);
+  // @ts-ignore
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
   const userVideo = useRef();
   const partnerVideo = useRef();
   // @ts-ignore
@@ -150,37 +150,40 @@ const WebrtcComponent = ({ history, match }) => {
   }, [selectedEmotion])
   if (callAccepted) {
     finishLoading();
-    PartnerVideo = (
-      <>
-        <div ref={popoverRef} style={{ marginBottom: 20 }}>
-          {popoverRef.current && (
-            <Popover
-              open={openPopUp}
-              anchorEl={popoverRef.current}
-              onClose={handleClose}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-            >
-              <div style={{ padding: 20 }}>
-                <Typography>
-                  {popUpMessage}
-                </Typography>
-              </div>
-
-            </Popover>
-          )}
-        </div>
+    PartnerVideo =
+      (< div className="partnerVideo" >
         <DetectionVideo videoRef={partnerVideo} />
-      </>
-    );
+      </div >);
+    // </div>
+
   }
 
+  const popOvers = (
+    <div ref={popoverRef} style={{ marginBottom: 20 }}>
+      {popoverRef.current && (
+        <Popover
+          open={openPopUp}
+          anchorEl={popoverRef.current}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+        >
+          <div style={{ padding: 20 }}>
+            <Typography>
+              {popUpMessage}
+            </Typography>
+          </div>
+
+        </Popover>
+      )}
+    </div>
+  )
   return (
     <div className="webrtcContainer">
       <div className="endCall">
@@ -194,8 +197,13 @@ const WebrtcComponent = ({ history, match }) => {
       </Button>
       </div>
       <div className="videoRow">
-        {PartnerVideo}
-        {UserVideo}
+        {popOvers}
+        <div style={{ position: 'relative', margin: 'auto' }}>
+          {PartnerVideo}
+          <div style={{ position: 'absolute', top: 0, left: 0 }}>
+            {UserVideo}
+          </div>
+        </div>
       </div>
     </div >
 
