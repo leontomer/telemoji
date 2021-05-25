@@ -21,6 +21,7 @@
     grid-area: landingSvg;
     width: 100%;
     margin-right: 100px;
+    z-index:1000;
   }
   .footer {
     grid-area: footer;
@@ -147,6 +148,12 @@
       justify-content: center;
       align-items: center;
       margin-top: 50px;
+    }
+
+    .footer {
+      bottom: -170px;
+      position: relative;
+      /* Height of the footer*/
     }
   }
 }
