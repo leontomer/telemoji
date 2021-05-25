@@ -130,9 +130,9 @@ export function DetectionVideo({ videoRef, muted = false }) {
           );
         }
         let data = null;
-        // if (!canvases || canvases.length === 0) {
-        //   // setUserEmotion("Trying to detect your face...");
-        // }
+        if (!canvases || canvases.length === 0) {
+          setUserEmotion("Cannot find a face...");
+        }
         if (canvases && canvases.length > 0) {
           try {
             data = tf.browser
