@@ -1,8 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { withRouter } from "react-router";
 import TextField from "@material-ui/core/TextField";
-import { Content } from "../../Common/content";
 import { DataHook } from "../../Common/DataHooks";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,6 +13,7 @@ import { editDetails } from "../../actions/usersActions";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import lan from "../../Languages/Languages.json";
+import { Card } from "@material-ui/core";
 export default function EditDetails() {
   const dispatch = useDispatch();
   //check if the user new password entered is the same as the confirm new password like i did in reset password component
@@ -71,6 +69,7 @@ export default function EditDetails() {
     submit: {
       margin: theme.spacing(3, 0, 2),
     },
+    card: { padding: 20, textAlign: "center" },
   }));
   const classes = useStyles();
   const handleChange = (event) => {
@@ -87,103 +86,105 @@ export default function EditDetails() {
   return (
     <div style={{ marginTop: 20 }}>
       <Container component="main" maxWidth="xs">
-        <CssBaseline />{" "}
-        <Typography variant="h4" gutterBottom>
-          {lan[language].edit_details}
-        </Typography>
-        <form className={classes.form} noValidate onSubmit={handleSubmit}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="First name"
-            label={lan[language].register_first_name}
-            type="text"
-            id="firstName"
-            onChange={(e) => setFirstName(e.target.value)}
-            value={firstName}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="last name"
-            label={lan[language].register_last_name}
-            type="text"
-            id="lastName"
-            onChange={(e) => setLastName(e.target.value)}
-            value={lastName}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="oldPassword"
-            label={lan[language].current_pass}
-            type="password"
-            id="oldPassword"
-            data-hook={DataHook.LoginPagePasswordTextField}
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-          />
+        <Card className={classes.card}>
+          <CssBaseline />{" "}
+          <Typography variant="h4" gutterBottom>
+            {lan[language].edit_details}
+          </Typography>
+          <form className={classes.form} noValidate onSubmit={handleSubmit}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="First name"
+              label={lan[language].register_first_name}
+              type="text"
+              id="firstName"
+              onChange={(e) => setFirstName(e.target.value)}
+              value={firstName}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="last name"
+              label={lan[language].register_last_name}
+              type="text"
+              id="lastName"
+              onChange={(e) => setLastName(e.target.value)}
+              value={lastName}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="oldPassword"
+              label={lan[language].current_pass}
+              type="password"
+              id="oldPassword"
+              data-hook={DataHook.LoginPagePasswordTextField}
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+            />
 
-          <FormControlLabel
-            control={
-              <Switch
-                checked={checked}
-                onChange={handleChange}
-                name="checkedA"
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={checked}
+                  onChange={handleChange}
+                  name="checkedA"
+                />
+              }
+              label={lan[language].change_password}
+            />
+
+            {checked && (
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label={lan[language].new_password}
+                type="password"
+                id="password"
+                data-hook={DataHook.LoginPagePasswordTextField}
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
-            }
-            label={lan[language].change_password}
-          />
+            )}
+            {checked && (
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="confirm password"
+                label={lan[language].confirm_new_password}
+                type="password"
+                id="password"
+                data-hook={DataHook.LoginPagePasswordTextField}
+                autoComplete="current-password"
+                onChange={(e) => setPassword2(e.target.value)}
+                value={password2}
+              />
+            )}
 
-          {checked && (
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
+            <Button
+              type="submit"
               fullWidth
-              name="password"
-              label={lan[language].new_password}
-              type="password"
-              id="password"
-              data-hook={DataHook.LoginPagePasswordTextField}
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          )}
-          {checked && (
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="confirm password"
-              label={lan[language].confirm_new_password}
-              type="password"
-              id="password"
-              data-hook={DataHook.LoginPagePasswordTextField}
-              autoComplete="current-password"
-              onChange={(e) => setPassword2(e.target.value)}
-              value={password2}
-            />
-          )}
-
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            {lan[language].profile_save}
-          </Button>
-        </form>
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              {lan[language].profile_save}
+            </Button>
+          </form>
+        </Card>
       </Container>
     </div>
   );
