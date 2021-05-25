@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { WidgetLoader, Widget } from "react-cloudinary-upload-widget";
-import { Button } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserImageAction } from "../../../../actions/usersActions";
-import lan from "../../../../Languages/Languages.json";
+import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 
 function CloudinaryUploadButton() {
   const dispatch = useDispatch();
@@ -26,20 +25,27 @@ function CloudinaryUploadButton() {
   }
   return (
     <>
-      <div style={{ height: "25px", width: "200px", padding: 0 }}>
+      <div
+        style={{
+          height: "30px",
+          width: "30px",
+          padding: 0,
+          borderRadius: "30px",
+        }}
+      >
         <WidgetLoader />
         <Widget
           resourceType={"image"}
           cloudName={"dypnevil0"}
           uploadPreset={"ibuffq8i"}
-          buttonText={lan[language].upload_profile_picture}
+          buttonText={<AddAPhotoIcon fontSize="small" />}
           style={{
             color: "white",
             border: "none",
             width: "100%",
             backgroundColor: "#3f51b5",
-            borderRadius: "4px",
-            height: "25px",
+            borderRadius: "30px",
+            height: "30px",
           }}
           cropping={false}
           onSuccess={(responseObject) => {
