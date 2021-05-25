@@ -111,9 +111,7 @@ export const pendingFriendRequestsListener = () => async (dispatch, getState) =>
 
 export const getCallStats = (callId: string) => async (dispatch) => {
     try {
-        console.log('entered!');
         const res = await axios.get(`${baseRoute}call-stats/${callId}`);
-        console.log('resdata is', res.data);
         if (res.data) {
             dispatch({
                 type: SET_SELECTED_CALL_HISTORY_STATS,
