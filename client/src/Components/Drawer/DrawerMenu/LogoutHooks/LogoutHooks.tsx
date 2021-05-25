@@ -5,6 +5,7 @@ import { logout } from "../../../../actions/authActions";
 import { useGoogleLogout } from "react-google-login";
 import { clientId } from "../../../../Common/constants";
 import lan from "../../../../Languages/Languages.json";
+import { purple } from "@material-ui/core/colors";
 
 export default function LogoutHooks() {
   // @ts-ignore
@@ -30,7 +31,7 @@ export default function LogoutHooks() {
   return (
     <Button
       style={{
-        background: "  #ec7063  ",
+        background: purple[800],
         color: "white",
         fontWeight: "bold",
         margin: "auto",

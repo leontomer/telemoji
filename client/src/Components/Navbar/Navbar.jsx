@@ -19,6 +19,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { setLanguage } from "../../actions/languageAction";
 import lan from "../../Languages/Languages.json";
+import { purple } from "@material-ui/core/colors";
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
@@ -96,8 +97,8 @@ export default function SearchAppBar() {
       <Link to="/login">
         <Button
           style={{
-            background: " #5499c7 ",
-            color: "white",
+            background: "white",
+            color: purple[400],
             fontWeight: "bold",
           }}
         >
@@ -107,7 +108,7 @@ export default function SearchAppBar() {
       <Link to="/register">
         <Button
           style={{
-            background: "  #ec7063  ",
+            background: purple[400],
             color: "white",
             fontWeight: "bold",
           }}

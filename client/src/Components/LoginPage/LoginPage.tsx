@@ -19,6 +19,7 @@ import { login } from "../../actions/authActions";
 import GoogleLoginHooks from "./GoogleLogin/GoogleLogin";
 import { useLoader } from "../../Contexts/LoaderContext";
 import lan from "../../Languages/Languages.json";
+import { Card } from "@material-ui/core";
 
 function Copyright() {
   return (
@@ -50,6 +51,12 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+  },
+  card: {
+    padding: 20,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
 }));
 
@@ -99,77 +106,86 @@ export default function LoginPage({ history }) {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Typography variant="h2" data-hook={DataHook.LoginPageTitle}>
-          {Content.app_name}
-        </Typography>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography
-          component="h1"
-          variant="h5"
-          data-hook={DataHook.LoginPageSignInText}
-        >
-          {lan[language].sign_in_text_login_page}
-        </Typography>
-        <form className={classes.form} noValidate onSubmit={handleSubmit}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label={lan[language].register_email}
-            name="email"
-            data-hook={DataHook.LoginPageUsernameTextField}
-            autoFocus
-            onChange={onChange}
-            value={email}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label={lan[language].register_password}
-            type="password"
-            id="password"
-            data-hook={DataHook.LoginPagePasswordTextField}
-            autoComplete="current-password"
-            onChange={onChange}
-            value={password}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label={lan[language].remember}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
+        <Card className={classes.card}>
+          <Typography variant="h2" data-hook={DataHook.LoginPageTitle}>
+            {Content.app_name}
+          </Typography>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography
+            component="h1"
+            variant="h5"
+            data-hook={DataHook.LoginPageSignInText}
           >
-            {lan[language].sign_in_login_page}
-          </Button>
+            {lan[language].sign_in_text_login_page}
+          </Typography>
+          <form className={classes.form} noValidate onSubmit={handleSubmit}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label={lan[language].register_email}
+              name="email"
+              data-hook={DataHook.LoginPageUsernameTextField}
+              autoFocus
+              onChange={onChange}
+              value={email}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label={lan[language].register_password}
+              type="password"
+              id="password"
+              data-hook={DataHook.LoginPagePasswordTextField}
+              autoComplete="current-password"
+              onChange={onChange}
+              value={password}
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label={lan[language].remember}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              {lan[language].sign_in_login_page}
+            </Button>
 
-          <Grid container>
-            <Grid item xs>
-              <Link to="/forgotPassword" variant="body2">
-                {lan[language].forgot_password}{" "}
-              </Link>
+            <Grid container>
+              <Grid item xs>
+                <Link to="/forgotPassword" variant="body2">
+                  {lan[language].forgot_password}{" "}
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link to="/register" variant="body2">
+                  {lan[language].register_login_page}
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Link to="/register" variant="body2">
-                {lan[language].register_login_page}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <div style={{ width: "400px", height: "100px", marginTop: "20px" }}>
-        <GoogleLoginHooks goToDashboard={() => goToDashboard()} />
+            <div
+              style={{
+                width: "400px",
+                height: "100px",
+                marginTop: "20px",
+                marginBottom: "-30px",
+              }}
+            >
+              <GoogleLoginHooks goToDashboard={() => goToDashboard()} />
+            </div>
+          </form>
+        </Card>
       </div>
       <Box mt={8}>
         <Copyright />
