@@ -5,18 +5,28 @@ import {
   SET_CALLERS_STREAM,
   ANSWER_CALL,
   END_CALL,
-  CLEAR_EMOTIONS_STATS
+  CLEAR_EMOTIONS_STATS,
 } from "./types";
+import { Howl } from "howler";
+// @ts-ignore
+import ringtone from "./ringtones/ringtone.mp3";
 
 import Peer from "simple-peer";
 import axios from "axios";
 let peer;
 const baseRoute = "/api/friends/";
 
+const ringtoneSound = new Howl({
+  src: [ringtone],
+  loop: true,
+  preload: true,
+});
+
 export const recieveCalls = () => async (dispatch, getState) => {
   const socket = getState().socketReducer.socket;
 
   socket.on("callInit", (data) => {
+    ringtoneSound.play();
     dispatch({
       type: GET_CALL,
       payload: {
@@ -25,12 +35,11 @@ export const recieveCalls = () => async (dispatch, getState) => {
         fromImageAddress: data.fromImageAddress,
         callerName: data.callerName,
         receivingCall: true,
-        callerId: data.callerId
+        callerId: data.callerId,
       },
     });
   });
 };
-
 
 export const getAnswerFromCall = () => async (dispatch, getState) => {
   const socket = getState().socketReducer.socket;
@@ -46,10 +55,11 @@ export const getAnswerFromCall = () => async (dispatch, getState) => {
 export const getStreamFromVideoCamera = (id?: string) => (dispatch) => {
   navigator.mediaDevices
     .getUserMedia({
-      audio: true, video: {
+      audio: true,
+      video: {
         width: 640,
-        height: 480
-      }
+        height: 480,
+      },
     })
     .then((stream) => {
       dispatch({
@@ -68,6 +78,8 @@ export const handleCallUser = (id: string) => (dispatch) => {
   dispatch(getStreamFromVideoCamera(id));
 };
 export const handleAcceptCall = () => (dispatch) => {
+  ringtoneSound.unload();
+
   dispatch(getStreamFromVideoCamera());
 };
 
@@ -77,6 +89,7 @@ export const makeCall = (id: string) => async (dispatch, getState) => {
   const imageAddress = getState().authReducer.user.imageAddress;
   const userName = getState().authReducer.user.firstName;
   const usersId = getState().authReducer.user._id;
+
   peer = new Peer({
     initiator: true,
     trickle: false,
@@ -99,7 +112,7 @@ export const makeCall = (id: string) => async (dispatch, getState) => {
       fromUser: socket.id,
       fromImageAddress: imageAddress,
       callerName: userName,
-      callerId: usersId
+      callerId: usersId,
     });
   });
 
@@ -117,13 +130,15 @@ export const makeCall = (id: string) => async (dispatch, getState) => {
     peer.signal(signal);
   });
 };
-
+export const handleRejectCall = () => {
+  ringtoneSound.unload();
+};
 export const acceptCall = () => async (dispatch, getState) => {
   const socket = getState().socketReducer.socket;
   const userStream = getState().callReducer.userStream;
   const callerSignal = getState().callReducer.callerSignal;
   const callerSocketId = getState().callReducer.callerSocketId;
-  const callerId = getState().callReducer.callerId
+  const callerId = getState().callReducer.callerId;
 
   dispatch({
     type: ANSWER_CALL,
@@ -137,7 +152,7 @@ export const acceptCall = () => async (dispatch, getState) => {
   peer.on("signal", (data) => {
     socket.emit("acceptCall", { signal: data, to: callerSocketId });
     axios.post(`${baseRoute}callHistory`, {
-      userToCall: callerId
+      userToCall: callerId,
     });
   });
 
@@ -161,7 +176,7 @@ export const endCall = () => async (dispatch, getState) => {
     });
   }
   if (peer) {
-    peer.destroy()
+    peer.destroy();
   }
 
   dispatch({
@@ -170,8 +185,7 @@ export const endCall = () => async (dispatch, getState) => {
   if (emotionStats) {
     axios.post(`${baseRoute}call-stats`, { emotionStats });
     dispatch({
-      type: CLEAR_EMOTIONS_STATS
-    })
+      type: CLEAR_EMOTIONS_STATS,
+    });
   }
-
-}
+};

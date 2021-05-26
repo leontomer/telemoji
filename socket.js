@@ -1,14 +1,17 @@
-
 module.exports = () => {
   global.users = {};
-  clientIdToSocketId = {}
+  clientIdToSocketId = {};
 
   io.on("connection", (socket) => {
     global.socket = socket;
 
     socket.on("login", (userdata) => {
-      users[userdata.id] = { socketId: socket.id, name: userdata.firstName, inCall: false };
-      clientIdToSocketId[socket.id] = userdata.id
+      users[userdata.id] = {
+        socketId: socket.id,
+        name: userdata.firstName,
+        inCall: false,
+      };
+      clientIdToSocketId[socket.id] = userdata.id;
       io.sockets.emit("allUsers", users);
     });
 
@@ -36,7 +39,7 @@ module.exports = () => {
         from: data.fromUser,
         fromImageAddress: data.fromImageAddress,
         callerName: data.callerName,
-        callerId: data.callerId
+        callerId: data.callerId,
       });
       io.sockets.emit("allUsers", users);
     });
@@ -47,9 +50,9 @@ module.exports = () => {
       io.sockets.emit("allUsers", users);
     });
 
-    socket.on('endCallForUser', (data) => {
-      const sendTo = users[data.id] ? users[data.id].socketId : data.id
+    socket.on("endCallForUser", (data) => {
+      const sendTo = users[data.id] ? users[data.id].socketId : data.id;
       io.to(sendTo).emit("endCall");
-    })
+    });
   });
 };
