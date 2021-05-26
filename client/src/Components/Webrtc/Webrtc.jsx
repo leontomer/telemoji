@@ -42,11 +42,7 @@ const WebrtcComponent = ({ history, match }) => {
   }
 
   const { startLoading, finishLoading } = useLoader();
-  // useEffect(() => {
-  //   if (!callingUser && !callAcceptedReducer) {
-  //     history.push('/');
-  //   }
-  // }, [callAcceptedReducer, callingUser])
+
 
 
 
@@ -111,7 +107,7 @@ const WebrtcComponent = ({ history, match }) => {
   let PartnerVideo;
   const popoverRef = useRef(null)
   const handleClose = () => {
-    // popoverRef.current = null;
+   
     setOpenPopUp(false);
   };
   const [openPopUp, setOpenPopUp] = useState(false);
@@ -125,26 +121,26 @@ const WebrtcComponent = ({ history, match }) => {
   }
   useEffect(() => {
     if (selectedEmotion === "happy") {
-      popMessageAndHide(lan[language].happy)
+      popMessageAndHide(lan[language].happy_popup)
     }
     if (selectedEmotion === "sad") {
-      popMessageAndHide(lan[language].sad)
+      popMessageAndHide(lan[language].sad_popup)
     }
 
     if (selectedEmotion === "disgust") {
-      popMessageAndHide(lan[language].disgust)
+      popMessageAndHide(lan[language].disgust_popup)
     }
 
     if (selectedEmotion === "surprise") {
-      popMessageAndHide(lan[language].surprise)
+      popMessageAndHide(lan[language].surprise_popup)
     }
 
     if (selectedEmotion === "angry") {
-      popMessageAndHide(lan[language].angry)
+      popMessageAndHide(lan[language].angry_popup)
     }
 
     if (selectedEmotion === "scared") {
-      popMessageAndHide(lan[language].fear)
+      popMessageAndHide(lan[language].fear_popup)
     }
 
   }, [selectedEmotion])
@@ -154,7 +150,7 @@ const WebrtcComponent = ({ history, match }) => {
       (< div className="partnerVideo" >
         <DetectionVideo videoRef={partnerVideo} />
       </div >);
-    // </div>
+    
 
   }
 

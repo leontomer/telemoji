@@ -11,7 +11,7 @@ import { contactUs } from "../../actions/usersActions";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
-
+import lan from "../../Languages/Languages.json";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -49,12 +49,7 @@ export default function ContactUs() {
     e.preventDefault();
 
     dispatch(contactUs({ message: value }));
-    dispatch(
-      setMessage(
-        "Thank you. we will be in touch with you soon.",
-        snackbarType.success
-      )
-    );
+    dispatch(setMessage(lan[language].contact_message, snackbarType.success));
   };
 
   return (
@@ -64,7 +59,7 @@ export default function ContactUs() {
         <Card className={classes.card}>
           <div style={{ textAlign: "center", marginTop: "20px" }}>
             <Typography variant="h4" gutterBottom>
-              Contact Us
+              {lan[language].contact_us}
             </Typography>
           </div>
           <form
@@ -83,7 +78,7 @@ export default function ContactUs() {
                 multiline
                 rows={8}
                 variant="outlined"
-                label="Tell us anything :)"
+                label={lan[language].contact_text}
                 value={value}
                 onChange={handleChange}
               />
@@ -94,7 +89,7 @@ export default function ContactUs() {
                   color="primary"
                   className={classes.submit}
                 >
-                  Send
+                  {lan[language].send}
                 </Button>{" "}
               </div>
             </div>{" "}

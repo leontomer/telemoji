@@ -4,13 +4,34 @@ import { useSelector, useDispatch } from "react-redux";
 import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
 import { setEmotion, setCallEmotionStats } from "../../actions/modelActions";
-
+import lan from "../../Languages/Languages.json";
 export function DetectionVideo({ videoRef, muted = false }) {
+  // @ts-ignore
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
+
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
+
+  let classNames;
+  if (language == "En") {
+    classNames = [
+      "angry",
+      "disgust",
+      "fear",
+      "happy",
+      "neutral",
+      "sad",
+      "surprise",
+    ];
+  } else {
+    classNames = ["עצבני", "נגעל", "מפחד", "שמח", "ניטרלי", "עצוב", "מופתע"];
+  }
+
   const [faceapi, setFaceapi] = useState();
   // const [emotionRecModel, setEmotionRecModel] = useState({});
-  const [userEmotion, setUserEmotion] = useState(
-    "Detection initializing, please wait..."
-  );
+  const [userEmotion, setUserEmotion] = useState(lan[language].detection);
   let canvasRef = useRef(null);
   const videoWidth = window.innerWidth < 640 ? window.innerWidth : 640;
   const videoHeight = 480;
@@ -37,15 +58,6 @@ export function DetectionVideo({ videoRef, muted = false }) {
     };
   }, [faceapiReducer]);
 
-  const classNames = [
-    "angry",
-    "disgust",
-    "fear",
-    "happy",
-    "neutral",
-    "sad",
-    "surprise",
-  ];
   const emotionStats = React.useRef({
     happy: 0,
     sad: 0,
@@ -94,7 +106,7 @@ export function DetectionVideo({ videoRef, muted = false }) {
   };
 
   const handleVideoOnPlay = () => {
-    setUserEmotion("Trying to detect your face...");
+    setUserEmotion(lan[language].detection_try);
     const videoToTensor = async () => {
       try {
         if (unmountingVideoChat && unmountingVideoChat.current) {
@@ -131,7 +143,7 @@ export function DetectionVideo({ videoRef, muted = false }) {
         }
         let data = null;
         if (!canvases || canvases.length === 0) {
-          setUserEmotion("Cannot find a face...");
+          setUserEmotion(lan[language].detection_fail);
         }
         if (canvases && canvases.length > 0) {
           try {
@@ -184,8 +196,8 @@ export function DetectionVideo({ videoRef, muted = false }) {
           alignItems: "center",
           flexDirection: "column",
           overflow: "hidden",
-          backgroundColor: 'black',
-          borderRadius: '50px'
+          backgroundColor: "black",
+          borderRadius: "50px",
         }}
       >
         <video
