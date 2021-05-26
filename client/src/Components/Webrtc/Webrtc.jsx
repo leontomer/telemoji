@@ -193,7 +193,7 @@ const WebrtcComponent = ({ history, match }) => {
           startIcon={<PhoneDisabledIcon />}
           onClick={() => history.push('/dashboard')}
         >
-          End Call
+          {lan[language].end_call}
       </Button>
       </div>
       <div className="videoRow">
