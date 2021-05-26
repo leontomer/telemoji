@@ -7,7 +7,7 @@ import { Button, Typography } from "@material-ui/core";
 import { useModal } from "../../Contexts/ModalContext";
 import { useDispatch, useSelector } from "react-redux";
 import { withRouter } from "react-router";
-import { handleAcceptCall } from "../../actions/callActions";
+import { handleAcceptCall, handleRejectCall } from "../../actions/callActions";
 import gifCall from "../../gifs/ringwhite.gif";
 import { Avatar } from "@material-ui/core";
 import PhoneDisabledIcon from "@material-ui/icons/PhoneDisabled";
@@ -58,6 +58,7 @@ const RecieveCallModalComponent = ({ history }) => {
     closeModal();
   };
   const handleDecline = () => {
+    handleRejectCall();
     closeModal();
   };
   useEffect(() => {
