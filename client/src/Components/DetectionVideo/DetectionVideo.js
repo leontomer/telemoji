@@ -225,13 +225,6 @@ export function DetectionVideo({ videoRef, muted = false }) {
           }}
         >
           <h3>{userEmotion}</h3>
-          {/* {userEmotion == "angry" && <h3>{lan[language].angry}</h3>}
-          {userEmotion == "happy" && <h3>{lan[language].happy}</h3>}
-          {userEmotion == "sad" && <h3>{lan[language].sad}</h3>}
-          {userEmotion == "surprise" && <h3>{lan[language].surprise}</h3>}
-          {userEmotion == "fear" && <h3>{lan[language].fear}</h3>}
-          {userEmotion == "disgust" && <h3>{lan[language].disgust}</h3>}
-          {userEmotion == "neutral" && <h3>{lan[language].neutral}</h3>} */}
         </div>
       </div>
     </div>
