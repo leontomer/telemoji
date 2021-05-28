@@ -174,6 +174,7 @@ const CallHistory = () => {
                 count={Math.ceil(callHistory.length / 5)}
                 color="primary"
                 onChange={handlePagination}
+                page={selectedPage}
               />
             )}
           </div>
