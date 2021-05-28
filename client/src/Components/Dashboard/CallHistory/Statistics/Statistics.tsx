@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Typography, Button } from "@material-ui/core";
-import { PieChart, Pie, Tooltip } from "recharts";
+import { PieChart, Pie, Tooltip, Cell } from "recharts";
 import happySvg from "../../../../gifs/happy.gif";
 import angrySvg from "../../../../gifs/angry.gif";
 import disgustSvg from "../../../../gifs/disgust.gif";
@@ -32,9 +32,11 @@ const Statistics = ({ goback, callId, callerStatsName }) => {
   // @ts-ignore
   const globalLanguage = useSelector((state) => state.LanguageReducer.language);
   const [language, setLocalLanguage] = React.useState(globalLanguage);
+
   useEffect(() => {
     setLocalLanguage(globalLanguage);
   }, [globalLanguage]);
+  const COLORS = ['#8E44AD', '#E74C3C', '#99A3A4', '#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
   const appear = useSpring({
     delay: 1100,
     from: { opacity: 0 },
@@ -88,13 +90,21 @@ const Statistics = ({ goback, callId, callerStatsName }) => {
     return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
   }
 
+  const chartWidth = window.innerWidth < 580 ? window.innerWidth - 150 : 400;
+
   useEffect(() => {
     if (!selectedCallHistoryStats) {
       return;
     }
+    console.log('Object.values(selectedCallHistoryStats)', Object.values(selectedCallHistoryStats));
+    //@ts-ignore
+    console.log('Object.values(selectedCallHistoryStats).slice(7).findIndex(value => value > 0)', Object.values(selectedCallHistoryStats).slice(0, 7).findIndex(value => value > 0))
+    console.log('Object.values(selectedCallHistoryStats).slice(7)', Object.values(selectedCallHistoryStats).slice(0, 7))
     if (
-      selectedCallHistoryStats &&
-      Object.keys(selectedCallHistoryStats).length === 0
+      selectedCallHistoryStats && (
+        Object.keys(selectedCallHistoryStats).length === 0 ||
+        //@ts-ignore
+        Object.values(selectedCallHistoryStats).slice(0, 7).findIndex(value => value > 0) === -1)
     ) {
       setNoData(true);
       setTimeout(() => {
@@ -134,6 +144,7 @@ const Statistics = ({ goback, callId, callerStatsName }) => {
       </div>
     );
   }
+
   return (
     <div>
       <animated.div style={{ ...appear }}>
@@ -160,17 +171,22 @@ const Statistics = ({ goback, callId, callerStatsName }) => {
         }}
       >
         <div>
-          <PieChart width={400} height={400}>
+          <PieChart width={chartWidth} height={chartWidth}>
             <Pie
               dataKey="value"
               isAnimationActive={true}
               data={statsData}
               cx="50%"
               cy="50%"
-              outerRadius={160}
+              outerRadius={chartWidth / 2}
               fill="#53317e"
-              label
-            />
+              label={renderCustomizedLabel}
+              labelLine={false}
+            >
+              {statsData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
             <Tooltip />
           </PieChart>
         </div>
@@ -304,5 +320,22 @@ function getTheDominantEmotionSvg() {
     return neutralSvg;
   }
 }
+
+
+const RADIAN = Math.PI / 180;
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  if (parseInt((percent * 100).toFixed(0), 10) > 0) {
+    return (
+      <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  }
+  else { return '' }
+
+};
 
 export default Statistics;

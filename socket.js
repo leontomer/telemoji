@@ -55,7 +55,6 @@ module.exports = () => {
     });
 
     socket.on('ping', (userdata) => {
-      console.log('ping is', userdata)
       if (!users[userdata.id]) {
         users[userdata.id] = {
           socketId: socket.id,
