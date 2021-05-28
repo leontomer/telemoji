@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { DetectionVideo } from "../DetectionVideo/DetectionVideo";
 import { useSelector, useDispatch } from "react-redux";
 import { endCall } from '../../actions/callActions';
-import { endCallForMyCaller } from '../../actions/socketActions';
+import { endCallForMyCaller, logUserToOnCall } from '../../actions/socketActions';
 import { withRouter } from "react-router";
 import PhoneDisabledIcon from '@material-ui/icons/PhoneDisabled';
 import Button from '@material-ui/core/Button';
@@ -49,6 +49,7 @@ const WebrtcComponent = ({ history, match }) => {
 
   useEffect(() => {
     startLoading();
+    dispatch(logUserToOnCall())
     setTimeout(() => {
       finishLoading()
     }, 5000);
@@ -107,7 +108,7 @@ const WebrtcComponent = ({ history, match }) => {
   let PartnerVideo;
   const popoverRef = useRef(null)
   const handleClose = () => {
-   
+
     setOpenPopUp(false);
   };
   const [openPopUp, setOpenPopUp] = useState(false);
@@ -150,7 +151,7 @@ const WebrtcComponent = ({ history, match }) => {
       (< div className="partnerVideo" >
         <DetectionVideo videoRef={partnerVideo} />
       </div >);
-    
+
 
   }
 
@@ -190,7 +191,7 @@ const WebrtcComponent = ({ history, match }) => {
           onClick={() => history.push('/dashboard')}
         >
           {lan[language].end_call}
-      </Button>
+        </Button>
       </div>
       <div className="videoRow">
         {popOvers}

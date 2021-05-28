@@ -31,9 +31,6 @@ module.exports = () => {
 
     socket.on("callUser", (data) => {
       const callToUser = users[data.userToCall];
-      if (users[data.callerId]) {
-        users[data.callerId].inCall = true;
-      }
       io.to(callToUser.socketId).emit("callInit", {
         signal: data.signalData,
         from: data.fromUser,
@@ -41,18 +38,36 @@ module.exports = () => {
         callerName: data.callerName,
         callerId: data.callerId,
       });
-      io.sockets.emit("allUsers", users);
     });
 
     socket.on("acceptCall", (data) => {
-      users[clientIdToSocketId[socket.id]].inCall = true;
       io.to(data.to).emit("callAccepted", data.signal);
-      io.sockets.emit("allUsers", users);
     });
+
+    socket.on('userOnCall', (data) => {
+      users[data.callerId].inCall = true;
+      io.sockets.emit("allUsers", users);
+    })
 
     socket.on("endCallForUser", (data) => {
       const sendTo = users[data.id] ? users[data.id].socketId : data.id;
       io.to(sendTo).emit("endCall");
     });
+
+    socket.on('ping', (userdata) => {
+      console.log('ping is', userdata)
+      if (!users[userdata.id]) {
+        users[userdata.id] = {
+          socketId: socket.id,
+          name: userdata.firstName,
+          inCall: userdata.inCall,
+        };
+        clientIdToSocketId[socket.id] = userdata.id;
+        io.sockets.emit("allUsers", users);
+      }
+      else {
+        io.to(socket.id).emit("ping", users);
+      }
+    })
   });
 };

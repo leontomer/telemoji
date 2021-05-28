@@ -2,11 +2,8 @@ import React, { useRef, useEffect, useState } from 'react'
 import { DetectionVideo } from '../DetectionVideo/DetectionVideo';
 
 const SelfFaceDetection = () => {
-
-
     const [stream, setStream] = useState();
     // @ts-ignore
-
     const userVideo = useRef();
 
 
@@ -32,7 +29,7 @@ const SelfFaceDetection = () => {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
             <DetectionVideo
-                videoRef={userVideo}
+                videoRef={userVideo} muted={true}
             />;
         </div>
     )
