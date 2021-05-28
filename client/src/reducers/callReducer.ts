@@ -6,10 +6,19 @@ import {
   ANSWER_CALL,
   END_CALL,
   CALLING_USER,
+  SET_NOW_IN_CALL,
+  SET_NOW_NOT_IN_CALL
 } from "../actions/types";
 
 const initialState = {
   language: {},
+  callerSignal: null,
+  receivingCall: null,
+  callerSocketId: null,
+  callerImage: null,
+  callerName: null,
+  callerId: null,
+  currentlyInCall: false
 };
 
 export default function (state = initialState, action) {
@@ -54,6 +63,16 @@ export default function (state = initialState, action) {
         ...state,
         callingUser: true,
       };
+    case SET_NOW_IN_CALL:
+      return {
+        ...state,
+        currentlyInCall: true
+      }
+    case SET_NOW_NOT_IN_CALL:
+      return {
+        ...state,
+        currentlyInCall: false
+      }
     default:
       return state;
   }
