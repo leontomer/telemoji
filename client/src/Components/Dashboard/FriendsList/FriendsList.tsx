@@ -180,14 +180,17 @@ function FriendsList({ history }) {
             </Typography>
           }
         />
+        <ListItem
+          style={{ maxWidth: "58px" }}
+          button
+          onClick={() => handleFriendClick(null)}
+        >
+          <ListItemAvatar>
+            <Avatar alt={`${user.firstName}`} src={user.imageAddress} />
+          </ListItemAvatar>
+        </ListItem>
       </ListItem>
-      <ListItem button onClick={() => handleFriendClick(null)}>
-        <ListItemAvatar>
-          <Avatar alt={`${user.firstName}`} src={user.imageAddress} />
-        </ListItemAvatar>
 
-        <ListItemText id={"thisUser"} primary={user.firstName} />
-      </ListItem>
       {userFriendList.map((friend: FriendProps, index) => {
         const labelId = `checkbox-list-secondary-label-${friend}`;
         return (
