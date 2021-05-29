@@ -32,6 +32,7 @@ export function DetectionVideo({ videoRef, muted = false }) {
   const [faceapi, setFaceapi] = useState();
   // const [emotionRecModel, setEmotionRecModel] = useState({});
   const [userEmotion, setUserEmotion] = useState(lan[language].detection);
+  const [detectFaceMessage, setDetecFaceMessage] = useState('')
   let canvasRef = useRef(null);
   const videoWidth = window.innerWidth < 640 ? window.innerWidth : 640;
   const videoHeight = 480;
@@ -127,10 +128,10 @@ export function DetectionVideo({ videoRef, muted = false }) {
             new faceapi.TinyFaceDetectorOptions()
           );
           //------------faceapi settings---------------
-          const resizedDetections = faceapi.resizeResults(
-            detections,
-            displaySize
-          );
+          // const resizedDetections = faceapi.resizeResults(
+          //   detections,
+          //   displaySize
+          // );
           canvasRef.current
             .getContext("2d")
             .clearRect(0, 0, videoWidth, videoHeight);
@@ -138,14 +139,15 @@ export function DetectionVideo({ videoRef, muted = false }) {
           //------------------------------------------
           canvases = await faceapi.extractFaces(
             videoRef.current,
-            resizedDetections
+            detections
           );
         }
         let data = null;
         if (!canvases || canvases.length === 0) {
-          setUserEmotion(lan[language].detection_fail);
+          setDetecFaceMessage(lan[language].detection_fail);
         }
         if (canvases && canvases.length > 0) {
+          setDetecFaceMessage('')
           try {
             data = tf.browser
               .fromPixels(canvases[0], 3)
@@ -225,6 +227,7 @@ export function DetectionVideo({ videoRef, muted = false }) {
           }}
         >
           <h3>{userEmotion}</h3>
+          <span style={{ fontSize: '25px', color: 'red' }}>{detectFaceMessage}</span>
         </div>
       </div>
     </div>
