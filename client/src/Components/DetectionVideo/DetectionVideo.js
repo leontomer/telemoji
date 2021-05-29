@@ -29,8 +29,6 @@ export function DetectionVideo({ videoRef, muted = false }) {
     classNames = ["עצבני", "נגעל", "מפחד", "שמח", "ניטרלי", "עצוב", "מופתע"];
   }
 
-  const [faceapi, setFaceapi] = useState();
-  // const [emotionRecModel, setEmotionRecModel] = useState({});
   const [userEmotion, setUserEmotion] = useState(lan[language].detection);
   const [detectFaceMessage, setDetecFaceMessage] = useState('')
   let canvasRef = useRef(null);
@@ -38,7 +36,7 @@ export function DetectionVideo({ videoRef, muted = false }) {
   const videoHeight = 480;
 
   const dispatch = useDispatch();
-  const faceapiReducer = useSelector((state) => state.modelReducer.faceapi);
+  const faceapi = useSelector((state) => state.modelReducer.faceapi);
   const emotionRecognition85p = useSelector(
     (state) => state.modelReducer.emotionRecognition85p
   );
@@ -46,18 +44,13 @@ export function DetectionVideo({ videoRef, muted = false }) {
   let timeVarHolder;
   let unmountingVideoChat = useRef(null);
   useEffect(() => {
-    console.log("mounting faceapi");
-    if (faceapiReducer && !faceapi) {
-      setFaceapi(faceapiReducer);
-    }
-
     return () => {
       clearTimeout(timeVarHolder);
       dispatch(setCallEmotionStats(emotionStats.current));
       canvasRef = null;
       unmountingVideoChat.current = true;
     };
-  }, [faceapiReducer]);
+  }, []);
 
   const emotionStats = React.useRef({
     happy: 0,
