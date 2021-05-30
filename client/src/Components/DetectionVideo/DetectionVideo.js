@@ -94,7 +94,13 @@ export function DetectionVideo({ videoRef, muted = false }) {
           }
         }
       } catch (error) {
-        console.log(error);
+        dispatch(
+          setMessage(
+            "Call has ended",
+            JSON.stringify(error),
+            snackbarType.error
+          )
+        );
       }
     }
   };
