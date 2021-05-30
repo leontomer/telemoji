@@ -17,8 +17,8 @@ const SelfFaceDetection = () => {
         navigator.mediaDevices
             .getUserMedia({
                 audio: true, video: {
-                    width: 1040,
-                    height: 880
+                    width: 1280,
+                    height: 720,
                 }
             })
             .then((stream) => {

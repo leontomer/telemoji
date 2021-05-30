@@ -57,8 +57,8 @@ export const getStreamFromVideoCamera = (id?: string) => (dispatch) => {
     .getUserMedia({
       audio: true,
       video: {
-        width: 640,
-        height: 480,
+        width: 1280,
+        height: 720,
       },
     })
     .then((stream) => {
