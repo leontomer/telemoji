@@ -5,6 +5,8 @@ import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
 import { setEmotion, setCallEmotionStats } from "../../actions/modelActions";
 import lan from "../../Languages/Languages.json";
+const blazeface = require('@tensorflow-models/blazeface');
+
 export function DetectionVideo({ videoRef, muted = false }) {
   // @ts-ignore
   const globalLanguage = useSelector((state) => state.LanguageReducer.language);
@@ -122,23 +124,38 @@ export function DetectionVideo({ videoRef, muted = false }) {
             height: videoHeight,
           };
           faceapi.matchDimensions(canvasRef.current, displaySize);
-          const detections = await faceapi.detectAllFaces(
-            videoRef.current,
-            new faceapi.TinyFaceDetectorOptions()
-          );
+          // const detections = await faceapi.detectAllFaces(
+          //   videoRef.current,
+          //   new faceapi.TinyFaceDetectorOptions()
+          // );
+          // console.log('detections', detections)
+          const model = await blazeface.load();
+          // console.log('model is', model);
+          const predictions = await model.estimateFaces(videoRef.current, false);
+          // console.log('predictions are', predictions);
+          let regionsToExtract
+          if (predictions.length > 0) {
+            regionsToExtract = [
+              new faceapi.Rect(predictions[0].topLeft[0],
+                predictions[0].topLeft[1],
+                predictions[0].bottomRight[0] - predictions[0].topLeft[0],
+                predictions[0].bottomRight[1] - predictions[0].topLeft[1])
+            ]
+          }
+
           //------------faceapi settings---------------
           // const resizedDetections = faceapi.resizeResults(
           //   detections,
           //   displaySize
           // );
-          canvasRef.current
-            .getContext("2d")
-            .clearRect(0, 0, videoWidth, videoHeight);
+          // canvasRef.current
+          //   .getContext("2d")
+          //   .clearRect(0, 0, videoWidth, videoHeight);
           // faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
           //------------------------------------------
-          canvases = await faceapi.extractFaces(
+          canvases = regionsToExtract && await faceapi.extractFaces(
             videoRef.current,
-            detections
+            regionsToExtract
           );
         }
         let data = null;
@@ -174,6 +191,7 @@ export function DetectionVideo({ videoRef, muted = false }) {
           timeVarHolder = setTimeout(videoToTensor, 300);
         }
       } catch (error) {
+        console.error(error)
         dispatch(
           setMessage(
             "Call has ended",
