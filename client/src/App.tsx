@@ -13,6 +13,7 @@ import { loadUser } from "./actions/authActions";
 import {
   loadFaceapi,
   loadEmotionRecognitionModel,
+  loadBlazeface
 } from "./actions/modelActions";
 import { recieveCalls, getAnswerFromCall } from "./actions/callActions";
 import setAuthToken from "./utilities/setAuthToken";
@@ -32,7 +33,7 @@ import ForgotPassword from "./Components/ForgotPassword/ForgotPassword";
 import SelfFaceDetection from "./Components/SelfFaceDetection/SelfFaceDetection";
 import store from "./store";
 import "./App.css";
-import { FromPixels } from "@tensorflow/tfjs-core";
+
 
 function App() {
   // @ts-ignore
@@ -40,6 +41,7 @@ function App() {
   useEffect(() => {
     store.dispatch(loadUser());
     store.dispatch(loadFaceapi());
+    store.dispatch(loadBlazeface());
     store.dispatch(loadEmotionRecognitionModel());
   }, []);
 
