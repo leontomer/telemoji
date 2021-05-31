@@ -1,8 +1,26 @@
 import * as faceapi from "@vladmandic/face-api/dist/face-api.esm.js";
 import * as tf from "@tensorflow/tfjs";
 
-import { SET_FACEAPI, SET_EMOTION_RECOGNITION_MODEL, SET_EMOTION, UPDATE_EMOT_STATS } from "./types";
+import {
+    SET_FACEAPI,
+    SET_EMOTION_RECOGNITION_MODEL,
+    SET_EMOTION,
+    UPDATE_EMOT_STATS,
+    SET_BLAZEFACE
+} from "./types";
+const blazeface = require('@tensorflow-models/blazeface');
 
+export const loadBlazeface = () => async (dispatch) => {
+    try {
+        const model = await blazeface.load();
+        dispatch({
+            type: SET_BLAZEFACE,
+            payload: model,
+        });
+    } catch (error) {
+        console.error(error)
+    }
+}
 export const loadFaceapi = () => async (
     dispatch
 ) => {
@@ -10,9 +28,9 @@ export const loadFaceapi = () => async (
         const MODEL_URL = "/models";
         await Promise.all([
             faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
-            faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-            faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
-            faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
+            // faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+            // faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
+            // faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
         ]);
         dispatch({
             type: SET_FACEAPI,

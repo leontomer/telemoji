@@ -5,7 +5,7 @@ import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
 import { setEmotion, setCallEmotionStats } from "../../actions/modelActions";
 import lan from "../../Languages/Languages.json";
-const blazeface = require('@tensorflow-models/blazeface');
+
 
 export function DetectionVideo({ videoRef, muted = false }) {
   // @ts-ignore
@@ -39,6 +39,7 @@ export function DetectionVideo({ videoRef, muted = false }) {
 
   const dispatch = useDispatch();
   const faceapi = useSelector((state) => state.modelReducer.faceapi);
+  const blazeFace = useSelector((state) => state.modelReducer.blazeFace);
   const emotionRecognition85p = useSelector(
     (state) => state.modelReducer.emotionRecognition85p
   );
@@ -124,22 +125,18 @@ export function DetectionVideo({ videoRef, muted = false }) {
             height: videoHeight,
           };
           faceapi.matchDimensions(canvasRef.current, displaySize);
-          // const detections = await faceapi.detectAllFaces(
-          //   videoRef.current,
-          //   new faceapi.TinyFaceDetectorOptions()
-          // );
-          // console.log('detections', detections)
-          const model = await blazeface.load();
-          // console.log('model is', model);
-          const predictions = await model.estimateFaces(videoRef.current, false);
-          // console.log('predictions are', predictions);
+          const faceApiFacedetections = await faceapi.detectAllFaces(
+            videoRef.current,
+            new faceapi.TinyFaceDetectorOptions()
+          );
+          const blazeFaceApiFacedetections = await blazeFace.estimateFaces(videoRef.current, false);
           let regionsToExtract
-          if (predictions.length > 0) {
+          if (blazeFaceApiFacedetections.length > 0) {
             regionsToExtract = [
-              new faceapi.Rect(predictions[0].topLeft[0],
-                predictions[0].topLeft[1],
-                predictions[0].bottomRight[0] - predictions[0].topLeft[0],
-                predictions[0].bottomRight[1] - predictions[0].topLeft[1])
+              new faceapi.Rect(blazeFaceApiFacedetections[0].topLeft[0],
+                blazeFaceApiFacedetections[0].topLeft[1],
+                blazeFaceApiFacedetections[0].bottomRight[0] - blazeFaceApiFacedetections[0].topLeft[0],
+                blazeFaceApiFacedetections[0].bottomRight[1] - blazeFaceApiFacedetections[0].topLeft[1])
             ]
           }
 
@@ -153,9 +150,10 @@ export function DetectionVideo({ videoRef, muted = false }) {
           //   .clearRect(0, 0, videoWidth, videoHeight);
           // faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
           //------------------------------------------
-          canvases = regionsToExtract && await faceapi.extractFaces(
+          const detections = faceApiFacedetections.length > 0 ? faceApiFacedetections : regionsToExtract ? regionsToExtract : null
+          canvases = detections && await faceapi.extractFaces(
             videoRef.current,
-            regionsToExtract
+            detections
           );
         }
         let data = null;
