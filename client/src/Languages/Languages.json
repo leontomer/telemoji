@@ -72,7 +72,8 @@
     "incoming_call": "is calling you",
     "detection": "Detection initializing, please wait...",
     "detection_try": "Trying to detect your face...",
-    "detection_fail": "Cannot find a face..."
+    "detection_fail": "Cannot find a face...",
+    "no_friends": " No Friends yet. please add friends to start enjoying video chats with them!"
   },
   "He": {
     "login_navbar": "התחברות",
@@ -140,7 +141,7 @@
     "disgust_popup": "אוי לא, חברך נגעל, נסה לשנות נושא 🤢",
     "disgust": "נגעל",
     "neutral": "נייטרלי",
-
+    "no_friends": "עדיין אין לך חברים. הוסף חברים על מנת שתוכל להתחיל להנות משיחות וידיאו איתם!",
     "angry_popup": "אוי לא, חברך כועס! נסה לומר משהו נחמד 😡",
     "angry": "כועס",
     "end_call": "נתק שיחה",

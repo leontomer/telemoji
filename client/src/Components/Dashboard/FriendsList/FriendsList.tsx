@@ -191,6 +191,15 @@ function FriendsList({ history }) {
         </ListItem>
       </ListItem>
 
+      {userFriendList.length == 0 && (
+        <Typography
+          variant="subtitle2"
+          style={{ marginLeft: "5px", marginRight: "5px" }}
+        >
+          {lan[language].no_friends}
+        </Typography>
+      )}
+
       {userFriendList.map((friend: FriendProps, index) => {
         const labelId = `checkbox-list-secondary-label-${friend}`;
         return (
