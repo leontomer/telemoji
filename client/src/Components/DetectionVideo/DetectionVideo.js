@@ -3,7 +3,13 @@ import * as tf from "@tensorflow/tfjs";
 import { useSelector, useDispatch } from "react-redux";
 import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
-import { setEmotion, setCallEmotionStats } from "../../actions/modelActions";
+import {
+  setEmotion,
+  setCallEmotionStats,
+  loadEmotionRecognitionModel,
+  loadBlazeface,
+  loadFaceapi
+} from "../../actions/modelActions";
 import lan from "../../Languages/Languages.json";
 
 
@@ -16,20 +22,20 @@ export function DetectionVideo({ videoRef, muted = false }) {
     setLocalLanguage(globalLanguage);
   }, [globalLanguage]);
 
-  let classNames;
-  if (language == "En") {
-    classNames = [
-      "angry",
-      "disgust",
-      "fear",
-      "happy",
-      "neutral",
-      "sad",
-      "surprise",
-    ];
-  } else {
-    classNames = ["עצבני", "נגעל", "מפחד", "שמח", "ניטרלי", "עצוב", "מופתע"];
-  }
+
+  // if (language == "En") {
+  const classNames = [
+    "angry",
+    "disgust",
+    "fear",
+    "happy",
+    "neutral",
+    "sad",
+    "surprise",
+  ];
+  // } else {
+  const hebrewClassNames = ["עצבני", "נגעל", "מפחד", "שמח", "ניטרלי", "עצוב", "מופתע"];
+  // }
 
   const [userEmotion, setUserEmotion] = useState(lan[language].detection);
   const [detectFaceMessage, setDetecFaceMessage] = useState('')
@@ -49,11 +55,24 @@ export function DetectionVideo({ videoRef, muted = false }) {
   useEffect(() => {
     return () => {
       clearTimeout(timeVarHolder);
-      dispatch(setCallEmotionStats(emotionStats.current));
+      setCallEmotionStats(emotionStats.current);
       canvasRef = null;
       unmountingVideoChat.current = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (!faceapi) {
+      dispatch(loadFaceapi())
+    }
+    if (!blazeFace) {
+      dispatch(loadBlazeface())
+    }
+    if (!emotionRecognition85p) {
+      dispatch(loadEmotionRecognitionModel())
+    }
+
+  }, [faceapi, blazeFace, emotionRecognition85p])
 
   const emotionStats = React.useRef({
     happy: 0,
@@ -75,18 +94,19 @@ export function DetectionVideo({ videoRef, muted = false }) {
         for (let i = 0; i < pred85.length; i++) {
           ans[i] = pred85[i];
         }
-        let maxPrediction = { value: 0, className: "" };
+        let maxPrediction = { value: 0, className: "", index: 0 };
 
         for (let i = 0; i < ans.length; i++) {
           if (ans[i] > maxPrediction.value) {
             maxPrediction.value = ans[i];
             maxPrediction.className = classNames[i];
+            maxPrediction.index = i
           }
         }
         if (maxPrediction) {
           emotionStats.current[maxPrediction.className]++;
           if (userEmotion !== maxPrediction.className) {
-            setUserEmotion(maxPrediction.className);
+            setUserEmotion(language == "En" ? maxPrediction.className : hebrewClassNames[maxPrediction.index]);
             if (!setEmotionDelay.current) {
               dispatch(setEmotion(maxPrediction.className));
               setEmotionDelay.current = true;

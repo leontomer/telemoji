@@ -18,9 +18,11 @@ const WebrtcComponent = ({ history, match }) => {
   // @ts-ignore
   const globalLanguage = useSelector((state) => state.LanguageReducer.language);
   const [language, setLocalLanguage] = React.useState(globalLanguage);
+
   useEffect(() => {
     setLocalLanguage(globalLanguage);
   }, [globalLanguage]);
+
   const userVideo = useRef();
   const partnerVideo = useRef();
   // @ts-ignore
@@ -42,10 +44,6 @@ const WebrtcComponent = ({ history, match }) => {
   }
 
   const { startLoading, finishLoading } = useLoader();
-
-
-
-
 
   useEffect(() => {
     startLoading();

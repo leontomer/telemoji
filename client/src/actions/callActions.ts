@@ -167,6 +167,7 @@ export const makeCall = (id: string) => async (dispatch, getState) => {
 export const handleRejectCall = () => {
   ringtoneSound.unload();
 };
+
 export const acceptCall = () => async (dispatch, getState) => {
   const socket = getState().socketReducer.socket;
   const userStream = getState().callReducer.userStream;
@@ -202,7 +203,6 @@ export const acceptCall = () => async (dispatch, getState) => {
 
 export const endCall = () => async (dispatch, getState) => {
   const userStream = getState().callReducer.userStream;
-  const emotionStats = getState().modelReducer.emotionStats;
   if (userStream) {
     const tracks = userStream.getTracks();
     tracks.forEach(function (track) {
@@ -216,10 +216,5 @@ export const endCall = () => async (dispatch, getState) => {
   dispatch({
     type: END_CALL,
   });
-  if (emotionStats) {
-    axios.post(`${baseRoute}call-stats`, { emotionStats });
-    dispatch({
-      type: CLEAR_EMOTIONS_STATS,
-    });
-  }
+
 };

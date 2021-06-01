@@ -58,7 +58,7 @@ const WelcomeBanner = () => {
             </p>
           )}
         </div>
-        <div style={{ marginLeft: 50 }}>
+        <div style={{ marginLeft: 50 }} className="rotating-image">
           <img src={welcomeImage} height="100px" />
         </div>
       </div>
@@ -67,6 +67,7 @@ const WelcomeBanner = () => {
         style={{
           ...styles,
         }}
+        className="rotating-image"
       >
         <img src={welcomeBannerSvg} height="120px" />
       </animated.div>

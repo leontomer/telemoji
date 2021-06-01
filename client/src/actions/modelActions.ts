@@ -8,6 +8,7 @@ import {
     UPDATE_EMOT_STATS,
     SET_BLAZEFACE
 } from "./types";
+import axios from "axios";
 const blazeface = require('@tensorflow-models/blazeface');
 
 export const loadBlazeface = () => async (dispatch) => {
@@ -51,11 +52,10 @@ export const setEmotion = (emotion) => async (
     });
 };
 
-export const setCallEmotionStats = (stats) => async (dispatch) => {
-    dispatch({
-        type: UPDATE_EMOT_STATS,
-        payload: stats
-    })
+export const setCallEmotionStats = async (stats) => {
+    if (stats) {
+        axios.post(`/api/friends/call-stats`, { emotionStats: stats });
+    }
 }
 
 

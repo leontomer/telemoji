@@ -96,10 +96,6 @@ const Statistics = ({ goback, callId, callerStatsName }) => {
     if (!selectedCallHistoryStats) {
       return;
     }
-    console.log('Object.values(selectedCallHistoryStats)', Object.values(selectedCallHistoryStats));
-    //@ts-ignore
-    console.log('Object.values(selectedCallHistoryStats).slice(7).findIndex(value => value > 0)', Object.values(selectedCallHistoryStats).slice(0, 7).findIndex(value => value > 0))
-    console.log('Object.values(selectedCallHistoryStats).slice(7)', Object.values(selectedCallHistoryStats).slice(0, 7))
     if (
       selectedCallHistoryStats && (
         Object.keys(selectedCallHistoryStats).length === 0 ||

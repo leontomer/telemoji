@@ -23,3 +23,10 @@
   margin-top: 10px;
 
 }
+
+@media only screen and (max-width: 950px) {
+  .rotating-image{
+    display:none;
+  }
+
+}

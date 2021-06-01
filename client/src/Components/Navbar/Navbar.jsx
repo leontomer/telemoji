@@ -65,6 +65,27 @@ export default function SearchAppBar() {
   useEffect(() => {
     setLocalLanguage(globalLanguage);
   }, [globalLanguage]);
+
+  const languageSelector = (selector) => (
+    <div style={{ marginLeft: "10px" }} className={selector}>
+      <Select
+        value={language}
+        onChange={handleChange}
+        label="Language"
+        style={{ color: "white" }}
+        className={classes.select}
+        inputProps={{
+          classes: {
+            icon: classes.icon,
+          },
+        }}
+      >
+        <MenuItem value={"En"}>English 🇺🇸 </MenuItem>
+        <MenuItem value={"He"}>עברית 🇮🇱</MenuItem>
+      </Select>
+    </div>
+  )
+
   const authenticatedContent = (
     <div className="navAuthContent">
       <div>
@@ -89,6 +110,7 @@ export default function SearchAppBar() {
           </IconButton>
         </div>
       </div>
+      {languageSelector('language-selector')}
     </div>
   );
 
@@ -116,8 +138,11 @@ export default function SearchAppBar() {
           {lan[language].register_navbar}
         </Button>
       </Link>
+      {languageSelector('language-selector')}
     </div>
   );
+
+
   return (
     <AppBar
       position="static"
@@ -143,31 +168,15 @@ export default function SearchAppBar() {
                 Telemoji
               </h2>
             </Link>
-            <div style={{ marginLeft: "10px" }}>
-              <Select
-                value={language}
-                onChange={handleChange}
-                label="Language"
-                style={{ color: "white" }}
-                className={classes.select}
-                inputProps={{
-                  classes: {
-                    icon: classes.icon,
-                  },
-                }}
-              >
-                <MenuItem value={"En"}>English 🇺🇸 </MenuItem>
-                <MenuItem value={"He"}>עברית 🇮🇱</MenuItem>
-              </Select>
-            </div>
+            {languageSelector('')}
           </div>
         </Typography>
 
         {isAuthenticated === null
           ? null
           : isAuthenticated
-          ? authenticatedContent
-          : notAuthenticatedContent}
+            ? authenticatedContent
+            : notAuthenticatedContent}
       </Toolbar>
     </AppBar>
   );
