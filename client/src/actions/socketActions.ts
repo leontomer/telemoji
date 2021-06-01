@@ -76,7 +76,7 @@ export const logoutUserFromSocket = () => (dispatch, getState) => {
       type: LOGOUT_FROM_SOCKET,
     });
   } catch (error) {
-    console.error("theeee error is", error);
+    console.error("the error is", error);
     dispatch(
       setMessage(
         error.name + ":" + error.name + ":" + error.message,
