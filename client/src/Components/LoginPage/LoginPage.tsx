@@ -173,17 +173,19 @@ export default function LoginPage({ history }) {
                   {lan[language].register_login_page}
                 </Link>
               </Grid>
+              <Grid item xs>
+                <div
+                  style={{
+                    width:'100%',
+                    height: "100px",
+                    marginTop: "20px",
+                    marginBottom: "-30px",
+                  }}
+                >
+                  <GoogleLoginHooks goToDashboard={() => goToDashboard()} />
+                </div>
+              </Grid>
             </Grid>
-            <div
-              style={{
-                width: "400px",
-                height: "100px",
-                marginTop: "20px",
-                marginBottom: "-30px",
-              }}
-            >
-              <GoogleLoginHooks goToDashboard={() => goToDashboard()} />
-            </div>
           </form>
         </Card>
       </div>

@@ -8,6 +8,7 @@ import aboutUsSvg from "../../svgs/content-creator.svg";
 import { useDispatch, useSelector } from "react-redux";
 
 import lan from "../../Languages/Languages.json";
+import { Grid } from "@material-ui/core";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -22,9 +23,9 @@ const useStyles = makeStyles((theme: Theme) =>
     card: {
       margin: "0 auto",
       marginTop: "80px",
-      width: "60%",
+      maxWidth: "600px",
       padding: "20px",
-      height: "370px",
+      minHeight: "370px",
     },
   })
 );
@@ -41,24 +42,23 @@ export default function AboutUs() {
       <Container fixed>
         <CssBaseline />{" "}
         <Card className={classes.card}>
-          <div style={{ textAlign: "center" }}>
-            <Typography variant="h4" gutterBottom>
-              {lan[language].about}
-            </Typography>
-          </div>
-          <div>
-            <Typography>{lan[language].about_content}</Typography>
-          </div>
-          <div>
-            <img
-              src={aboutUsSvg}
-              height="120px"
-              style={{
-                margin: "20px",
-                paddingLeft: "80%",
-              }}
-            />
-          </div>
+          <Grid>
+            <Grid item xs>
+              <div style={{ textAlign: "center" }}>
+                <Typography variant="h4" gutterBottom>
+                  {lan[language].about}
+                </Typography>
+              </div>
+            </Grid>
+            <Grid item xs>
+              <Typography>{lan[language].about_content}</Typography>
+            </Grid>
+            <Grid item xs>
+              <div>
+                <img src={aboutUsSvg} height="120px" />
+              </div>
+            </Grid>
+          </Grid>
         </Card>
       </Container>
     </div>
