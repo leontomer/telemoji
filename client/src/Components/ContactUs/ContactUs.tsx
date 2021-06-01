@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
 import lan from "../../Languages/Languages.json";
+import { Grid } from "@material-ui/core";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -26,7 +27,8 @@ const useStyles = makeStyles((theme: Theme) =>
     card: {
       margin: "0 auto",
       marginTop: "80px",
-      width: "50%",
+      minWidth: "50%",
+      maxWidth: "600px",
     },
   })
 );
@@ -57,48 +59,57 @@ export default function ContactUs() {
       <Container fixed>
         <CssBaseline />{" "}
         <Card className={classes.card}>
-          <div style={{ textAlign: "center", marginTop: "20px" }}>
-            <Typography variant="h4" gutterBottom>
-              {lan[language].contact_us}
-            </Typography>
-          </div>
-          <form
-            className={classes.root}
-            noValidate
-            autoComplete="off"
-            onSubmit={handleSubmit}
-          >
-            <div>
-              <TextField
-                style={{ width: "80%", height: "150px", marginLeft: "10%" }}
-                inputProps={{
-                  min: 0,
-                }}
-                id="outlined-multiline-static"
-                multiline
-                rows={8}
-                variant="outlined"
-                label={lan[language].contact_text}
-                value={value}
-                onChange={handleChange}
-              />
-              <div style={{ marginLeft: "80%", marginTop: "100px" }}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  {lan[language].send}
-                </Button>{" "}
+          <Grid>
+            <Grid item xs>
+              <div style={{ textAlign: "center", marginTop: "20px" }}>
+                <Typography variant="h4" gutterBottom>
+                  {lan[language].contact_us}
+                </Typography>
               </div>
-            </div>{" "}
-            <img
-              src={questionsSvg}
-              height="120px"
-              style={{ margin: "20px", marginTop: "-200px" }}
-            />
-          </form>
+            </Grid>
+            <form
+              className={classes.root}
+              noValidate
+              autoComplete="off"
+              onSubmit={handleSubmit}
+            >
+              <div>
+                <TextField
+                  style={{ width: "80%", height: "150px", marginLeft: "10%" }}
+                  inputProps={{
+                    min: 0,
+                  }}
+                  id="outlined-multiline-static"
+                  multiline
+                  rows={8}
+                  variant="outlined"
+                  label={lan[language].contact_text}
+                  value={value}
+                  onChange={handleChange}
+                />
+                <div
+                  style={{
+                    marginLeft: "75%",
+                    marginTop: "100px",
+                  }}
+                >
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                  >
+                    {lan[language].send}
+                  </Button>{" "}
+                </div>
+              </div>{" "}
+              <img
+                src={questionsSvg}
+                height="120px"
+                style={{ margin: "20px", marginTop: "-200px" }}
+              />
+            </form>
+          </Grid>
         </Card>
       </Container>
     </div>
