@@ -128,6 +128,21 @@ const CallHistory = () => {
           >
             {lan[language].call_history}
           </Typography>
+
+          {callHistory.length == 0 && (
+            <Typography
+              variant="subtitle2"
+              style={{
+                marginLeft: "5px",
+                marginRight: "5px",
+                textAlign: "center",
+                marginTop: "5px",
+              }}
+            >
+              {lan[language].no_calls}
+            </Typography>
+          )}
+
           <List className={classes.root}>
             {callHistory
               .slice(0)

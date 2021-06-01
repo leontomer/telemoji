@@ -194,7 +194,7 @@ function FriendsList({ history }) {
       {userFriendList.length == 0 && (
         <Typography
           variant="subtitle2"
-          style={{ marginLeft: "5px", marginRight: "5px" }}
+          style={{ marginLeft: "5px", marginRight: "5px", marginTop: "5px" }}
         >
           {lan[language].no_friends}
         </Typography>
