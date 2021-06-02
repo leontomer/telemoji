@@ -3,15 +3,19 @@ import * as tf from "@tensorflow/tfjs";
 import { useSelector, useDispatch } from "react-redux";
 import { setMessage } from "../../actions/errorsActions";
 import { snackbarType } from "../../Common/dataTypes";
+import VideocamIcon from "@material-ui/icons/Videocam";
+import HighlightOffIcon from "@material-ui/icons/HighlightOff";
+import GetAppIcon from "@material-ui/icons/GetApp";
 import {
   setEmotion,
   setCallEmotionStats,
   loadEmotionRecognitionModel,
   loadBlazeface,
-  loadFaceapi
+  loadFaceapi,
 } from "../../actions/modelActions";
 import lan from "../../Languages/Languages.json";
-
+import { useReactMediaRecorder } from "react-media-recorder";
+import { Button } from "@material-ui/core";
 
 export function DetectionVideo({ videoRef, muted = false }) {
   // @ts-ignore
@@ -21,7 +25,6 @@ export function DetectionVideo({ videoRef, muted = false }) {
   useEffect(() => {
     setLocalLanguage(globalLanguage);
   }, [globalLanguage]);
-
 
   // if (language == "En") {
   const classNames = [
@@ -34,11 +37,27 @@ export function DetectionVideo({ videoRef, muted = false }) {
     "surprise",
   ];
   // } else {
-  const hebrewClassNames = ["עצבני", "נגעל", "מפחד", "שמח", "ניטרלי", "עצוב", "מופתע"];
+  const hebrewClassNames = [
+    "עצבני",
+    "נגעל",
+    "מפחד",
+    "שמח",
+    "ניטרלי",
+    "עצוב",
+    "מופתע",
+  ];
   // }
+  const [stopScreenShare, SetStopScreenShare] = useState(false);
+  const { status, startRecording, stopRecording, mediaBlobUrl } =
+    useReactMediaRecorder({
+      video: true,
+      screen: true,
+      blobPropertyBag: { type: "video/webm" },
+    });
 
   const [userEmotion, setUserEmotion] = useState(lan[language].detection);
-  const [detectFaceMessage, setDetecFaceMessage] = useState('')
+
+  const [detectFaceMessage, setDetectFaceMessage] = useState("");
   let canvasRef = useRef(null);
   const videoWidth = window.innerWidth < 640 ? window.innerWidth : 640;
   const videoHeight = 480;
@@ -63,16 +82,15 @@ export function DetectionVideo({ videoRef, muted = false }) {
 
   useEffect(() => {
     if (!faceapi) {
-      dispatch(loadFaceapi())
+      dispatch(loadFaceapi());
     }
     if (!blazeFace) {
-      dispatch(loadBlazeface())
+      dispatch(loadBlazeface());
     }
     if (!emotionRecognition85p) {
-      dispatch(loadEmotionRecognitionModel())
+      dispatch(loadEmotionRecognitionModel());
     }
-
-  }, [faceapi, blazeFace, emotionRecognition85p])
+  }, [faceapi, blazeFace, emotionRecognition85p]);
 
   const emotionStats = React.useRef({
     happy: 0,
@@ -85,6 +103,15 @@ export function DetectionVideo({ videoRef, muted = false }) {
   });
   const setEmotionDelay = useRef(false);
 
+  const handleStopRecording = () => {
+    stopRecording();
+    SetStopScreenShare(true);
+  };
+
+  const handleStartRecording = () => {
+    startRecording();
+    SetStopScreenShare(false);
+  };
   const predict = (data) => {
     if (emotionRecognition85p && data) {
       try {
@@ -100,13 +127,17 @@ export function DetectionVideo({ videoRef, muted = false }) {
           if (ans[i] > maxPrediction.value) {
             maxPrediction.value = ans[i];
             maxPrediction.className = classNames[i];
-            maxPrediction.index = i
+            maxPrediction.index = i;
           }
         }
         if (maxPrediction) {
           emotionStats.current[maxPrediction.className]++;
           if (userEmotion !== maxPrediction.className) {
-            setUserEmotion(language == "En" ? maxPrediction.className : hebrewClassNames[maxPrediction.index]);
+            setUserEmotion(
+              language == "En"
+                ? maxPrediction.className
+                : hebrewClassNames[maxPrediction.index]
+            );
             if (!setEmotionDelay.current) {
               dispatch(setEmotion(maxPrediction.className));
               setEmotionDelay.current = true;
@@ -149,15 +180,22 @@ export function DetectionVideo({ videoRef, muted = false }) {
             videoRef.current,
             new faceapi.TinyFaceDetectorOptions()
           );
-          const blazeFaceApiFacedetections = await blazeFace.estimateFaces(videoRef.current, false);
-          let regionsToExtract
+          const blazeFaceApiFacedetections = await blazeFace.estimateFaces(
+            videoRef.current,
+            false
+          );
+          let regionsToExtract;
           if (blazeFaceApiFacedetections.length > 0) {
             regionsToExtract = [
-              new faceapi.Rect(blazeFaceApiFacedetections[0].topLeft[0],
+              new faceapi.Rect(
+                blazeFaceApiFacedetections[0].topLeft[0],
                 blazeFaceApiFacedetections[0].topLeft[1],
-                blazeFaceApiFacedetections[0].bottomRight[0] - blazeFaceApiFacedetections[0].topLeft[0],
-                blazeFaceApiFacedetections[0].bottomRight[1] - blazeFaceApiFacedetections[0].topLeft[1])
-            ]
+                blazeFaceApiFacedetections[0].bottomRight[0] -
+                  blazeFaceApiFacedetections[0].topLeft[0],
+                blazeFaceApiFacedetections[0].bottomRight[1] -
+                  blazeFaceApiFacedetections[0].topLeft[1]
+              ),
+            ];
           }
 
           //------------faceapi settings---------------
@@ -170,18 +208,22 @@ export function DetectionVideo({ videoRef, muted = false }) {
           //   .clearRect(0, 0, videoWidth, videoHeight);
           // faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
           //------------------------------------------
-          const detections = faceApiFacedetections.length > 0 ? faceApiFacedetections : regionsToExtract ? regionsToExtract : null
-          canvases = detections && await faceapi.extractFaces(
-            videoRef.current,
-            detections
-          );
+          const detections =
+            faceApiFacedetections.length > 0
+              ? faceApiFacedetections
+              : regionsToExtract
+              ? regionsToExtract
+              : null;
+          canvases =
+            detections &&
+            (await faceapi.extractFaces(videoRef.current, detections));
         }
         let data = null;
         if (!canvases || canvases.length === 0) {
-          setDetecFaceMessage(lan[language].detection_fail);
+          setDetectFaceMessage(lan[language].detection_fail);
         }
         if (canvases && canvases.length > 0) {
-          setDetecFaceMessage('')
+          setDetectFaceMessage("");
           try {
             data = tf.browser
               .fromPixels(canvases[0], 3)
@@ -209,7 +251,7 @@ export function DetectionVideo({ videoRef, muted = false }) {
           timeVarHolder = setTimeout(videoToTensor, 300);
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
         dispatch(
           setMessage(
             "Call has ended",
@@ -262,9 +304,43 @@ export function DetectionVideo({ videoRef, muted = false }) {
           }}
         >
           <h3>{userEmotion}</h3>
-          <span style={{ fontSize: '25px', color: 'red' }}>{detectFaceMessage}</span>
+          <span style={{ fontSize: "25px", color: "red" }}>
+            {detectFaceMessage}
+          </span>
         </div>
       </div>
+
+      <div style={{ marginTop: 25 }}>
+        {status !== "recording" ? (
+          <Button
+            onClick={handleStartRecording}
+            color="primary"
+            variant="contained"
+          >
+            <VideocamIcon />
+            &nbsp; {lan[language].start_record}
+          </Button>
+        ) : (
+          <Button
+            onClick={handleStopRecording}
+            color="secondary"
+            variant="contained"
+          >
+            <HighlightOffIcon />
+            &nbsp; {lan[language].stop_record}
+          </Button>
+        )}
+      </div>
+      {stopScreenShare && (
+        <div style={{ marginTop: 15 }}>
+          <Button color="#ffffff" variant="contained">
+            <GetAppIcon color="primary" />
+            <a href={mediaBlobUrl} download="telemojiRecord.webm">
+              &nbsp; {lan[language].download_record}
+            </a>
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
