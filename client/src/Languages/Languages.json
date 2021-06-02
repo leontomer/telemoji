@@ -74,7 +74,10 @@
     "detection_try": "Trying to detect your face...",
     "detection_fail": "Cannot find a face...",
     "no_friends": " No Friends yet. please add friends to start enjoying video chats with them!",
-    "no_calls": "Your call history is empty"
+    "no_calls": "Your call history is empty",
+    "start_record": "Start Recording",
+    "stop_record": "Stop Recording",
+    "download_record": "Download Record"
   },
   "He": {
     "login_navbar": "התחברות",
@@ -151,6 +154,9 @@
     "detection": "איתור פנים החל, אנא המתן...",
     "detection_try": "מנסה לזהות את הפנים שלך...",
     "detection_fail": "לא מצליח לזהות פנים...",
-    "no_calls": "היסטוריית השיחות שלך ריקה"
+    "no_calls": "היסטוריית השיחות שלך ריקה",
+    "start_record": "הקלט",
+    "stop_record": "עצור הקלטה",
+    "download_record": "הורד הקלטה"
   }
 }
