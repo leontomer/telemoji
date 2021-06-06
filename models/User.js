@@ -50,11 +50,6 @@ const UserSchema = new mongoose.Schema({
       ref: "call",
     },
   ],
-
-  thirdPartyAuthentication: {
-    type: Boolean,
-    default: false,
-  },
 });
 
 module.exports = User = mongoose.model("user", UserSchema);

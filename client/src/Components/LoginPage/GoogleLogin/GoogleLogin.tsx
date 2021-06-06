@@ -35,6 +35,7 @@ function GoogleLoginHooks({ goToDashboard }) {
     try {
       dispatch(loginWithGoogle(res.tokenId));
       refreshTokenSetup(res);
+      finishLoading();
     } catch (error) {
       finishLoading();
       dispatch(setMessage(error.msg, snackbarType.error));
