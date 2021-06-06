@@ -68,7 +68,7 @@ export const DrawerMenu = (props) => {
         </Link>
 
         <Link to="/contactUs">
-          <ListItem button key={"editDetails"}>
+          <ListItem button key={"contactUs"}>
             <ListItemIcon>
               <ContactSupportIcon color={"primary"} />
             </ListItemIcon>
@@ -77,7 +77,7 @@ export const DrawerMenu = (props) => {
         </Link>
 
         <Link to="/aboutUs">
-          <ListItem button key={"editDetails"}>
+          <ListItem button key={"/aboutUs"}>
             <ListItemIcon>
               <InfoIcon color={"primary"} />
             </ListItemIcon>
