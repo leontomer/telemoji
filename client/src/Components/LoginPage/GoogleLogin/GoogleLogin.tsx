@@ -57,8 +57,8 @@ function GoogleLoginHooks({ goToDashboard }) {
     // <div>hi</div>
     <button
       onClick={() => {
-        startLoading();
-        signIn();
+        // startLoading();
+        // signIn();
       }}
       type="button"
       className="login-with-google-btn"
