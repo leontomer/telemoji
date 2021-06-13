@@ -10,7 +10,7 @@ import { setMessage } from "../../../actions/errorsActions";
 import { snackbarType } from "../../../Common/dataTypes";
 import lan from "../../../Languages/Languages.json";
 
-function GoogleLoginHooks() {
+function GoogleLoginHooks({ goToDashboard }) {
   // @ts-ignore
   const globalLanguage = useSelector((state) => state.LanguageReducer.language);
   const [language, setLocalLanguage] = React.useState(globalLanguage);
@@ -18,20 +18,14 @@ function GoogleLoginHooks() {
     setLocalLanguage(globalLanguage);
   }, [globalLanguage]);
   const { startLoading, finishLoading } = useLoader();
-  // @ts-ignore
   const isAuthenticated = useSelector(
     // @ts-ignore
     (state) => state.authReducer.isAuthenticated
   );
-
-  // const goToDashboard = () => {
-  //   //history.push("/dashboard");
-  // };
-
   useLayoutEffect(() => {
     if (isAuthenticated) {
       finishLoading();
-      //   goToDashboard();
+      goToDashboard();
     }
   }, [isAuthenticated]);
 
@@ -40,6 +34,7 @@ function GoogleLoginHooks() {
     try {
       dispatch(loginWithGoogle(res.tokenId));
       refreshTokenSetup(res);
+      finishLoading();
     } catch (error) {
       finishLoading();
       dispatch(setMessage(error.msg, snackbarType.error));

@@ -182,7 +182,7 @@ export default function LoginPage({ history }) {
                     marginBottom: "-30px",
                   }}
                 >
-                  <GoogleLoginHooks />
+                  <GoogleLoginHooks goToDashboard={() => goToDashboard()} />
                 </div>
               </Grid>
             </Grid>
