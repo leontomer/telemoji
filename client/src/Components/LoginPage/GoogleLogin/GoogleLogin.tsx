@@ -10,7 +10,7 @@ import { setMessage } from "../../../actions/errorsActions";
 import { snackbarType } from "../../../Common/dataTypes";
 import lan from "../../../Languages/Languages.json";
 
-function GoogleLoginHooks({ goToDashboard }) {
+function GoogleLoginHooks() {
   // @ts-ignore
   const globalLanguage = useSelector((state) => state.LanguageReducer.language);
   const [language, setLocalLanguage] = React.useState(globalLanguage);
@@ -23,10 +23,15 @@ function GoogleLoginHooks({ goToDashboard }) {
     // @ts-ignore
     (state) => state.authReducer.isAuthenticated
   );
+
+  // const goToDashboard = () => {
+  //   //history.push("/dashboard");
+  // };
+
   useLayoutEffect(() => {
     if (isAuthenticated) {
       finishLoading();
-      goToDashboard();
+      //   goToDashboard();
     }
   }, [isAuthenticated]);
 
