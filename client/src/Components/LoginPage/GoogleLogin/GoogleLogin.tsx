@@ -22,12 +22,12 @@ function GoogleLoginHooks({ goToDashboard }) {
     // @ts-ignore
     (state) => state.authReducer.isAuthenticated
   );
-  // useLayoutEffect(() => {
-  //   if (isAuthenticated) {
-  //     finishLoading();
-  //     goToDashboard();
-  //   }
-  // }, [isAuthenticated]);
+  useLayoutEffect(() => {
+    if (isAuthenticated) {
+      finishLoading();
+      goToDashboard();
+    }
+  }, [isAuthenticated]);
 
   const dispatch = useDispatch();
   const onSuccess = (res) => {
@@ -54,16 +54,17 @@ function GoogleLoginHooks({ goToDashboard }) {
   });
 
   return (
-    <button
-      onClick={() => {
-        startLoading();
-        signIn();
-      }}
-      type="button"
-      className="login-with-google-btn"
-    >
-      {lan[language].google_sign_in}
-    </button>
+    <div>hi</div>
+    // <button
+    //   onClick={() => {
+    //     startLoading();
+    //     signIn();
+    //   }}
+    //   type="button"
+    //   className="login-with-google-btn"
+    // >
+    //   {lan[language].google_sign_in}
+    // </button>
   );
 }
 
