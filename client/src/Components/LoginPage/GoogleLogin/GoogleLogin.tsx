@@ -54,7 +54,6 @@ function GoogleLoginHooks({ goToDashboard }) {
   });
 
   return (
-    // <div>hi</div>
     <button
       onClick={() => {
         startLoading();
