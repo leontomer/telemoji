@@ -18,7 +18,6 @@ function GoogleLoginHooks({ goToDashboard }) {
     setLocalLanguage(globalLanguage);
   }, [globalLanguage]);
   const { startLoading, finishLoading } = useLoader();
-  // @ts-ignore
   const isAuthenticated = useSelector(
     // @ts-ignore
     (state) => state.authReducer.isAuthenticated
@@ -42,7 +41,7 @@ function GoogleLoginHooks({ goToDashboard }) {
     }
   };
   const onFailure = (res) => {
-    dispatch(setMessage(res, snackbarType.error));
+    dispatch(setMessage("error occurred", snackbarType.error));
     finishLoading();
   };
 

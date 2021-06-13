@@ -176,7 +176,7 @@ export default function LoginPage({ history }) {
               <Grid item xs>
                 <div
                   style={{
-                    width:'100%',
+                    width: "100%",
                     height: "100px",
                     marginTop: "20px",
                     marginBottom: "-30px",
