@@ -45,11 +45,13 @@ function GoogleLoginHooks({ goToDashboard }) {
     finishLoading();
   };
 
-  const { signIn } = useGoogleLogin({
-    onSuccess,
-    onFailure,
-    clientId,
-  });
+  // const { signIn } = useGoogleLogin({
+  //   onSuccess,
+  //   onFailure,
+  //   clientId,
+  //   isSignedIn: false,
+  //   accessType: "offline",
+  // });
 
   return (
     // <div>hi</div>
