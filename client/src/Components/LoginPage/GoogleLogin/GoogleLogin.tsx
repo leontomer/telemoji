@@ -17,41 +17,41 @@ function GoogleLoginHooks({ goToDashboard }) {
   useEffect(() => {
     setLocalLanguage(globalLanguage);
   }, [globalLanguage]);
-  // const { startLoading, finishLoading } = useLoader();
-  // const isAuthenticated = useSelector(
-  //   // @ts-ignore
-  //   (state) => state.authReducer.isAuthenticated
-  // );
-  // useLayoutEffect(() => {
-  //   if (isAuthenticated) {
-  //     finishLoading();
-  //     goToDashboard();
-  //   }
-  // }, [isAuthenticated]);
+  const { startLoading, finishLoading } = useLoader();
+  const isAuthenticated = useSelector(
+    // @ts-ignore
+    (state) => state.authReducer.isAuthenticated
+  );
+  useLayoutEffect(() => {
+    if (isAuthenticated) {
+      finishLoading();
+      goToDashboard();
+    }
+  }, [isAuthenticated]);
 
-  // const dispatch = useDispatch();
-  // const onSuccess = (res) => {
-  //   try {
-  //     dispatch(loginWithGoogle(res.tokenId));
-  //     refreshTokenSetup(res);
-  //     finishLoading();
-  //   } catch (error) {
-  //     finishLoading();
-  //     dispatch(setMessage(error.msg, snackbarType.error));
-  //   }
-  // };
-  // const onFailure = (res) => {
-  //   dispatch(setMessage(res, snackbarType.error));
-  //   finishLoading();
-  // };
+  const dispatch = useDispatch();
+  const onSuccess = (res) => {
+    try {
+      dispatch(loginWithGoogle(res.tokenId));
+      refreshTokenSetup(res);
+      finishLoading();
+    } catch (error) {
+      finishLoading();
+      dispatch(setMessage(error.msg, snackbarType.error));
+    }
+  };
+  const onFailure = (res) => {
+    dispatch(setMessage(res, snackbarType.error));
+    finishLoading();
+  };
 
-  // const { signIn } = useGoogleLogin({
-  //   onSuccess,
-  //   onFailure,
-  //   clientId,
-  //   isSignedIn: false,
-  //   accessType: "offline",
-  // });
+  const { signIn } = useGoogleLogin({
+    onSuccess,
+    onFailure,
+    clientId,
+    isSignedIn: false,
+    accessType: "offline",
+  });
 
   return (
     // <div>hi</div>
