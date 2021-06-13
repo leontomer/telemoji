@@ -33,7 +33,7 @@ function GoogleLoginHooks({ goToDashboard }) {
   const onSuccess = (res) => {
     try {
       dispatch(loginWithGoogle(res.tokenId));
-      refreshTokenSetup(res);
+      // refreshTokenSetup(res);
       finishLoading();
     } catch (error) {
       finishLoading();
@@ -45,20 +45,20 @@ function GoogleLoginHooks({ goToDashboard }) {
     finishLoading();
   };
 
-  // const { signIn } = useGoogleLogin({
-  //   onSuccess,
-  //   onFailure,
-  //   clientId,
-  //   isSignedIn: false,
-  //   accessType: "offline",
-  // });
+  const { signIn } = useGoogleLogin({
+    onSuccess,
+    onFailure,
+    clientId,
+    isSignedIn: false,
+    accessType: "offline",
+  });
 
   return (
     // <div>hi</div>
     <button
       onClick={() => {
-        // startLoading();
-        // signIn();
+        startLoading();
+        signIn();
       }}
       type="button"
       className="login-with-google-btn"
