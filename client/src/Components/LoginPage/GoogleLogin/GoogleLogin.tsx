@@ -11,12 +11,12 @@ import { snackbarType } from "../../../Common/dataTypes";
 import lan from "../../../Languages/Languages.json";
 
 function GoogleLoginHooks({ goToDashboard }) {
-  // // @ts-ignore
-  // const globalLanguage = useSelector((state) => state.LanguageReducer.language);
-  // const [language, setLocalLanguage] = React.useState(globalLanguage);
-  // useEffect(() => {
-  //   setLocalLanguage(globalLanguage);
-  // }, [globalLanguage]);
+  // @ts-ignore
+  const globalLanguage = useSelector((state) => state.LanguageReducer.language);
+  const [language, setLocalLanguage] = React.useState(globalLanguage);
+  useEffect(() => {
+    setLocalLanguage(globalLanguage);
+  }, [globalLanguage]);
   // const { startLoading, finishLoading } = useLoader();
   // const isAuthenticated = useSelector(
   //   // @ts-ignore
@@ -54,17 +54,17 @@ function GoogleLoginHooks({ goToDashboard }) {
   // });
 
   return (
-    <div>hi</div>
-    // <button
-    //   onClick={() => {
-    //     startLoading();
-    //     signIn();
-    //   }}
-    //   type="button"
-    //   className="login-with-google-btn"
-    // >
-    //   {lan[language].google_sign_in}
-    // </button>
+    // <div>hi</div>
+    <button
+      onClick={() => {
+        startLoading();
+        signIn();
+      }}
+      type="button"
+      className="login-with-google-btn"
+    >
+      {lan[language].google_sign_in}
+    </button>
   );
 }
 
