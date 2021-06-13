@@ -41,7 +41,7 @@ function GoogleLoginHooks({ goToDashboard }) {
     }
   };
   const onFailure = (res) => {
-    dispatch(setMessage(res, snackbarType.error));
+    //dispatch(setMessage(res, snackbarType.error));
     finishLoading();
   };
 
