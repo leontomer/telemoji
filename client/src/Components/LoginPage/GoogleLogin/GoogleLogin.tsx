@@ -22,12 +22,12 @@ function GoogleLoginHooks({ goToDashboard }) {
     // @ts-ignore
     (state) => state.authReducer.isAuthenticated
   );
-  useLayoutEffect(() => {
-    if (isAuthenticated) {
-      finishLoading();
-      goToDashboard();
-    }
-  }, [isAuthenticated]);
+  // useLayoutEffect(() => {
+  //   if (isAuthenticated) {
+  //     finishLoading();
+  //     goToDashboard();
+  //   }
+  // }, [isAuthenticated]);
 
   const dispatch = useDispatch();
   const onSuccess = (res) => {
