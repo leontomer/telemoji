@@ -11,7 +11,6 @@ import { snackbarType } from "../../../Common/dataTypes";
 import lan from "../../../Languages/Languages.json";
 
 function GoogleLoginHooks({ goToDashboard }) {
-  // @ts-ignore
   const globalLanguage = useSelector((state) => state.LanguageReducer.language);
   const [language, setLocalLanguage] = React.useState(globalLanguage);
   useEffect(() => {
@@ -19,7 +18,6 @@ function GoogleLoginHooks({ goToDashboard }) {
   }, [globalLanguage]);
   const { startLoading, finishLoading } = useLoader();
   const isAuthenticated = useSelector(
-    // @ts-ignore
     (state) => state.authReducer.isAuthenticated
   );
   useLayoutEffect(() => {
