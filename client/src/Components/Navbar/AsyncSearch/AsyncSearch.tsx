@@ -7,9 +7,9 @@ import { getAllUsers } from "../../../actions/usersActions";
 import { setFriendInFocus } from "../../../actions/friendActions";
 import { FriendProps } from "../../../reducers/authReducer";
 import { useDispatch, useSelector } from "react-redux";
-import Avatar from '@material-ui/core/Avatar';
-import Popper from '@material-ui/core/Popper';
-import './AsyncSearch.scss';
+import Avatar from "@material-ui/core/Avatar";
+import Popper from "@material-ui/core/Popper";
+import "./AsyncSearch.scss";
 
 const useStyles = makeStyles((theme) => ({
   search: {
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
       fontSize: 18,
       "& li:hover": { backgroundColor: "#E5E7E9" },
     },
-  }
+  },
 }));
 export default function AsyncSearch() {
   const [options, setOptions] = React.useState<FriendProps[]>([]);
@@ -53,8 +53,11 @@ export default function AsyncSearch() {
   const handleInputChance = ({ target: { value } }) => {
     setInput(value);
     setChanged(true);
+    (async () => {
+      await fetchUsers();
+      setOptions(users);
+    })();
   };
-
 
   React.useEffect(() => {
     (async () => {
@@ -76,13 +79,11 @@ export default function AsyncSearch() {
     })();
   }, [loading, changed, input]);
 
-
-
   const handleSelectUserToFocus = (event, value) => {
     if (value) {
-      dispatch(setFriendInFocus(value as FriendProps))
+      dispatch(setFriendInFocus(value as FriendProps));
     }
-  }
+  };
   const classes = useStyles();
   return (
     <Autocomplete
@@ -94,10 +95,12 @@ export default function AsyncSearch() {
       options={options}
       loading={loading}
       renderOption={(option) => {
-        return (<div className="searchItem">
-          <Avatar src={option.imageAddress} style={{ marginRight: 10 }} />
-          {`${option.firstName} ${option.lastName}`}
-        </div>)
+        return (
+          <div className="searchItem">
+            <Avatar src={option.imageAddress} style={{ marginRight: 10 }} />
+            {`${option.firstName} ${option.lastName}`}
+          </div>
+        );
       }}
       PopperComponent={CustomPopper}
       renderInput={(params) => (
