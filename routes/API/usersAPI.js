@@ -13,7 +13,7 @@ router.post(
   [
     check("firstName", "First name is required").not().isEmpty(),
     check("lastName", "Last name is required").not().isEmpty(),
-    check("email", "Please include a valid email").normalizeEmail().isEmail(),
+    check("email", "Please include a valid email").isEmail(),
     check(
       "password",
       "Password must be minimum 6 letters long, and no more then 20"

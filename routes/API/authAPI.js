@@ -102,8 +102,7 @@ router.post("/google", async (req, res) => {
     };
 
     const authenticationResponse = await googleAuth(req.body.tokenId);
-
-    let user = await User.findOne({ email: authenticationResponse.email });
+    const user = await User.findOne({ email: authenticationResponse.email });
 
     if (!authenticationResponse.verified) {
       throw new Error("the user is not verified by Google!");
@@ -113,6 +112,7 @@ router.post("/google", async (req, res) => {
       const { firstName, lastName } = dbHelper.splitName(
         authenticationResponse.fullName
       );
+
       user = new User({
         firstName,
         lastName,
